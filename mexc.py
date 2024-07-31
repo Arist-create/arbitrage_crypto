@@ -24,7 +24,7 @@ async def get_tokens(): #переписать на получение из фа�
         }
     )
     resp = resp.json()["data"]
-
+ 
     arr = [
         i
         for i in resp
