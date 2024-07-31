@@ -1,0 +1,93 @@
+[
+    {
+        "decimals": "6",
+        "tokenContractAddress": "0xa219439258ca9da29e9cc4ce5596924745e12b93",
+        "tokenLogoUrl": "https://static.okx.com/cdn/web3/currency/token/1718088031349.png/type=png_350_0",
+        "tokenName": "Tether USD",
+        "tokenSymbol": "USDT"
+    },
+    {
+        "decimals": "6",
+        "tokenContractAddress": "0x176211869ca2b568f2a7d4ee941e073a821ee1ff",
+        "tokenLogoUrl": "https://static.okx.com/cdn/wallet/logo/USDC.png",
+        "tokenName": "USDC",
+        "tokenSymbol": "USDC"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+        "tokenLogoUrl": "https://static.okx.com/cdn/wallet/logo/linea_eth_20700.png",
+        "tokenName": "Linea",
+        "tokenSymbol": "LINEA_ETH"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0x4af15ec2a0bd43db75dd04e62faa3b8ef36b00d5",
+        "tokenLogoUrl": "https://static.okx.com/cdn/wallet/logo/dai01.png",
+        "tokenName": "Dai Stablecoin",
+        "tokenSymbol": "DAI"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0x7d43aabc515c356145049227cee54b608342c0ad",
+        "tokenLogoUrl": "https://static.okx.com/cdn/wallet/logo/BUSD-20220308.png",
+        "tokenName": "Binance USD",
+        "tokenSymbol": "BUSD"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0xe5d7c2a44ffddf6b295a15c148167daaaf5cf34f",
+        "tokenLogoUrl": "https://static.okx.com/cdn/wallet/logo/WETH-0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2.png",
+        "tokenName": "Wrapped Ether",
+        "tokenSymbol": "WETH"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0x0a3bb08b3a15a19b4de82f8acfc862606fb69a2d",
+        "tokenLogoUrl": "https://static.okx.com/cdn/web3/currency/token/59144-0x0a3bb08b3a15a19b4de82f8acfc862606fb69a2d-101.png/type=default_350_0",
+        "tokenName": "iZUMi Bond USD",
+        "tokenSymbol": "iUSD"
+    },
+    {
+        "decimals": "6",
+        "tokenContractAddress": "0xeb466342c4d449bc9f53a865d5cb90586f405215",
+        "tokenLogoUrl": "https://static.okx.com/cdn/web3/currency/token/59144-0xeb466342c4d449bc9f53a865d5cb90586f405215-97.png/type=png_350_0",
+        "tokenName": "Axelar Wrapped USDC",
+        "tokenSymbol": "axlUSDC"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0x93f4d0ab6a8b4271f4a28db399b5e30612d21116",
+        "tokenLogoUrl": "https://static.okx.com/cdn/web3/currency/token/1718384115084.png/type=png_350_0",
+        "tokenName": "StakeStone Ether",
+        "tokenSymbol": "STONE"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0xd83af4fbD77f3AB65C3B1Dc4B38D7e67AEcf599A",
+        "tokenLogoUrl": "https://static.okx.com/cdn/web3/currency/token/59144-0xd83af4fbd77f3ab65c3b1dc4b38d7e67aecf599a.png/type=png_350_0",
+        "tokenName": "Linea Voyage XP",
+        "tokenSymbol": "LXP"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0xd96536b77ae5500fe850add2253bcf640e7824c1",
+        "tokenLogoUrl": "https://static.okx.com/cdn/web3/currency/token/59144-0xd96536b77ae5500fe850add2253bcf640e7824c1-101.png/type=default_350_0",
+        "tokenName": "Sidus",
+        "tokenSymbol": "Sidus"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0x5fbdf89403270a1846f5ae7d113a989f850d1566",
+        "tokenLogoUrl": "https://static.okx.com/cdn/web3/currency/token/59144-0x5fbdf89403270a1846f5ae7d113a989f850d1566.png/type=png_350_0",
+        "tokenName": "Foxy",
+        "tokenSymbol": "FOXY"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0x78354f8dccb269a615a7e0a24f9b0718fdc3c7a7",
+        "tokenLogoUrl": "https://static.okx.com/cdn/web3/currency/token/59144-0x78354f8dccb269a615a7e0a24f9b0718fdc3c7a7-97.png/type=png_350_0",
+        "tokenName": "ZeroLend",
+        "tokenSymbol": "ZERO"
+    }
+]

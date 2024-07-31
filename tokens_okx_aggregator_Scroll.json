@@ -1,0 +1,65 @@
+[
+    {
+        "decimals": "6",
+        "tokenContractAddress": "0x06efdbff2a14a7c8e15944d1f4a48f9f95f663a4",
+        "tokenLogoUrl": "https://static.okx.com/cdn/wallet/logo/USDC.png",
+        "tokenName": "USD Coin",
+        "tokenSymbol": "USDC"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+        "tokenLogoUrl": "https://static.okx.com/cdn/wallet/logo/scroll_eth_21400.png",
+        "tokenName": "Scroll",
+        "tokenSymbol": "SCROLL_ETH"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0x5300000000000000000000000000000000000004",
+        "tokenLogoUrl": "https://static.okx.com/cdn/wallet/logo/WETH-0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2.png",
+        "tokenName": "Wrapped Ether",
+        "tokenSymbol": "WETH"
+    },
+    {
+        "decimals": "6",
+        "tokenContractAddress": "0xf55bec9cafdbe8730f096aa55dad6d22d44099df",
+        "tokenLogoUrl": "https://static.okx.com/cdn/web3/currency/token/1718088031349.png/type=png_350_0",
+        "tokenName": "Tether USD",
+        "tokenSymbol": "USDT"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0x6f2d7ce6601a07fbfaa7b9c9608ca99d5f35ff4a",
+        "tokenLogoUrl": "https://static.okx.com/cdn/web3/currency/token/1718364439540.png/type=png_350_0",
+        "tokenName": "Tranchess Turbo Point STONE",
+        "tokenSymbol": "turPSTONE"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0x820144d59d20f1838a88cae95c946a9bb6a7fea2",
+        "tokenLogoUrl": "https://static.okx.com/cdn/web3/currency/token/1718364420309.png/type=png_350_0",
+        "tokenName": "Tranchess Stable Yield STONE",
+        "tokenSymbol": "staYSTONE"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0x3b97ccc0c8c5e10ac3e7f1594b55b6239a493eea",
+        "tokenLogoUrl": "https://static.okx.com/cdn/web3/currency/token/1718363936607.png/type=png_350_0",
+        "tokenName": "Tranchess STONE QUEEN",
+        "tokenSymbol": "stoneQUEEN"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0xf478f5eb8eb12a9ad66f3dfad59ab683486dce25",
+        "tokenLogoUrl": "https://static.okx.com/cdn/web3/currency/token/1718363855693.png/type=png_350_0",
+        "tokenName": "Tranchess Stable Yield STONE",
+        "tokenSymbol": "staYSTONE"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0x858b14D9e80cE49E9eca487ae9a432bd05a94393",
+        "tokenLogoUrl": "https://static.okx.com/cdn/web3/currency/token/1718363833095.png/type=png_350_0",
+        "tokenName": "Tranchess Turbo Point STONE",
+        "tokenSymbol": "turPSTONE"
+    }
+]

@@ -1,0 +1,44 @@
+[
+    {
+        "decimals": "6",
+        "tokenContractAddress": "0xb73603c5d87fa094b7314c74ace2e64d165016fb",
+        "tokenLogoUrl": "https://static.okx.com/cdn/wallet/logo/USDC.png",
+        "tokenName": "USD Coin",
+        "tokenSymbol": "USDC"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+        "tokenLogoUrl": "https://static.okx.com/cdn/wallet/logo/manta_22000.png",
+        "tokenName": "Manta Pacific",
+        "tokenSymbol": "MANTA_ETH"
+    },
+    {
+        "decimals": "6",
+        "tokenContractAddress": "0xf417f5a458ec102b90352f697d6e2ac3a3d2851f",
+        "tokenLogoUrl": "https://static.okx.com/cdn/wallet/logo/USDT-1693242374806.png",
+        "tokenName": "Tether USD",
+        "tokenSymbol": "USDT"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0x0dc808adce2099a9f62aa87d9670745aba741746",
+        "tokenLogoUrl": "https://static.okx.com/cdn/web3/currency/token/manta_eth-weth-0x0dc808adce2099a9f62aa87d9670745aba741746.png/type=png_350_0",
+        "tokenName": "Wrapped Ether",
+        "tokenSymbol": "WETH"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0xec901da9c68e90798bbbb74c11406a32a70652c3",
+        "tokenLogoUrl": "https://static.okx.com/cdn/web3/currency/token/1718384115084.png/type=png_350_0",
+        "tokenName": "StakeStone Ether",
+        "tokenSymbol": "STONE"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0x95CeF13441Be50d20cA4558CC0a27B601aC544E5",
+        "tokenLogoUrl": "https://static.okx.com/cdn/web3/currency/token/169-0x95cef13441be50d20ca4558cc0a27b601ac544e5.png/type=png_350_0",
+        "tokenName": "Manta",
+        "tokenSymbol": "MANTA"
+    }
+]

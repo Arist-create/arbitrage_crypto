@@ -1,0 +1,156 @@
+[
+    {
+        "decimals": "6",
+        "tokenContractAddress": "0xa8ce8aee21bc2a48a5ef670afcc9274c7bbbc035",
+        "tokenLogoUrl": "https://static.okx.com/cdn/wallet/logo/USDC.png",
+        "tokenName": "USD Coin",
+        "tokenSymbol": "USDC"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+        "tokenLogoUrl": "https://static.okx.com/cdn/wallet/logo/POLYGON_ETH_19300.png",
+        "tokenName": "Polygon zkEVM",
+        "tokenSymbol": "POLYGON_ETH"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0xc5015b9d9161dca7e18e32f6f25c4ad850731fd4",
+        "tokenLogoUrl": "https://static.okx.com/cdn/wallet/logo/dai01.png",
+        "tokenName": "Dai Stablecoin",
+        "tokenSymbol": "DAI"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0xa2036f0538221a77a3937f1379699f44945018d0",
+        "tokenLogoUrl": "https://static.okx.com/cdn/wallet/logo/WMATIC-a909697b39a04bdd87fe8952586f8ce1-20220719.png",
+        "tokenName": "Matic Token",
+        "tokenSymbol": "MATIC"
+    },
+    {
+        "decimals": "6",
+        "tokenContractAddress": "0x1e4a5963abfd975d8c9021ce480b42188849d41d",
+        "tokenLogoUrl": "https://static.okx.com/cdn/web3/currency/token/1718088031349.png/type=png_350_0",
+        "tokenName": "Tether USD",
+        "tokenSymbol": "USDT"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0x4f9a0e7fd2bf6067db6994cf12e4495df938e6e9",
+        "tokenLogoUrl": "https://static.okx.com/cdn/wallet/logo/WETH-0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2.png",
+        "tokenName": "Wrapped Ether",
+        "tokenSymbol": "WETH"
+    },
+    {
+        "decimals": "8",
+        "tokenContractAddress": "0xea034fb02eb1808c2cc3adbc15f447b93cbe08e1",
+        "tokenLogoUrl": "https://static.okx.com/cdn/web3/currency/token/1101-0xea034fb02eb1808c2cc3adbc15f447b93cbe08e1-97.png/type=png_350_0",
+        "tokenName": "Wrapped BTC",
+        "tokenSymbol": "WBTC"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0xff8544fed5379d9ffa8d47a74ce6b91e632ac44d",
+        "tokenLogoUrl": "https://static.okx.com/cdn/web3/currency/token/1101-0xff8544fed5379d9ffa8d47a74ce6b91e632ac44d-97.png/type=png_350_0",
+        "tokenName": "Frax",
+        "tokenSymbol": "FRAX"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0x83b874c1e09d316059d929da402dcb1a98e92082",
+        "tokenLogoUrl": "https://static.okx.com/cdn/web3/currency/token/1101-0x83b874c1e09d316059d929da402dcb1a98e92082-97.png/type=png_350_0",
+        "tokenName": "Staked MATIC",
+        "tokenSymbol": "stMATIC"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0x6b856a14cea1d7dcfaf80fa6936c0b75972ccace",
+        "tokenLogoUrl": "https://static.okx.com/cdn/wallet/logo/icon_custom_default_F.png",
+        "tokenName": "Frax Share",
+        "tokenSymbol": "FXS"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0xcf7ecee185f19e2e970a301ee37f93536ed66179",
+        "tokenLogoUrl": "https://static.okx.com/cdn/web3/currency/token/1101-0xcf7ecee185f19e2e970a301ee37f93536ed66179-97.png/type=png_350_0",
+        "tokenName": "Frax Ether",
+        "tokenSymbol": "frxETH"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0x7c2af1fb79d0b1c67d4eb802d44c673d0a1d2c04",
+        "tokenLogoUrl": "https://static.okx.com/cdn/wallet/logo/icon_custom_default_s.png",
+        "tokenName": "Staked Frax Ether",
+        "tokenSymbol": "sfrxETH"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0x4b16e4752711a7abec32799c976f3cefc0111f2b",
+        "tokenLogoUrl": "https://static.okx.com/cdn/wallet/logo/icon_custom_default_L.png",
+        "tokenName": "ChainLink Token",
+        "tokenSymbol": "LINK"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0x120ef59b80774f02211563834d8e3b72cb1649d6",
+        "tokenLogoUrl": "https://static.okx.com/cdn/web3/currency/token/1101-0x120ef59b80774f02211563834d8e3b72cb1649d6-97.png/type=png_350_0",
+        "tokenName": "Balancer",
+        "tokenSymbol": "BAL"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0x7e5845b1bfc9e6620893e48346bdb8541995a8d9",
+        "tokenLogoUrl": "https://static.okx.com/cdn/wallet/logo/icon_custom_default_F.png",
+        "tokenName": "Frax Price Index",
+        "tokenSymbol": "FPI"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0x3d5320821bfca19fb0b5428f2c79d63bd5246f89",
+        "tokenLogoUrl": "https://static.okx.com/cdn/wallet/logo/icon_custom_default_C.png",
+        "tokenName": "Curve DAO Token",
+        "tokenSymbol": "CRV"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0xf9ed88937b2d82707d0eabd8c3d9aa4870b714d3",
+        "tokenLogoUrl": "https://static.okx.com/cdn/wallet/logo/icon_custom_default_M.png",
+        "tokenName": "Liquid Staking Matic",
+        "tokenSymbol": "MaticX"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0x68791cfe079814c46e0e25c19bcc5bfc71a744f7",
+        "tokenLogoUrl": "https://static.okx.com/cdn/wallet/logo/icon_custom_default_A.png",
+        "tokenName": "Aave Token",
+        "tokenSymbol": "AAVE"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0x2548c94a3092494db3af864cc2cf781a72f55678",
+        "tokenLogoUrl": "https://static.okx.com/cdn/wallet/logo/UNI-20220328.png",
+        "tokenName": "Uniswap",
+        "tokenSymbol": "UNI"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0x7e2feea957b7d1606335e339754f4e52b452b792",
+        "tokenLogoUrl": "https://static.okx.com/cdn/wallet/logo/icon_custom_default_L.png",
+        "tokenName": "Lido DAO Token",
+        "tokenSymbol": "LDO"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0xdE7df9036801676aF0cB73661d93a098c0085fba",
+        "tokenLogoUrl": "https://static.okx.com/cdn/wallet/logo/icon_custom_default_F.png",
+        "tokenName": "Frax Price Index Share",
+        "tokenSymbol": "FPIS"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0x9cbd81b43ba263ca894178366cfb89a246d1159c",
+        "tokenLogoUrl": "https://static.okx.com/cdn/web3/currency/token/polygon_eth-dysn-0x9cbd81b43ba263ca894178366cfb89a246d1159c.png/type=png_350_0",
+        "tokenName": "Dyson Sphere",
+        "tokenSymbol": "DYSN"
+    }
+]

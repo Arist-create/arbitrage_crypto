@@ -1,0 +1,93 @@
+[
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+        "tokenLogoUrl": "https://static.okx.com/cdn/wallet/logo/metis.png",
+        "tokenName": "Metis",
+        "tokenSymbol": "METIS"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0x420000000000000000000000000000000000000A",
+        "tokenLogoUrl": "https://static.okx.com/cdn/wallet/logo/WETH-0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2.png",
+        "tokenName": "Wrapped Ether",
+        "tokenSymbol": "WETH"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0x90fE084F877C65e1b577c7b2eA64B8D8dd1AB278",
+        "tokenLogoUrl": "https://static.okx.com/cdn/wallet/logo/NETT-83fe812f990f4c318ad554b42ac341c2-20220719.png",
+        "tokenName": "Netswap Token",
+        "tokenSymbol": "NETT"
+    },
+    {
+        "decimals": "6",
+        "tokenContractAddress": "0xEA32A96608495e54156Ae48931A7c20f0dcc1a21",
+        "tokenLogoUrl": "https://static.okx.com/cdn/wallet/logo/USDC.png",
+        "tokenName": "USDC Token",
+        "tokenSymbol": "m.USDC"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0x69fdb77064ec5c84FA2F21072973eB28441F43F3",
+        "tokenLogoUrl": "https://static.okx.com/cdn/wallet/logo/TETHYS-66ed77b6db9149a0bd627b25a951c0ab-20220719.png",
+        "tokenName": "Tethys",
+        "tokenSymbol": "TETHYS"
+    },
+    {
+        "decimals": "6",
+        "tokenContractAddress": "0xbB06DCA3AE6887fAbF931640f67cab3e3a16F4dC",
+        "tokenLogoUrl": "https://static.okx.com/cdn/web3/currency/token/1718088031349.png/type=png_350_0",
+        "tokenName": "USDT Token",
+        "tokenSymbol": "m.USDT"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0xb27BbeaACA2C00d6258C3118BAB6b5B6975161c8",
+        "tokenLogoUrl": "https://static.okx.com/cdn/wallet/logo/hermes-29dd925c87da4316bed2bebea8256b56-20220721.png",
+        "tokenName": "Hermes",
+        "tokenSymbol": "HERMES"
+    },
+    {
+        "decimals": "8",
+        "tokenContractAddress": "0xaCde0D6721fe16193Ba3cC25E547410f057Af175",
+        "tokenLogoUrl": "https://static.okx.com/cdn/wallet/logo/icon_custom_default_x.png",
+        "tokenName": "xAGORA DEFI",
+        "tokenSymbol": "xAGORA"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0x0Ed0Ca6872073E02cd3aE005BaF04bA43BE947fA",
+        "tokenLogoUrl": "https://static.okx.com/cdn/wallet/logo/agora-6fe029e95e9047c4bef1a2fca60e86b9-20220719.png",
+        "tokenName": "AGORA DEFI",
+        "tokenSymbol": "AGORA"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0xb26F58f0b301a077cFA779c0B0f8281C7f936Ac0",
+        "tokenLogoUrl": "https://static.okx.com/cdn/wallet/logo/STARS-ee78edfa7e6b47e7ac08e791cfd27247-20220719.png",
+        "tokenName": "Starstream",
+        "tokenSymbol": "STARS"
+    },
+    {
+        "decimals": "9",
+        "tokenContractAddress": "0x559119275a8A862EdbD2cDE21196f4c758D5Ab84",
+        "tokenLogoUrl": "https://static.okx.com/cdn/wallet/logo/icon_custom_default_M.png",
+        "tokenName": "Staked Maia",
+        "tokenSymbol": "MAIA"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0x6F05709bc91Bad933346F9E159f0D3FdBc2c9DCE",
+        "tokenLogoUrl": "https://static.okx.com/cdn/wallet/logo/hera-1f28671bc6f94a8ca255e53a42e6713b-20220721.png",
+        "tokenName": "Hera Token",
+        "tokenSymbol": "HERA"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0xA31848AA61F784CDBb6F74260d224A4356295799",
+        "tokenLogoUrl": "https://static.okx.com/cdn/wallet/logo/dxp-4b9907d9574944ca83d32daf244098d4-20220721.png",
+        "tokenName": "Dexpools Token",
+        "tokenSymbol": "DXP"
+    }
+]

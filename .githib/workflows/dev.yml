@@ -1,0 +1,33 @@
+name: Dev Deploy
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build App
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v4
+
+      # - name: Setup env 
+      #   run: |
+      #     mv .env-dev .env
+
+      - name: Set up docker context over SSH authentication
+        uses: amirmarmul/docker-context-ssh-action@v2.1.3
+        with:
+          ssh-host: 'dizeldigital.duckdns.org'
+          ssh-username: 'alexey'
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          context-name: 'dev'
+          context-use: true
+
+      - name: Deploy via docker-compose
+        run: |
+          docker-compose up --build -d

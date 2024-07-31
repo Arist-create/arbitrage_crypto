@@ -1,0 +1,79 @@
+[
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0x6963efed0ab40f6c3d7bda44a05dcf1437c44372",
+        "tokenLogoUrl": "https://static.okx.com/cdn/wallet/logo/USDC.png",
+        "tokenName": "USD Coin",
+        "tokenSymbol": "USDC"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+        "tokenLogoUrl": "https://static.okx.com/cdn/wallet/logo/cfx_19200.png",
+        "tokenName": "Conflux",
+        "tokenSymbol": "CFX"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0xfe97e85d13abd9c1c33384e796f10b73905637ce",
+        "tokenLogoUrl": "https://static.okx.com/cdn/web3/currency/token/1718088031349.png/type=png_350_0",
+        "tokenName": "Tether USD",
+        "tokenSymbol": "USDT"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0xa47f43de2f9623acb395ca4905746496d2014d57",
+        "tokenLogoUrl": "https://static.okx.com/cdn/wallet/logo/WETH-0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2.png",
+        "tokenName": "Ethereum Token",
+        "tokenSymbol": "WETH"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0x889138644274a7dc602f25a7e7d53ff40e6d0091",
+        "tokenLogoUrl": "https://static.okx.com/cdn/wallet/logo/xCFX-20230406.png",
+        "tokenName": "X nucleon CFX",
+        "tokenSymbol": "xCFX"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0xfe197e7968807b311d476915db585831b43a7e3b",
+        "tokenLogoUrl": "https://static.okx.com/cdn/wallet/logo/NUT-20230406.png",
+        "tokenName": "Nucleon Governance Token",
+        "tokenSymbol": "NUT"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0xa4b59aa3de2af57959c23e2c9c89a2fcb408ce6a",
+        "tokenLogoUrl": "https://static.okx.com/cdn/wallet/logo/GOL-20230406.png",
+        "tokenName": "Goledo Token",
+        "tokenSymbol": "GOL"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0x1f545487c62e5acfea45dcadd9c627361d1616d8",
+        "tokenLogoUrl": "https://static.okx.com/cdn/wallet/logo/WBTC-20230804.png",
+        "tokenName": "Wrapped BTC",
+        "tokenSymbol": "WBTC"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0x14b2d3bc65e74dae1030eafd8ac30c533c976a9b",
+        "tokenLogoUrl": "https://static.okx.com/cdn/wallet/logo/WCFX-20230406.png",
+        "tokenName": "Wrapped Conflux",
+        "tokenSymbol": "WCFX"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0x94bd7a37d2ce24cc597e158facaa8d601083ffec",
+        "tokenLogoUrl": "https://static.okx.com/cdn/wallet/logo/WBNB-20220415.png",
+        "tokenName": "BNB",
+        "tokenSymbol": "WBNB"
+    },
+    {
+        "decimals": "18",
+        "tokenContractAddress": "0xff33b107a0e2c0794ac43c3ffaf637fcea3697cf",
+        "tokenLogoUrl": "https://static.okx.com/cdn/wallet/logo/AUSD-20230406.png",
+        "tokenName": "AUSD Stablecoin",
+        "tokenSymbol": "AUSD"
+    }
+]
