@@ -22,7 +22,7 @@ jobs:
       - name: Set up docker context over SSH authentication
         uses: amirmarmul/docker-context-ssh-action@v2.1.3
         with:
-          ssh-host: 'dizeldigital.duckdns.org'
+          ssh-host: '176.192.241.93'
           ssh-port: '2222'
           ssh-username: 'alexey'
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
