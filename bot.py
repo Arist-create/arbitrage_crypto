@@ -129,7 +129,7 @@ async def message_id(message: types.Message):
             if not target_profit:
                 await redis.set("target_profit", json.dumps(0.0))
                 target_profit = await redis.get("target_profit")
-            target_profit = int(json.loads(target_profit))
+            target_profit = int(json.loads(target_profit)) 
             
             rpc_url = "https://rpc.ankr.com/eth"
             async with httpx.AsyncClient(
