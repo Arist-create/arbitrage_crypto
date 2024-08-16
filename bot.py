@@ -9,8 +9,9 @@ from web3 import Web3
 from swap import get_eth_price
 import datetime
 import httpx
-from mongo import trades_db
-API_TOKEN = '7473932480:AAHvJvYndS0-blMx8U-w57BBjMuUTl01E7E'
+from mongo import trades_db 
+API_TOKEN = '7473932480:AAHvJvYndS0-blMx8U-w57BBjMuUTl01E7E' #прод
+# API_TOKEN = '6769001742:AAGW0d_60IymQPl8ef4U7Pvun3aIYf0aBPc'
 
 bot = Bot(token=API_TOKEN)
 
@@ -196,7 +197,7 @@ async def message_id(message: types.Message):
                                 trades_db.add(line)
                             trades_db.update("symbol", token["symbol"], {"message": message})
                             arr.update(line)
-                            
+
                             # сделать удаление неактуальных арбитражей(если в списке нет этой пары то удалить её из монги)
                     else:
                         continue
