@@ -16,12 +16,14 @@ class Mongo:
     def add(self, dictionary: dict):
         self.mycollection.insert_one(dictionary)
     
+    def delete(self, key, value):
+        self.mycollection.delete_one({f"{key}": value})
 
     def get_all(self):
         return self.mycollection.find()
 
 
-    def get_by_key(self, key, value):
+    def get(self, key, value):
         return self.mycollection.find_one({f"{key}": value})
 
     def update(self, key, value, dictionary):

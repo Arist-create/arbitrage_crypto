@@ -192,7 +192,7 @@ async def message_id(message: types.Message):
                                     "message": message,
                                     "start_time": start_time,
                                     "notify": False}
-                            check = trades_db.get_by_key("symbol", token["symbol"])
+                            check = trades_db.get("symbol", token["symbol"])
                             if not check:
                                 trades_db.add(line)
                             trades_db.update("symbol", token["symbol"], {"message": message})
@@ -203,6 +203,10 @@ async def message_id(message: types.Message):
                         continue
                 except Exception as e:
                     print(token["symbol"])
+            current_trades = trades_db.get_all()
+            for i in current_trades:
+                if i["symbol"] not in arr:
+                    trades_db.delete("symbol", i["symbol"])
             await redis.set('scan', json.dumps(arr))
 
         except Exception as e:
