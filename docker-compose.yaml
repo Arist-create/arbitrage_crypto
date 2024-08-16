@@ -39,3 +39,13 @@ services:
       redis:
         condition: service_healthy
     command: python bot.py
+
+  mongodb:
+    image: mongo:4.4
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: username
+      MONGO_INITDB_ROOT_PASSWORD: password
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./mongodb_data:/data/db

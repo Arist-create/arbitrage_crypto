@@ -7,7 +7,9 @@ from mexc import get_tokens
 import json
 from web3 import Web3
 from swap import get_eth_price
+import datetime
 import httpx
+from mongo import trades_db
 API_TOKEN = '7473932480:AAHvJvYndS0-blMx8U-w57BBjMuUTl01E7E'
 
 bot = Bot(token=API_TOKEN)
@@ -91,27 +93,37 @@ async def message_id(message: types.Message):
     arr = json.loads(arr)
     string = ""
     for k, v in arr.items():
-        string += f"{k}: {v}\n"
+        string += f'{k}: {v}\n'
 
     await bot.send_message(message.chat.id, string)
 
 @dp.message_handler(commands=['not'])
 async def message_id(message: types.Message):
-    await redis.set("scan_prev", await redis.get("scan"))
+    await redis.set("scan_prev", json.dumps({}))
     while True:
-        arr = await redis.get("scan")
+        life_time_target = await redis.get("life_time_target")
+        if not life_time_target:
+            await redis.set("life_time_target", json.dumps(0))
+            life_time_target = await redis.get("life_time_target")
+        life_time_target = int(json.loads(life_time_target))
+        arr = trades_db.get_all()
         if not arr:
             continue
-        arr = json.loads(arr)
-        arr_prev = await redis.get("scan_prev")
-        if not arr_prev:
-            continue
-        arr_prev = json.loads(arr_prev)
-        for k, v in arr.items():
-            if k in arr_prev:
+        for trade in arr:
+            if trade["notify"]:
                 continue
-            await bot.send_message(message.chat.id, f"{k}: {v}")
-        await redis.set("scan_prev", json.dumps(arr))
+            life_time = datetime.datetime.now() - datetime.datetime.strptime(trade["start_time"], "%Y-%m-%d %H:%M:%S")
+            if life_time.total_seconds() < life_time_target:
+                continue
+            trades_db.update("symbol", trade["symbol"], {"notify": True})
+            await bot.send_message(message.chat.id, f'{trade["symbol"]}: {trade["message"]}')
+
+
+@dp.message_handler(lambda message: message.text and ':' in message.text.lower())
+async def message_id(message: types.Message):
+    life_time_target = float(message.text[1:])
+    await redis.set("life_time_target", json.dumps(life_time_target)) 
+    await bot.send_message(message.chat.id, "Done")
 
 @dp.message_handler(lambda message: message.text and '.' in message.text.lower())
 async def message_id(message: types.Message):
@@ -123,6 +135,7 @@ async def message_id(message: types.Message):
 @dp.message_handler(commands=['scan'])
 async def message_id(message: types.Message):
     await bot.send_message(message.chat.id, "Scanning...")
+    tokens = await get_tokens()
     while True:
         try:
             target_profit = await redis.get("target_profit")
@@ -152,7 +165,7 @@ async def message_id(message: types.Message):
             with open("list_of_tokens_goplus.json") as f:
                 go_plus = json.load(f)
             arr = {}
-            tokens = await get_tokens()
+            start_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             for token in tokens:
                 try:
                     info = dict_of_inf[token['symbol'][:-4]]
@@ -173,8 +186,18 @@ async def message_id(message: types.Message):
                     profit_one_inch, orders_to_sell = await buy_on_one_inch(mexc, one_inch, info, gas_for_withdraw, go)
                     if profit_mexc and profit_one_inch:
                         if profit_mexc > target_profit or profit_one_inch > target_profit:
-                            line = {token["symbol"]: f'\n mexc: {float(profit_mexc):.2f} \n orders_to_buy: {orders_to_buy} \n one_inch: {float(profit_one_inch):.2f} \n orders_to_sell: {orders_to_sell}'}
+                            message = f'\n mexc: {float(profit_mexc):.2f} \n orders_to_buy: {orders_to_buy} \n one_inch: {float(profit_one_inch):.2f} \n orders_to_sell: {orders_to_sell}'
+                            line = {"symbol": token["symbol"], 
+                                    "message": message,
+                                    "start_time": start_time,
+                                    "notify": False}
+                            check = trades_db.get_by_key("symbol", token["symbol"])
+                            if not check:
+                                trades_db.add(line)
+                            trades_db.update("symbol", token["symbol"], {"message": message})
                             arr.update(line)
+                            
+                            # сделать удаление неактуальных арбитражей(если в списке нет этой пары то удалить её из монги)
                     else:
                         continue
                 except Exception as e:
