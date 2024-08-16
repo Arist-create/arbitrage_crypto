@@ -28,7 +28,7 @@ async def get_tokens(): #переписать на получение из фа�
     arr = [
         i
         for i in resp
-        if i['state'] == 'ENABLED'
+        if i['state'] == '1'
         and i.get('symbol')[-4:] == 'USDT'
         and i.get('symbol')[:-5] in arr_new
     ]
@@ -87,9 +87,9 @@ async def get_quote(subscribe_list):
                             )
 
                     except Exception as e:
-                        pass
+                        print(e)
         except Exception as e:
-            pass
+            print(e)
 
 async def main():
     tokens = await get_tokens()

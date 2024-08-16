@@ -169,60 +169,60 @@
 
 
 
-import requests
-import json
-import httpx
-import asyncio
+# import requests
+# import json
+# import httpx
+# import asyncio
 
-async def fetch(session, url):
-    try:
-        resp = await session.get(url)
-        return resp.json()["result"]
-    except Exception as e:
-        print(e)
-async def main():
-    with open('list_of_tokens_with_and_dep_mexc_plus.json') as f:
-        tokens = json.load(f)
-    dictionary = {}
-    for j in tokens:
-            for i in j["coins"]:
-                if i["chain"] == "Ethereum(ERC20)":
-                    dictionary[i["address"]] = j["currency"]
+# async def fetch(session, url):
+#     try:
+#         resp = await session.get(url)
+#         return resp.json()["result"]
+#     except Exception as e:
+#         print(e)
+# async def main():
+#     with open('list_of_tokens_with_and_dep_mexc_plus.json') as f:
+#         tokens = json.load(f)
+#     dictionary = {}
+#     for j in tokens:
+#             for i in j["coins"]:
+#                 if i["chain"] == "Ethereum(ERC20)":
+#                     dictionary[i["address"]] = j["currency"]
                     
-    arr = list(dictionary.keys())
-    dictionary_finish = []
-    async with httpx.AsyncClient(
-                        limits=httpx.Limits(max_keepalive_connections=3000, max_connections=3000),
-                        timeout=60,
-                        verify=False,
-                        mounts={"https://": httpx.AsyncHTTPTransport(proxy="socks5://bmWEur:eFWBjr@209.46.2.35:8000", verify=False)}
-                    ) as client:
-        tasks = []
-        results = []
-        for i in arr:
-            await asyncio.sleep(0.5)
-            tasks.append(fetch(client, f"https://api.gopluslabs.io/api/v1/token_security/1?contract_addresses={i}"))
-            if len(tasks) > 1:
-                result = await asyncio.gather(*tasks)
-                results.extend(result)
-                tasks = []
-        if tasks:
-            result = await asyncio.gather(*tasks)
-            results.extend(result)
+#     arr = list(dictionary.keys())
+#     dictionary_finish = []
+#     async with httpx.AsyncClient(
+#                         limits=httpx.Limits(max_keepalive_connections=3000, max_connections=3000),
+#                         timeout=60,
+#                         verify=False,
+#                         mounts={"https://": httpx.AsyncHTTPTransport(proxy="socks5://bmWEur:eFWBjr@209.46.2.35:8000", verify=False)}
+#                     ) as client:
+#         tasks = []
+#         results = []
+#         for i in arr:
+#             await asyncio.sleep(0.5)
+#             tasks.append(fetch(client, f"https://api.gopluslabs.io/api/v1/token_security/1?contract_addresses={i}"))
+#             if len(tasks) > 1:
+#                 result = await asyncio.gather(*tasks)
+#                 results.extend(result)
+#                 tasks = []
+#         if tasks:
+#             result = await asyncio.gather(*tasks)
+#             results.extend(result)
 
 
-    for j in results:
-        try:
-            dictionary_finish.append(j)
-        except Exception as e:
-            print(e)
+#     for j in results:
+#         try:
+#             dictionary_finish.append(j)
+#         except Exception as e:
+#             print(e)
 
-    print(len(dictionary_finish))
-    with open('list_of_tokens_goplus.json', 'w') as f:
-        json.dump(dictionary_finish, f, indent=4)
+#     print(len(dictionary_finish))
+#     with open('list_of_tokens_goplus.json', 'w') as f:
+#         json.dump(dictionary_finish, f, indent=4)
 
 
-asyncio.run(main())
+# asyncio.run(main())
 
 # from goplus.token import Token
 # import json
@@ -314,3 +314,15 @@ asyncio.run(main())
 
 
 # print(resp.json())
+import requests
+
+resp = requests.get(
+        'https://www.mexc.com/open/api/v2/market/symbols',
+        headers={
+            'Accept': 'application/json', 
+            'Content-Type': 'application/json', 
+            'X-MEXC-APIKEY': 'mx0vglNJacXHNmGojb',
+        }
+    )
+resp = resp.json()["data"]
+print(resp)
