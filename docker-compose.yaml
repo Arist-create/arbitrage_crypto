@@ -39,7 +39,7 @@ services:
       redis:
         condition: service_healthy
     command: python bot.py
-
+ 
   mongodb:
     image: mongo:4.4
     environment:
