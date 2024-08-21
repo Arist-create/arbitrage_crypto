@@ -314,15 +314,18 @@
 
 
 # print(resp.json())
-import requests
+# import requests
 
-resp = requests.get(
-        'https://www.mexc.com/open/api/v2/market/symbols',
-        headers={
-            'Accept': 'application/json', 
-            'Content-Type': 'application/json', 
-            'X-MEXC-APIKEY': 'mx0vglNJacXHNmGojb',
-        }
-    )
-resp = resp.json()["data"]
-print(resp)
+# resp = requests.get(
+#         'https://www.mexc.com/open/api/v2/market/symbols',
+#         headers={
+#             'Accept': 'application/json', 
+#             'Content-Type': 'application/json', 
+#             'X-MEXC-APIKEY': 'mx0vglNJacXHNmGojb',
+#         }
+#     )
+# resp = resp.json()["data"]
+# print(resp)
+
+import certifi
+print(certifi.where())

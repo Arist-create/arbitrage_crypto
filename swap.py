@@ -8,7 +8,7 @@ import datetime
 import requests
 
 
-proxy_mounts={"https://": httpx.AsyncHTTPTransport(proxy="socks5://bmWEur:eFWBjr@209.46.2.35:8000", verify=False)}
+proxy_mounts={"https://": httpx.AsyncHTTPTransport(proxy="socks5://proxy_user:wcPYZj5Zlj@62.133.62.154:41257")}
 
 async def check_deposit_and_withdraw_mexc():
     resp = requests.get(
@@ -151,8 +151,8 @@ async def main():
             async with httpx.AsyncClient(
                     limits=httpx.Limits(max_keepalive_connections=3000, max_connections=3000),
                     timeout=60,
-                    verify=False,
-                    mounts={"https://": httpx.AsyncHTTPTransport(proxy="socks5://bmWEur:eFWBjr@209.46.2.35:8000", verify=False)}
+                    # mounts=proxy_mounts
+                    verify=False
                 ) as client:
                 one_eth = await get_eth_price(client)
                 one_eth = int(one_eth['toAmount'])/(10**6) 
@@ -189,7 +189,7 @@ async def main():
                             6,
                             mn
                         ))
-                    if len(tasks) > 150:
+                    if len(tasks) >= 10:
                         await asyncio.gather(*tasks)
                         tasks = []
                 if tasks:

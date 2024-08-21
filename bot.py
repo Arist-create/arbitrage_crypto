@@ -150,7 +150,7 @@ async def message_id(message: types.Message):
                             limits=httpx.Limits(max_keepalive_connections=3000, max_connections=3000),
                             timeout=60,
                             verify=False,
-                            mounts={"https://": httpx.AsyncHTTPTransport(proxy="socks5://bmWEur:eFWBjr@209.46.2.35:8000", verify=False)}
+                            mounts={"https://": httpx.AsyncHTTPTransport(proxy="socks5://proxy_user:wcPYZj5Zlj@62.133.62.154:41257", verify=False)}
                         ) as client:
                 one_eth = await get_eth_price(client)
             web_3 = Web3(Web3.HTTPProvider(rpc_url))
@@ -165,7 +165,7 @@ async def message_id(message: types.Message):
                         dict_of_inf[j["currency"]] = i
             with open("list_of_tokens_goplus.json") as f:
                 go_plus = json.load(f)
-            arr = {}
+            arr = set()
             start_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             for token in tokens:
                 try:
@@ -196,7 +196,7 @@ async def message_id(message: types.Message):
                             if not check:
                                 trades_db.add(line)
                             trades_db.update("symbol", token["symbol"], {"message": message})
-                            arr.update(line)
+                            arr.add(line["symbol"])
 
                             # сделать удаление неактуальных арбитражей(если в списке нет этой пары то удалить её из монги)
                     else:
@@ -207,7 +207,7 @@ async def message_id(message: types.Message):
             for i in current_trades:
                 if i["symbol"] not in arr:
                     trades_db.delete("symbol", i["symbol"])
-            await redis.set('scan', json.dumps(arr))
+            
 
         except Exception as e:
             print(f"Error: {e}")
