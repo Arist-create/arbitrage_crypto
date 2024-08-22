@@ -15,8 +15,8 @@ services:
   
   parser_mexc:
     build: .
-    # volumes:
-    #   - .:/app
+    volumes:
+      - .:/app
     depends_on:
       redis:
         condition: service_healthy
@@ -24,8 +24,8 @@ services:
   
   parser_swap:
     build: .
-    # volumes:
-    #   - .:/app
+    volumes:
+      - .:/app
     depends_on:
       redis:
         condition: service_healthy
@@ -35,8 +35,8 @@ services:
   
   telegram_bot:
     build: .
-    # volumes:
-    #   - .:/app
+    volumes:
+      - .:/app
     depends_on:
       redis:
         condition: service_healthy

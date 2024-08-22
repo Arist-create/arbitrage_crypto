@@ -9,9 +9,10 @@ from web3 import Web3
 from swap import get_eth_price
 import datetime
 import httpx
+import asyncio
 from mongo import trades_db, settings_db
-API_TOKEN = '7473932480:AAHvJvYndS0-blMx8U-w57BBjMuUTl01E7E' #прод
-# API_TOKEN = '6769001742:AAGW0d_60IymQPl8ef4U7Pvun3aIYf0aBPc'
+# API_TOKEN = '7473932480:AAHvJvYndS0-blMx8U-w57BBjMuUTl01E7E' #прод
+API_TOKEN = '6769001742:AAGW0d_60IymQPl8ef4U7Pvun3aIYf0aBPc'
 
 bot = Bot(token=API_TOKEN)
 
@@ -109,25 +110,23 @@ async def message_id(message: types.Message):
 @dp.message_handler(commands=['not'])
 async def message_id(message: types.Message):
     while True:
-        try:
-            life_time_target = settings_db.get("number", 1)
-            if not life_time_target:
-                life_time_target = 0
-            else:
-                life_time_target = float(life_time_target["life_time_target"])
-            arr = trades_db.get_all()
-            if not arr:
+        life_time_target = settings_db.get("number", 1)
+        if not life_time_target:
+            life_time_target = 0
+        else:
+            life_time_target = float(life_time_target["life_time_target"])
+        arr = trades_db.get_all()
+        if not arr:
+            continue
+        for trade in arr:
+            if trade["notify"]:
                 continue
-            for trade in arr:
-                if trade["notify"]:
-                    continue
-                life_time = datetime.datetime.now() - datetime.datetime.strptime(trade["start_time"], "%Y-%m-%d %H:%M:%S")
-                if life_time.total_seconds() < life_time_target:
-                    continue
-                trades_db.update("symbol", trade["symbol"], {"notify": True})
-                await bot.send_message(message.chat.id, f'{trade["symbol"]}: {trade["message"]}')
-        except Exception as e:
-            print(e)
+            life_time = datetime.datetime.now() - datetime.datetime.strptime(trade["start_time"], "%Y-%m-%d %H:%M:%S")
+            if life_time.total_seconds() < life_time_target:
+                continue
+            trades_db.update("symbol", trade["symbol"], {"notify": True})
+            await bot.send_message(message.chat.id, f'{trade["symbol"]}: {trade["message"]}')
+        await asyncio.sleep(5)
 
 
 @dp.message_handler(lambda message: message.text and ':' in message.text.lower())
