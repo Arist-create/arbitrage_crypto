@@ -26,10 +26,11 @@ class Mongo:
     def get(self, key, value):
         return self.mycollection.find_one({f"{key}": value})
 
-    def update(self, key, value, dictionary):
-        self.mycollection.update_one({key: value}, {"$set": dictionary})
+    def update(self, key, value, dictionary, upsert=False):
+        self.mycollection.update_one({key: value}, {"$set": dictionary}, upsert=upsert)
 
  
 
 trades_db = Mongo("trades")
+settings_db = Mongo("settings")
 

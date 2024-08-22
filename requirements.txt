@@ -6,8 +6,6 @@ annotated-types==0.7.0
 anyio==4.4.0
 attrs==23.2.0
 billiard==4.2.0
-celery==5.4.0
-goplus==0.2.4
 certifi==2024.6.2
 frozenlist==1.4.1
 gevent==24.2.1
@@ -37,7 +35,6 @@ PyYAML==6.0.1
 regex==2024.5.15
 requests==2.32.3
 rich==13.7.1
-selenium==4.21.0
 setuptools==71.0.3
 shellingham==1.5.4
 six==1.16.0

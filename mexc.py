@@ -40,29 +40,6 @@ async def get_tokens(): #переписать на получение из фа�
         json.dump(arr, f, indent=4)
     return arr
 
-# async def calculate_avg_price(arr):
-#     total_cost = 0.0
-#     target_value = 1000.0
-#     total_volume = 0.0
-#     k = 0
-#     for i in arr:
-#         k += 1
-#         price = float(i['p'])
-#         volume = float(i['v'])
-#         value = price * volume
-
-#         if total_cost + value >= target_value:
-#             remaining_value = target_value - total_cost
-#             volume_needed = remaining_value / price
-#             total_cost += remaining_value
-#             total_volume += volume_needed
-#             break
-#         else:
-#             total_cost += value
-#             total_volume += volume
-
-#     avg_price = total_cost / total_volume
-#     return avg_price, k, total_cost, total_volume
 
 async def get_quote(subscribe_list):
     while True: 
@@ -78,9 +55,6 @@ async def get_quote(subscribe_list):
                     data = await websocket.recv()
                     data = json.loads(data)
                     try:
-                        # avg_price_bid, orders_bid, vol_bid_in_usdt, vol_bid = await calculate_avg_price(data['d']['bids'])
-                        # avg_price_ask, orders_ask, vol_ask_in_usdt, vol_ask = await calculate_avg_price(data['d']['asks'])
-
                         await redis.set(
                             f'{data["s"]}@MEXC',
                                 json.dumps(data["d"])
@@ -101,5 +75,8 @@ async def main():
         tasks.append(get_quote(chunk))
 
     await asyncio.gather(*tasks)
+
+
+
 if __name__ == '__main__':
     asyncio.run(main())

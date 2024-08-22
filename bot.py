@@ -9,7 +9,7 @@ from web3 import Web3
 from swap import get_eth_price
 import datetime
 import httpx
-from mongo import trades_db 
+from mongo import trades_db, settings_db
 API_TOKEN = '7473932480:AAHvJvYndS0-blMx8U-w57BBjMuUTl01E7E' #прод
 # API_TOKEN = '6769001742:AAGW0d_60IymQPl8ef4U7Pvun3aIYf0aBPc'
 
@@ -88,48 +88,56 @@ async def message_id(message: types.Message):
 
 @dp.message_handler(commands=['show'])
 async def message_id(message: types.Message):
-    arr = await redis.get("scan")
-    if not arr:
-        await bot.send_message(message.chat.id, "Nothing to show")
-    arr = json.loads(arr)
+    trades = trades_db.get_all()
     string = ""
-    for k, v in arr.items():
-        string += f'{k}: {v}\n'
+    for trade in trades:
+        string += f'{trade["symbol"]}: {trade["message"]}\n'
+
+    await bot.send_message(message.chat.id, string)
+
+@dp.message_handler(commands=['settings'])
+async def message_id(message: types.Message):
+    settings = settings_db.get_all()
+    string = ""
+    for setting in settings:
+        string += f'{setting["key"]}: {setting["value"]}\n'
 
     await bot.send_message(message.chat.id, string)
 
 @dp.message_handler(commands=['not'])
 async def message_id(message: types.Message):
-    await redis.set("scan_prev", json.dumps({}))
     while True:
-        life_time_target = await redis.get("life_time_target")
-        if not life_time_target:
-            await redis.set("life_time_target", json.dumps(0))
+        try:
             life_time_target = await redis.get("life_time_target")
-        life_time_target = int(json.loads(life_time_target))
-        arr = trades_db.get_all()
-        if not arr:
-            continue
-        for trade in arr:
-            if trade["notify"]:
+            if not life_time_target:
+                await redis.set("life_time_target", json.dumps(0))
+                life_time_target = await redis.get("life_time_target")
+            life_time_target = int(json.loads(life_time_target))
+            arr = trades_db.get_all()
+            if not arr:
                 continue
-            life_time = datetime.datetime.now() - datetime.datetime.strptime(trade["start_time"], "%Y-%m-%d %H:%M:%S")
-            if life_time.total_seconds() < life_time_target:
-                continue
-            trades_db.update("symbol", trade["symbol"], {"notify": True})
-            await bot.send_message(message.chat.id, f'{trade["symbol"]}: {trade["message"]}')
+            for trade in arr:
+                if trade["notify"]:
+                    continue
+                life_time = datetime.datetime.now() - datetime.datetime.strptime(trade["start_time"], "%Y-%m-%d %H:%M:%S")
+                if life_time.total_seconds() < life_time_target:
+                    continue
+                trades_db.update("symbol", trade["symbol"], {"notify": True})
+                await bot.send_message(message.chat.id, f'{trade["symbol"]}: {trade["message"]}')
+        except Exception as e:
+            print(e)
 
 
 @dp.message_handler(lambda message: message.text and ':' in message.text.lower())
 async def message_id(message: types.Message):
     life_time_target = float(message.text[1:])
-    await redis.set("life_time_target", json.dumps(life_time_target)) 
+    settings_db.update("life_time_target", life_time_target, upsert=True)
     await bot.send_message(message.chat.id, "Done")
 
 @dp.message_handler(lambda message: message.text and '.' in message.text.lower())
 async def message_id(message: types.Message):
     target_profit = float(message.text[1:])
-    await redis.set("target_profit", json.dumps(target_profit)) 
+    settings_db.update("target_profit", target_profit, upsert=True)
     await bot.send_message(message.chat.id, "Done")
 
 
@@ -202,7 +210,7 @@ async def message_id(message: types.Message):
                     else:
                         continue
                 except Exception as e:
-                    print(token["symbol"])
+                    pass
             current_trades = trades_db.get_all()
             for i in current_trades:
                 if i["symbol"] not in arr:
