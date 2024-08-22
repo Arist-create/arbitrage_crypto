@@ -108,7 +108,8 @@ async def message_id(message: types.Message):
 async def message_id(message: types.Message):
     while True:
         try:
-            life_time_target = settings_db.get("life_time_target")
+            life_time_target = settings_db.get_all()
+            life_time_target = float(life_time_target[0]["life_time_target"])
             if not life_time_target:
                 life_time_target = 0
             arr = trades_db.get_all()
