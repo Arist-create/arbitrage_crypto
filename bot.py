@@ -97,10 +97,12 @@ async def message_id(message: types.Message):
 
 @dp.message_handler(commands=['settings'])
 async def message_id(message: types.Message):
-    settings = settings_db.get_all()
+    settings = settings_db.get("number", 1)
+    if not settings:
+        return
     string = ""
-    for setting in settings:
-        string += f'{setting["key"]}: {setting["value"]}\n'
+    for k, v in settings.items():
+        string += f'{k}: {v}\n'
 
     await bot.send_message(message.chat.id, string)
 
@@ -108,10 +110,11 @@ async def message_id(message: types.Message):
 async def message_id(message: types.Message):
     while True:
         try:
-            life_time_target = settings_db.get_all()
-            life_time_target = float(life_time_target[0]["life_time_target"])
+            life_time_target = settings_db.get("number", 1)
             if not life_time_target:
                 life_time_target = 0
+            else:
+                life_time_target = float(life_time_target["life_time_target"])
             arr = trades_db.get_all()
             if not arr:
                 continue
@@ -130,13 +133,21 @@ async def message_id(message: types.Message):
 @dp.message_handler(lambda message: message.text and ':' in message.text.lower())
 async def message_id(message: types.Message):
     life_time_target = float(message.text[1:])
-    settings_db.update("life_time_target", life_time_target, upsert=True)
+    check = settings_db.get("number", 1)
+    if not check:
+        settings_db.add({"life_time_target": 0.0, "number": 1})
+    else:
+        settings_db.update("number", 1, {"life_time_target": life_time_target})
     await bot.send_message(message.chat.id, "Done")
 
 @dp.message_handler(lambda message: message.text and '.' in message.text.lower())
 async def message_id(message: types.Message):
     target_profit = float(message.text[1:])
-    settings_db.update("target_profit", target_profit, upsert=True)
+    check = settings_db.get("number", 1)
+    if not check:
+        settings_db.add({"target_profit": 0.0, "number": 1})
+    else:
+        settings_db.update("number", 1, {"target_profit": target_profit})
     await bot.send_message(message.chat.id, "Done")
 
 
@@ -146,12 +157,12 @@ async def message_id(message: types.Message):
     tokens = await get_tokens()
     while True:
         try:
-            target_profit = await redis.get("target_profit")
+            target_profit = settings_db.get("number", 1)
             if not target_profit:
-                await redis.set("target_profit", json.dumps(0.0))
-                target_profit = await redis.get("target_profit")
-            target_profit = int(json.loads(target_profit)) 
-            
+                target_profit = 0
+            else:
+                target_profit = float(target_profit["target_profit"])
+             
             rpc_url = "https://rpc.ankr.com/eth"
             async with httpx.AsyncClient(
                             limits=httpx.Limits(max_keepalive_connections=3000, max_connections=3000),
