@@ -108,11 +108,9 @@ async def message_id(message: types.Message):
 async def message_id(message: types.Message):
     while True:
         try:
-            life_time_target = await redis.get("life_time_target")
+            life_time_target = settings_db.get("life_time_target")
             if not life_time_target:
-                await redis.set("life_time_target", json.dumps(0))
-                life_time_target = await redis.get("life_time_target")
-            life_time_target = int(json.loads(life_time_target))
+                life_time_target = 0
             arr = trades_db.get_all()
             if not arr:
                 continue
