@@ -109,7 +109,7 @@ async def main():
                     limits=httpx.Limits(max_keepalive_connections=3000, max_connections=3000),
                     timeout=60,
                     # mounts=proxy_mounts
-                    verify=False
+                    verify=False 
                 ) as client:
                 one_eth = await get_eth_price(client)
                 one_eth = int(one_eth['toAmount'])/(10**6) 
