@@ -5,68 +5,25 @@ import httpx
 from redis import redis
 from web3 import Web3
 import datetime
-import requests
 
 
 proxy_mounts={"https://": httpx.AsyncHTTPTransport(proxy="socks5://proxy_user:wcPYZj5Zlj@62.133.62.154:41257")}
 
-async def check_deposit_and_withdraw_mexc():
-    resp = requests.get(
-        f"https://www.mexc.com/open/api/v2/market/coin/list",
-        headers={
-            'Accept': 'application/json', 
-            'Content-Type': 'application/json', 
-            'X-MEXC-APIKEY': 'mx0vglNJacXHNmGojb'
-        }
-    )
-    resp = resp.json()['data']
-
-    with open('list_of_deposit_and_withdraw_tokens_mexc.json', 'w') as f:
-        json.dump(resp, f, indent=4)
-
-
-async def actualize():
-    await check_deposit_and_withdraw_mexc()
-    with open('list_of_deposit_and_withdraw_tokens_mexc.json') as f:
-        tokens = json.load(f)
-
-    with open('list_of_tokens_mexc_with_addresses.json') as f:
-        tokens_2 = json.load(f)
-    arr = []
-
-
-    for i in tokens:
-        try:
-            info = tokens_2[i["currency"]]
-        except:
-            continue
-        for j in i["coins"]:
-            if j["chain"] == "Ethereum(ERC20)":
-                for chain in info["chains"]:
-                    if chain["chainName"] == "Ethereum(ERC20)":
-                        j["address"] = chain["contractAddress"]
-                        arr.append(i)
-                        break
-                break
-
-    with open('list_of_tokens_with_and_dep_mexc_plus.json', 'w') as f:
-        json.dump(arr, f, indent=4)
-
 async def get_token_address():
-    await actualize()
-    with open('list_of_tokens_mexc.json') as f1, open('list_of_tokens_with_and_dep_mexc_plus.json') as f2:
+    with open('list_of_pairs_mexc.json') as f1, open('tokens_mexc_by_chains.json') as f2:
         arr = json.load(f1)
         arr_address = json.load(f2)
     symbol_to_address = {}
-    for j in arr_address:
-        for i in j["coins"]:
-            if i["chain"] == "Ethereum(ERC20)":
-                symbol_to_address[j["currency"]] = (i["address"], int(i["precision"]))
+    for j in arr_address.values():
+        for i in j["networkList"]:
+            if i["network"] == "Ethereum(ERC20)":
+                if not i.get("decimals"):
+                    continue
+                symbol_to_address[i["coin"]] = (i["contract"], int(i["decimals"]))
 
-    
     for i in arr:
         if i['symbol'][:-4] in symbol_to_address:
-            i['address'], i['decimals'] = symbol_to_address[i['symbol'][:-4]]
+            i['contract'], i['decimals'] = symbol_to_address[i['symbol'][:-4]]
     return arr
 
 async def set_results(results, mn, redis_client):
@@ -138,7 +95,7 @@ async def fetch_volume(redis, token, dict_of_inf):
     vol = await redis.get(f'{token["symbol"]}@MEXC')
     if vol:
         vol, _ = await calculate_vol(json.loads(vol)['asks'])
-        vol -= dict_of_inf['fee']
+        vol -= float(dict_of_inf['withdrawFee'])
         return vol * (10 ** token['decimals'])
     return None
 
@@ -160,18 +117,18 @@ async def main():
                 gas = web_3.eth.gas_price/10**18
                 mn = gas*one_eth
 
-                with open('list_of_tokens_with_and_dep_mexc_plus.json') as f:
+                with open('tokens_mexc_by_chains.json') as f:
                     tokens_with_and_dep = json.load(f)
                 dict_of_inf = {}
-                for j in tokens_with_and_dep:
-                    for i in j["coins"]:
-                        if i["chain"] == "Ethereum(ERC20)":
-                            dict_of_inf[j["currency"]] = i
+                for v in tokens_with_and_dep.values():
+                    for i in v["networkList"]:
+                        if i["network"] == "Ethereum(ERC20)":
+                            dict_of_inf[i["coin"]] = i
 
                 tasks = []
                 for token in tokens:
                     try:
-                        _ = token['address']
+                        _ = token['contract']
                     except:
                         continue
                     vol = await fetch_volume(redis, token, dict_of_inf[token["symbol"][:-4]])
@@ -179,7 +136,7 @@ async def main():
                         continue
                     tasks.append(make_request( 
                             client,
-                            token['address'], 
+                            token['contract'], 
                             '0xdac17f958d2ee523a2206206994597c13d831ec7', 
                             format(vol, '.0f'),
                             3000000000,

@@ -1,9 +1,8 @@
-
+import requests
 import time
 from aiogram import types, executor
 from aiogram import Bot, Dispatcher
 from redis import redis
-from mexc import get_tokens
 import json
 from web3 import Web3
 from swap import get_eth_price
@@ -21,7 +20,7 @@ dp = Dispatcher(bot)
 
 async def calc_vol_in_usdt(arr):
     total_cost = 0.0
-    target_value = 3000.0
+    target_value = 1000.0
     total_volume = 0.0
     k = 0
     for i in arr:
@@ -61,26 +60,65 @@ async def calc_vol_to_sell_on_mexc_in_usdt(arr, target_value):
             total_volume += volume
     return total_cost, k
 
-async def buy_on_mexc(mexc, one_inch, info, go_plus):
-    if info["is_withdraw_enabled"] == False:
+
+async def buy_on_mexc(mexc, one_inch, info, target_profit):
+    if info["withdrawEnable"] == False:
         return None, None
     mexc_vol, orders = await calc_vol_in_usdt(mexc['asks'])
-    if mexc_vol < 3000:
+    if mexc_vol < 1000:
         return None, None
     one_inch_vol = one_inch[0]['sell']
-    one_inch_vol = one_inch_vol - (one_inch_vol * float(go_plus["sell_tax"]))
     gas = one_inch[0]['gas']
+    pre_profit = (one_inch_vol - mexc_vol) - gas
+    if pre_profit < target_profit:
+        return None, None
+    contract_address = info['contract']
+    resp = requests.get(f'https://api.gopluslabs.io/api/v1/token_security/1?contract_addresses={contract_address}')
+    try:
+        buy_tax = resp.json()["result"][f'{contract_address.lower()}']["buy_tax"]
+        sell_tax = resp.json()["result"][f'{contract_address.lower()}']["sell_tax"]
+    
+        go_plus = {
+            "buy_tax": buy_tax,
+            "sell_tax": sell_tax
+            }
+        
+    except Exception as e:
+        print(e)
+        print(resp.json())
+    one_inch_vol = one_inch_vol - (one_inch_vol * float(go_plus["sell_tax"]))
     profit = (one_inch_vol - mexc_vol) - gas
+
+    await asyncio.sleep(1)
     return profit, orders
  
-async def buy_on_one_inch(mexc, one_inch, info, gas_for_withdraw, go_plus):
-    if info["is_deposit_enabled"] == False:
+async def buy_on_one_inch(mexc, one_inch, info, gas_for_withdraw, target_profit):
+    if info["depositEnable"] == False:
         return None, None
     one_inch_vol = one_inch[1]['buy']
-    one_inch_vol = one_inch_vol - (one_inch_vol * float(go_plus["buy_tax"]))
     gas = one_inch[1]['gas']
     mexc_vol, orders = await calc_vol_to_sell_on_mexc_in_usdt(mexc['bids'], one_inch_vol)
-    profit = (mexc_vol - 3000) - gas - gas_for_withdraw
+    pre_profit = (mexc_vol - 1000) - gas - gas_for_withdraw
+    if pre_profit < target_profit:
+        return None, None
+    contract_address = info['contract']
+    resp = requests.get(f'https://api.gopluslabs.io/api/v1/token_security/1?contract_addresses={contract_address}')
+    try:
+        buy_tax = resp.json()["result"][f'{contract_address.lower()}']["buy_tax"]
+        sell_tax = resp.json()["result"][f'{contract_address.lower()}']["sell_tax"]
+    
+        go_plus = {
+            "buy_tax": buy_tax,
+            "sell_tax": sell_tax
+            }
+        
+    except Exception as e:
+        print(e)
+        print(resp.json())
+    one_inch_vol = one_inch_vol - (one_inch_vol * float(go_plus["buy_tax"]))
+    mexc_vol, orders = await calc_vol_to_sell_on_mexc_in_usdt(mexc['bids'], one_inch_vol)
+    profit = (mexc_vol - 1000) - gas - gas_for_withdraw
+    await asyncio.sleep(1)
     return profit, orders
 
 @dp.message_handler(commands=['start'])
@@ -153,7 +191,8 @@ async def message_id(message: types.Message):
 @dp.message_handler(commands=['scan'])
 async def message_id(message: types.Message):
     await bot.send_message(message.chat.id, "Scanning...")
-    tokens = await get_tokens()
+    with open ('list_of_pairs_mexc.json') as f:
+        pairs = json.load(f)
     while True:
         try:
             target_profit = settings_db.get("number", 1)
@@ -173,46 +212,38 @@ async def message_id(message: types.Message):
             web_3 = Web3(Web3.HTTPProvider(rpc_url))
             gas = web_3.eth.gas_price/10**18
             gas_for_withdraw = gas*int(one_eth["toAmount"])
-            with open('list_of_tokens_with_and_dep_mexc_plus.json') as f:
+            with open('tokens_mexc_by_chains.json') as f:
                 tokens_with_and_dep = json.load(f)
             dict_of_inf = {}
-            for j in tokens_with_and_dep:
-                for i in j["coins"]:
-                    if i["chain"] == "Ethereum(ERC20)":
-                        dict_of_inf[j["currency"]] = i
-            with open("list_of_tokens_goplus.json") as f:
-                go_plus = json.load(f)
+            for v in tokens_with_and_dep.values():
+                for i in v["networkList"]:
+                    if i["network"] == "Ethereum(ERC20)":
+                        dict_of_inf[i["coin"]] = i
             arr = set()
             start_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            for token in tokens:
+            for pair in pairs:
                 try:
-                    info = dict_of_inf[token['symbol'][:-4]]
-                    one_inch = await redis.get(f'{token["symbol"]}@1INCH')
+                    info = dict_of_inf[pair['symbol'][:-4]]
+                    one_inch = await redis.get(f'{pair["symbol"]}@1INCH')
                     if not one_inch:
                         continue
                     one_inch = json.loads(one_inch)
-                    mexc = await redis.get(f'{token["symbol"]}@MEXC')
+                    mexc = await redis.get(f'{pair["symbol"]}@MEXC')
                     mexc = json.loads(mexc)
-                    for i in go_plus:
-                        try:
-                            go = i[info["address"].lower()] 
-                            break
-                        except:
-                            continue
-                    profit_mexc, orders_to_buy = await buy_on_mexc(mexc, one_inch, info, go)
-            
-                    profit_one_inch, orders_to_sell = await buy_on_one_inch(mexc, one_inch, info, gas_for_withdraw, go)
+
+                    profit_mexc, orders_to_buy = await buy_on_mexc(mexc, one_inch, info, target_profit) 
+                    profit_one_inch, orders_to_sell = await buy_on_one_inch(mexc, one_inch, info, gas_for_withdraw, target_profit) 
                     if profit_mexc and profit_one_inch:
                         if profit_mexc > target_profit or profit_one_inch > target_profit:
                             message = f'\n mexc: {float(profit_mexc):.2f} \n orders_to_buy: {orders_to_buy} \n one_inch: {float(profit_one_inch):.2f} \n orders_to_sell: {orders_to_sell}'
-                            line = {"symbol": token["symbol"], 
+                            line = {"symbol": pair["symbol"], 
                                     "message": message,
                                     "start_time": start_time,
                                     "notify": False}
-                            check = trades_db.get("symbol", token["symbol"])
+                            check = trades_db.get("symbol", pair["symbol"])
                             if not check:
                                 trades_db.add(line)
-                            trades_db.update("symbol", token["symbol"], {"message": message})
+                            trades_db.update("symbol", pair["symbol"], {"message": message})
                             arr.add(line["symbol"])
 
                             # сделать удаление неактуальных арбитражей(если в списке нет этой пары то удалить её из монги)

@@ -1,9 +1,13 @@
-
+import asyncio
 import requests
 import json
+import time
+import hmac
+import hashlib
 
 
-async def check_deposit_and_withdraw_mexc():
+
+async def get_decimals_mexc():
     resp = requests.get(
         f"https://www.mexc.com/open/api/v2/market/coin/list",
         headers={
@@ -13,86 +17,110 @@ async def check_deposit_and_withdraw_mexc():
         }
     )
     resp = resp.json()['data']
+    dictionary = {i["currency"]: i for i in resp}
 
-    with open('list_of_deposit_and_withdraw_tokens_mexc.json', 'w') as f:
-        json.dump(resp, f, indent=4)
 
-async def get_tokens(): #переписать на получение из файла а обновление сделать на актуализаторе
-    with open('list_of_deposit_and_withdraw_tokens_mexc.json', 'r') as f:
-        arr = json.load(f)
-    arr_new = set()
-    for i in arr:
-        for j in i["coins"]:
-            if j["chain"] == "Ethereum(ERC20)":
-                arr_new.add(i["currency"])
+    with open('decimals_mexc.json', 'w') as f:
+        json.dump(dictionary, f, indent=4)
+
+async def signature(timestamp):
+    secret = b"e4089671cab54eaab97caddadf3cabdc"
+    return hmac.new(secret, f"timestamp={timestamp}".encode("utf-8"), hashlib.sha256).hexdigest()
+
+async def get_tokens_mexc_by_chains():
+    timestamp = int(time.time() * 1000)
+    sign = await signature(timestamp) 
     resp = requests.get(
-        'https://www.mexc.com/open/api/v2/market/symbols',
+        f'https://api.mexc.com/api/v3/capital/config/getall?timestamp={timestamp}&signature={sign}',
+        headers={ 
+            'X-MEXC-APIKEY': 'mx0vglNJacXHNmGojb',
+        }
+    )
+    tokens_by_chains = resp.json()
+
+    dictionary = {i["coin"]: i for i in tokens_by_chains}
+    
+    with open('decimals_mexc.json') as f:
+        tokens_with_decimals = json.load(f)
+    
+    for k, v in dictionary.items():
+        info = tokens_with_decimals.get(k)
+        if not info:
+            continue
+        info = info.get("coins")
+        if not info:
+            continue
+        for i in v["networkList"]:
+            for j in info:
+                if i["network"] == j["chain"]:
+                    i["decimals"] = j["precision"]
+                    break
+
+    with open('tokens_mexc_by_chains.json', 'w') as f:
+        json.dump(dictionary, f, indent=4)
+
+async def get_pairs(): #переписать на получение из файла а обновление сделать на актуализаторе
+    resp = requests.get(
+        'https://api.mexc.com/api/v3/exchangeInfo',
         headers={
             'Accept': 'application/json', 
             'Content-Type': 'application/json', 
             'X-MEXC-APIKEY': 'mx0vglNJacXHNmGojb',
         }
     )
-    resp = resp.json()["data"]
- 
+    resp = resp.json()["symbols"]
     arr = [
         i
         for i in resp
-        if i['state'] == '1'
-        and i.get('symbol')[-4:] == 'USDT'
-        and i.get('symbol')[:-5] in arr_new
+        if i['status'] == '1'
+        and i.get("quoteAsset") == 'USDT'
     ]
     print(len(arr))
-    for i in arr:
-        i["symbol"] = i["symbol"].replace('_USDT', 'USDT')
     # сохранить список в json файл
-    with open('list_of_tokens_mexc.json', 'w') as f:
+    with open('list_of_pairs_mexc.json', 'w') as f:
         json.dump(arr, f, indent=4)
-    return arr
 
+
+# async def get_tokens_by_goplus():
+#     with open('tokens_mexc_by_chains.json') as f1, open('chains_by_number_only_for_mexc.json') as f2, open('tokens_by_goplus.json') as f3:
+#         tokens, chains, tokens_by_goplus = map(json.load, [f1, f2, f3])
+#     print(len(tokens_by_goplus.keys()))
+#     flag = True
+#     for v in tokens.values():
+#         for i in v["networkList"]:
+#             contract_address = i.get("contract")
+#             if not contract_address:
+#                 continue
+#             check = tokens_by_goplus.get(contract_address.lower())
+#             if check:
+#                 continue
+#             chain_number = chains.get(i["network"])
+#             if chain_number:
+#                 if flag:
+#                     resp = requests.get(f'https://api.gopluslabs.io/api/v1/token_security/{chain_number}?contract_addresses={contract_address}', proxies={"https": "socks5://proxy_user:wcPYZj5Zlj@62.133.62.154:41257"})
+#                     flag = False
+#                 else:
+#                     resp = requests.get(f'https://api.gopluslabs.io/api/v1/token_security/{chain_number}?contract_addresses={contract_address}')
+#                     flag = True
+#                 try:
+#                     buy_tax = resp.json()["result"][f'{contract_address.lower()}']["buy_tax"]
+#                     sell_tax = resp.json()["result"][f'{contract_address.lower()}']["sell_tax"]
+                
+#                     dictionary = {f"{contract_address.lower()}": {
+#                         "buy_tax": buy_tax,
+#                         "sell_tax": sell_tax
+#                         }
+#                     }
+#                     tokens_by_goplus.update(dictionary)
+#                     with open('tokens_by_goplus.json', 'w') as f:
+#                         json.dump(tokens_by_goplus, f, indent=4)
+#                 except:
+#                     print(resp.json())
+#                 await asyncio.sleep(0.5)
 
 
 
 async def actualize():
-    await check_deposit_and_withdraw_mexc()
-    with open('list_of_deposit_and_withdraw_tokens_mexc.json') as f:
-        tokens = json.load(f)
-
-    with open('list_of_tokens_mexc_with_addresses.json') as f:
-        tokens_2 = json.load(f)
-    arr = []
-
-
-    for i in tokens:
-        try:
-            info = tokens_2[i["currency"]]
-        except:
-            continue
-        for j in i["coins"]:
-            if j["chain"] == "Ethereum(ERC20)":
-                for chain in info["chains"]:
-                    if chain["chainName"] == "Ethereum(ERC20)":
-                        j["address"] = chain["contractAddress"]
-                        arr.append(i)
-                        break
-                break
-
-    with open('list_of_tokens_with_and_dep_mexc_plus.json', 'w') as f:
-        json.dump(arr, f, indent=4)
-
-async def get_token_address():
-    await actualize()
-    with open('list_of_tokens_mexc.json') as f1, open('list_of_tokens_with_and_dep_mexc_plus.json') as f2:
-        arr = json.load(f1)
-        arr_address = json.load(f2)
-    symbol_to_address = {}
-    for j in arr_address:
-        for i in j["coins"]:
-            if i["chain"] == "Ethereum(ERC20)":
-                symbol_to_address[j["currency"]] = (i["address"], int(i["precision"]))
-
-    
-    for i in arr:
-        if i['symbol'][:-4] in symbol_to_address:
-            i['address'], i['decimals'] = symbol_to_address[i['symbol'][:-4]]
-    return arr
+    await get_pairs()
+    await get_decimals_mexc()
+    await get_tokens_mexc_by_chains()

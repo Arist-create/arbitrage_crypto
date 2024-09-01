@@ -309,9 +309,12 @@
 
 # print(len(arr))
 # import requests
-# resp = requests.get('https://api.gopluslabs.io/api/v1/token_security/1?contract_addresses=0x043312456f73D8014D9b84f4337DE54995CD2A5B')
-# # "https://api.gopluslabs.io/api/v1/token_security/1?contract_addresses=
-# # 0x25bE643995fA9F077c7349FB78d13c5ee3fc11d6
+# import json
+# resp = requests.get('https://api.gopluslabs.io/api/v1/token_security/1', params={"contract_addresses": ["0x043312456f73D8014D9b84f4337DE54995CD2A5B","0x25bE643995fA9F077c7349FB78d13c5ee3fc11d6"]})
+# resp = resp.json()["result"]
+# print(json.dumps(resp, indent=4))
+# "https://api.gopluslabs.io/api/v1/token_security/1?contract_addresses=
+# 0x25bE643995fA9F077c7349FB78d13c5ee3fc11d6
 
 
 # print(resp.json())
@@ -328,28 +331,61 @@
 # resp = resp.json()["data"]
 # print(resp)
 
-import requests
-import time
-import hmac
-import hashlib
+# import requests
+# import time
+# import hmac
+# import json
+# import hashlib
 
-def signature(timestamp):
-    secret = b"e4089671cab54eaab97caddadf3cabdc"
-    return hmac.new(secret, f"timestamp={timestamp}".encode("utf-8"), hashlib.sha256).hexdigest()
+# def signature(timestamp):
+#     secret = b"e4089671cab54eaab97caddadf3cabdc"
+#     return hmac.new(secret, f"timestamp={timestamp}".encode("utf-8"), hashlib.sha256).hexdigest()
 
-timestamp = int(time.time() * 1000)
-sign = signature(timestamp)
-print(sign)
-print(timestamp)
-
-
-resp = requests.get(
-        f'https://api.mexc.com/api/v3/capital/config/getall?timestamp={timestamp}&signature={sign}',
-        headers={ 
-            'X-MEXC-APIKEY': 'mx0vglNJacXHNmGojb',
-        }
-    )
-resp = resp.json()
-print(resp)
+# timestamp = int(time.time() * 1000)
+# sign = signature(timestamp)
+# print(sign)
+# print(timestamp)
 
 
+# resp = requests.get(
+#         f'https://api.mexc.com/api/v3/capital/config/getall?timestamp={timestamp}&signature={sign}',
+#         headers={ 
+#             'X-MEXC-APIKEY': 'mx0vglNJacXHNmGojb',
+#         }
+#     )
+# resp = resp.json()
+# with open('list_of_tokens_mexc_with_addresses.json', 'w') as f:
+#     json.dump(resp, f, indent=4)
+# print(resp)
+# import json
+# import requests
+# import asyncio
+
+# async def get_decimals_mexc():
+#     resp = requests.get(
+#         f"https://www.mexc.com/open/api/v2/market/coin/list",
+#         headers={
+#             'Accept': 'application/json', 
+#             'Content-Type': 'application/json', 
+#             'X-MEXC-APIKEY': 'mx0vglNJacXHNmGojb'
+#         }
+#     )
+#     resp = resp.json()['data']
+
+#     with open('decimals_mexc.json', 'w') as f:
+#         json.dump(resp, f, indent=4)
+
+
+# asyncio.run(get_decimals_mexc())
+
+from goplus.token import Token
+import json
+
+data = Token(access_token=None).token_security(
+    chain_id="1", addresses=["0x25bE643995fA9F077c7349FB78d13c5ee3fc11d6"]
+)
+print(data)
+
+
+for i in data.result:
+    print(i)
