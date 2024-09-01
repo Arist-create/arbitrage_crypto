@@ -70,7 +70,7 @@ async def get_eth_price(client):
 
 async def calculate_vol(arr):
     total_cost = 0.0
-    target_value = 3000.0
+    target_value = 1000.0
     total_volume = 0.0
     k = 0
     for i in arr:
@@ -139,7 +139,7 @@ async def main():
                             token['contract'], 
                             '0xdac17f958d2ee523a2206206994597c13d831ec7', 
                             format(vol, '.0f'),
-                            3000000000,
+                            1000000000,
                             token["symbol"],
                             f'{token["symbol"]}_F', 
                             token['decimals'],
