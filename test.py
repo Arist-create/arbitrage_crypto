@@ -378,14 +378,21 @@
 
 # asyncio.run(get_decimals_mexc())
 
-from goplus.token import Token
-import json
+# from goplus.token import Token
+# import json
 
-data = Token(access_token=None).token_security(
-    chain_id="1", addresses=["0x25bE643995fA9F077c7349FB78d13c5ee3fc11d6"]
-)
-print(data)
+# data = Token(access_token=None).token_security(
+#     chain_id="1", addresses=["0x25bE643995fA9F077c7349FB78d13c5ee3fc11d6"]
+# )
+# print(data)
 
 
-for i in data.result:
-    print(i)
+# for i in data.result:
+#     print(i)
+
+import requests
+
+resp = requests.get("https://api.gopluslabs.io/api/v1/token_security/1?contract_addresses=0x25bE643995fA9F077c7349FB78d13c5ee3fc11d6",
+                    proxies={"https": "socks5://QFJKFyXIDB:PoCuFiLDL7@109.120.147.37:46328"})
+
+print(resp.json())

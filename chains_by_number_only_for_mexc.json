@@ -4,8 +4,5 @@
     "Optimism(OP)": 10,
     "Polygon(MATIC)": 137,
     "BNB Smart Chain(BEP20)": 56,
-    "Avalanche C Chain(AVAX CCHAIN)": 43114,
-    "BASE": 8453,
-    "zkSync Era": 324,
-    "Fantom(FTM)": 250
+    "Avalanche C Chain(AVAX CCHAIN)": 43114
 }

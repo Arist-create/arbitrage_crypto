@@ -1,4 +1,3 @@
-import requests
 import time
 from aiogram import types, executor
 from aiogram import Bot, Dispatcher
@@ -7,9 +6,8 @@ import json
 from web3 import Web3
 from swap import get_eth_price
 import datetime
-import httpx
 import asyncio
-from mongo import trades_db, settings_db
+from mongo import trades_db, settings_db, goplus_db
 API_TOKEN = '7473932480:AAHvJvYndS0-blMx8U-w57BBjMuUTl01E7E' #прод
 # API_TOKEN = '6769001742:AAGW0d_60IymQPl8ef4U7Pvun3aIYf0aBPc'
 
@@ -61,7 +59,7 @@ async def calc_vol_to_sell_on_mexc_in_usdt(arr, target_value):
     return total_cost, k
 
 
-async def buy_on_mexc(mexc, one_inch, info, target_profit):
+async def buy_on_mexc(mexc, one_inch, info, goplus):
     if info["withdrawEnable"] == False:
         return None, None
     mexc_vol, orders = await calc_vol_in_usdt(mexc['asks'])
@@ -69,56 +67,26 @@ async def buy_on_mexc(mexc, one_inch, info, target_profit):
         return None, None
     one_inch_vol = one_inch[0]['sell']
     gas = one_inch[0]['gas']
-    pre_profit = (one_inch_vol - mexc_vol) - gas
-    if pre_profit < target_profit:
-        return None, None
-    contract_address = info['contract']
-    resp = requests.get(f'https://api.gopluslabs.io/api/v1/token_security/1?contract_addresses={contract_address}')
-    try:
-        buy_tax = resp.json()["result"][f'{contract_address.lower()}']["buy_tax"]
-        sell_tax = resp.json()["result"][f'{contract_address.lower()}']["sell_tax"]
-    
-        go_plus = {
-            "buy_tax": buy_tax,
-            "sell_tax": sell_tax
-            }
-        
-    except Exception as e:
-        print(e)
-        print(resp.json())
-    one_inch_vol = one_inch_vol - (one_inch_vol * float(go_plus["sell_tax"]))
+    tax = goplus["sell_tax"]
+    if tax == '':
+        tax = 0
+    one_inch_vol = one_inch_vol - (one_inch_vol * float(tax))
     profit = (one_inch_vol - mexc_vol) - gas
 
-    await asyncio.sleep(1)
     return profit, orders
  
-async def buy_on_one_inch(mexc, one_inch, info, gas_for_withdraw, target_profit):
+async def buy_on_one_inch(mexc, one_inch, info, goplus):
     if info["depositEnable"] == False:
         return None, None
     one_inch_vol = one_inch[1]['buy']
     gas = one_inch[1]['gas']
+    tax = goplus["buy_tax"]
+    if tax == '':
+        tax = 0
+    one_inch_vol = one_inch_vol - (one_inch_vol * float(tax))
     mexc_vol, orders = await calc_vol_to_sell_on_mexc_in_usdt(mexc['bids'], one_inch_vol)
-    pre_profit = (mexc_vol - 1000) - gas - gas_for_withdraw
-    if pre_profit < target_profit:
-        return None, None
-    contract_address = info['contract']
-    resp = requests.get(f'https://api.gopluslabs.io/api/v1/token_security/1?contract_addresses={contract_address}')
-    try:
-        buy_tax = resp.json()["result"][f'{contract_address.lower()}']["buy_tax"]
-        sell_tax = resp.json()["result"][f'{contract_address.lower()}']["sell_tax"]
-    
-        go_plus = {
-            "buy_tax": buy_tax,
-            "sell_tax": sell_tax
-            }
-        
-    except Exception as e:
-        print(e)
-        print(resp.json())
-    one_inch_vol = one_inch_vol - (one_inch_vol * float(go_plus["buy_tax"]))
-    mexc_vol, orders = await calc_vol_to_sell_on_mexc_in_usdt(mexc['bids'], one_inch_vol)
-    profit = (mexc_vol - 1000) - gas - gas_for_withdraw
-    await asyncio.sleep(1)
+    profit = (mexc_vol - 1000) - gas
+
     return profit, orders
 
 @dp.message_handler(commands=['start'])
@@ -127,7 +95,7 @@ async def message_id(message: types.Message):
 
 @dp.message_handler(commands=['show'])
 async def message_id(message: types.Message):
-    trades = trades_db.get_all()
+    trades = await trades_db.get_all()
     string = ""
     for trade in trades:
         string += f'{trade["symbol"]}: {trade["message"]}\n'
@@ -136,7 +104,7 @@ async def message_id(message: types.Message):
 
 @dp.message_handler(commands=['settings'])
 async def message_id(message: types.Message):
-    settings = settings_db.get("number", 1)
+    settings = await settings_db.get("number", 1)
     if not settings:
         return
     string = ""
@@ -148,12 +116,12 @@ async def message_id(message: types.Message):
 @dp.message_handler(commands=['not'])
 async def message_id(message: types.Message):
     while True:
-        life_time_target = settings_db.get("number", 1)
+        life_time_target = await settings_db.get("number", 1)
         if not life_time_target:
             life_time_target = 0
         else:
             life_time_target = float(life_time_target["life_time_target"])
-        arr = trades_db.get_all()
+        arr = await trades_db.get_all()
         if not arr:
             continue
         for trade in arr:
@@ -162,7 +130,7 @@ async def message_id(message: types.Message):
             life_time = datetime.datetime.now() - datetime.datetime.strptime(trade["start_time"], "%Y-%m-%d %H:%M:%S")
             if life_time.total_seconds() < life_time_target:
                 continue
-            trades_db.update("symbol", trade["symbol"], {"notify": True})
+            await trades_db.update("symbol", trade["symbol"], {"notify": True})
             await bot.send_message(message.chat.id, f'{trade["symbol"]}: {trade["message"]}')
         await asyncio.sleep(5)
 
@@ -170,21 +138,21 @@ async def message_id(message: types.Message):
 @dp.message_handler(lambda message: message.text and ':' in message.text.lower())
 async def message_id(message: types.Message):
     life_time_target = float(message.text[1:])
-    check = settings_db.get("number", 1)
+    check = await settings_db.get("number", 1)
     if not check:
-        settings_db.add({"life_time_target": 0.0, "number": 1})
+        await settings_db.add({"life_time_target": 0.0, "number": 1})
     else:
-        settings_db.update("number", 1, {"life_time_target": life_time_target})
+        await settings_db.update("number", 1, {"life_time_target": life_time_target})
     await bot.send_message(message.chat.id, "Done")
 
 @dp.message_handler(lambda message: message.text and '.' in message.text.lower())
 async def message_id(message: types.Message):
     target_profit = float(message.text[1:])
-    check = settings_db.get("number", 1)
+    check = await settings_db.get("number", 1)
     if not check:
-        settings_db.add({"target_profit": 0.0, "number": 1})
+        await settings_db.add({"target_profit": 0.0, "number": 1})
     else:
-        settings_db.update("number", 1, {"target_profit": target_profit})
+        await settings_db.update("number", 1, {"target_profit": target_profit})
     await bot.send_message(message.chat.id, "Done")
 
 
@@ -194,75 +162,69 @@ async def message_id(message: types.Message):
     with open ('list_of_pairs_mexc.json') as f:
         pairs = json.load(f)
     while True:
-        try:
-            target_profit = settings_db.get("number", 1)
-            if not target_profit:
-                target_profit = 0
-            else:
-                target_profit = float(target_profit["target_profit"])
-             
-            rpc_url = "https://rpc.ankr.com/eth"
-            async with httpx.AsyncClient(
-                            limits=httpx.Limits(max_keepalive_connections=3000, max_connections=3000),
-                            timeout=60,
-                            verify=False,
-                            mounts={"https://": httpx.AsyncHTTPTransport(proxy="socks5://proxy_user:wcPYZj5Zlj@62.133.62.154:41257", verify=False)}
-                        ) as client:
-                one_eth = await get_eth_price(client)
-            web_3 = Web3(Web3.HTTPProvider(rpc_url))
-            gas = web_3.eth.gas_price/10**18
-            gas_for_withdraw = gas*int(one_eth["toAmount"])
-            with open('tokens_mexc_by_chains.json') as f:
-                tokens_with_and_dep = json.load(f)
-            dict_of_inf = {}
-            for v in tokens_with_and_dep.values():
-                for i in v["networkList"]:
-                    if i["network"] == "Ethereum(ERC20)":
-                        dict_of_inf[i["coin"]] = i
-            arr = set()
-            start_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            for pair in pairs:
-                try:
-                    info = dict_of_inf[pair['symbol'][:-4]]
-                    one_inch = await redis.get(f'{pair["symbol"]}@1INCH')
-                    if not one_inch:
-                        continue
-                    one_inch = json.loads(one_inch)
-                    mexc = await redis.get(f'{pair["symbol"]}@MEXC')
-                    mexc = json.loads(mexc)
-
-                    profit_mexc, orders_to_buy = await buy_on_mexc(mexc, one_inch, info, target_profit) 
-                    profit_one_inch, orders_to_sell = await buy_on_one_inch(mexc, one_inch, info, gas_for_withdraw, target_profit) 
-                    if profit_mexc and profit_one_inch:
-                        if profit_mexc > target_profit or profit_one_inch > target_profit:
-                            message = f'\n mexc: {float(profit_mexc):.2f} \n orders_to_buy: {orders_to_buy} \n one_inch: {float(profit_one_inch):.2f} \n orders_to_sell: {orders_to_sell}'
-                            line = {"symbol": pair["symbol"], 
-                                    "message": message,
-                                    "start_time": start_time,
-                                    "notify": False}
-                            check = trades_db.get("symbol", pair["symbol"])
-                            if not check:
-                                trades_db.add(line)
-                            trades_db.update("symbol", pair["symbol"], {"message": message})
-                            arr.add(line["symbol"])
-
-                            # сделать удаление неактуальных арбитражей(если в списке нет этой пары то удалить её из монги)
-                    else:
-                        continue
-                except Exception as e:
-                    pass
-            current_trades = trades_db.get_all()
-            for i in current_trades:
-                if i["symbol"] not in arr:
-                    trades_db.delete("symbol", i["symbol"])
+        target_profit = await settings_db.get("number", 1)
+        if not target_profit:
+            target_profit = 0
+        else:
+            target_profit = float(target_profit["target_profit"])
             
+        # rpc_url = "https://rpc.ankr.com/eth"
+        # async with httpx.AsyncClient(
+        #                 limits=httpx.Limits(max_keepalive_connections=3000, max_connections=3000),
+        #                 timeout=60,
+        #                 verify=False,
+        #                 mounts={"https://": httpx.AsyncHTTPTransport(proxy="socks5://proxy_user:wcPYZj5Zlj@62.133.62.154:41257", verify=False)}
+        #             ) as client:
+        #     one_eth = await get_eth_price(client)
+        # web_3 = Web3(Web3.HTTPProvider(rpc_url))
+        # gas = web_3.eth.gas_price/10**18
+        # gas_for_withdraw = gas*int(one_eth["toAmount"])
+        with open('tokens_mexc_by_chains.json') as f:
+            tokens_with_and_dep = json.load(f)
+        arr = set()
+        start_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        for pair in pairs:
+            one_inch = await redis.get(f'{pair["symbol"]}@1INCH')
+            if not one_inch:
+                continue
+            one_inch = json.loads(one_inch)
+            mexc = await redis.get(f'{pair["symbol"]}@MEXC')
+            mexc = json.loads(mexc)
+            info = tokens_with_and_dep[pair['symbol'][:-4]]["networkList"]
+            if not one_inch[0].get("chain"):
+                continue
+            chain_buy = one_inch[0]["chain"]
+            chain_sell = one_inch[1]["chain"]
+            info_buy = [i for i in info if i["network"] == chain_buy][0]
+            info_sell = [i for i in info if i["network"] == chain_sell][0]
+            
+            goplus_buy = await goplus_db.get("contract_address", info_buy["contract"].lower())
+            goplus_sell = await goplus_db.get("contract_address", info_sell["contract"].lower())
+            if not goplus_buy or not goplus_sell:
+                continue
 
-        except Exception as e:
-            print(f"Error: {e}")
-            time.sleep(5)
-        
-        
+            profit_mexc, orders_to_buy = await buy_on_mexc(mexc, one_inch, info_buy, goplus_buy) 
+            profit_one_inch, orders_to_sell= await buy_on_one_inch(mexc, one_inch, info_sell, goplus_sell)
+            
+            if not profit_mexc or not profit_one_inch:
+                continue
+            if profit_mexc < target_profit and profit_one_inch < target_profit:
+                continue
+            message = f'\n mexc: {float(profit_mexc):.2f} \n orders_to_buy: {orders_to_buy} \n chain_buy: {chain_buy} \n one_inch: {float(profit_one_inch):.2f} \n orders_to_sell: {orders_to_sell} \n chain_sell: {chain_sell}'
+            line = {"symbol": pair["symbol"], 
+                    "message": message,
+                    "start_time": start_time,
+                    "notify": False}
+            check = await trades_db.get("symbol", pair["symbol"])
+            if not check:
+                await trades_db.add(line)
+            await trades_db.update("symbol", pair["symbol"], {"message": message})
+            arr.add(line["symbol"])
 
+        current_trades = await trades_db.get_all()
+        for i in current_trades:
+            if i["symbol"] not in arr:
+                await trades_db.delete("symbol", i["symbol"])
 
 if __name__ == '__main__':
     # создать папку если её нет 

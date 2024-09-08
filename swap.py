@@ -6,61 +6,11 @@ from redis import redis
 from web3 import Web3
 import datetime
 
-
 proxy_mounts={"https://": httpx.AsyncHTTPTransport(proxy="socks5://proxy_user:wcPYZj5Zlj@62.133.62.154:41257")}
 
-async def get_token_address():
-    with open('list_of_pairs_mexc.json') as f1, open('tokens_mexc_by_chains.json') as f2:
-        arr = json.load(f1)
-        arr_address = json.load(f2)
-    symbol_to_address = {}
-    for j in arr_address.values():
-        for i in j["networkList"]:
-            if i["network"] == "Ethereum(ERC20)":
-                if not i.get("decimals"):
-                    continue
-                symbol_to_address[i["coin"]] = (i["contract"], int(i["decimals"]))
-
-    for i in arr:
-        if i['symbol'][:-4] in symbol_to_address:
-            i['contract'], i['decimals'] = symbol_to_address[i['symbol'][:-4]]
-    return arr
-
-async def set_results(results, mn, redis_client):
-
-    dict_f = {arr[1]: arr for arr in results}
-    for arr in results:
-        token = arr[1]
-        if token.endswith('_F'):
-            continue
-        i = dict_f[f'{token}_F']
-        try:
-            await redis_client.set(
-                    f'{token}@1INCH',
-                    json.dumps(
-                        [
-                            {'sell': int(arr[0]['toAmount'])/(10**i[2]), "gas": mn*arr[0]["gas"]},
-                            {'buy': int(i[0]['toAmount'])/(10**arr[2]), "gas": mn*i[0]["gas"]},
-                            datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-                        ]
-                    )
-                )
-        except Exception as e:
-            print(e)
-
-async def fetch(client, token, token_2, amount, name, decimals):
-    resp = await client.get(f'https://api-defillama.1inch.io/v5.2/1/quote?src={token}&dst={token_2}&amount={amount}&includeGas=true')
-    return [resp.json(), name, decimals]
-async def make_request(client, sell_token, buy_token, amount, amount_2, token, token_2, decimals, decimals_2, mn):
-    try:
-        tasks = []
-        tasks.extend([fetch(client, sell_token, buy_token, amount, token, decimals), fetch(client, buy_token, sell_token, amount_2, token_2, decimals_2)])
-        print(token)
-        print(token_2)
-        results = await asyncio.gather(*tasks)
-        await set_results(results, mn, redis)
-    except Exception as e:
-        print(e)
+async def fetch(client, chain_number, sell_token, buy_token, amount):
+    resp = await client.get(f'https://api-defillama.1inch.io/v5.2/{chain_number}/quote?src={sell_token}&dst={buy_token}&amount={amount}&includeGas=true')
+    return resp.json()
 
 
 async def get_eth_price(client):
@@ -91,70 +41,105 @@ async def calculate_vol(arr):
 
     return total_volume, k
 
-async def fetch_volume(redis, token, dict_of_inf):
-    vol = await redis.get(f'{token["symbol"]}@MEXC')
-    if vol:
-        vol, _ = await calculate_vol(json.loads(vol)['asks'])
-        vol -= float(dict_of_inf['withdrawFee'])
-        return vol * (10 ** token['decimals'])
-    return None
+async def fetch_volume(coin, withdraw_fee):
+    vol = await redis.get(f'{coin}USDT@MEXC')
+    if not vol:
+        return None
+    vol, _ = await calculate_vol(json.loads(vol)['asks'])
+    vol -= float(withdraw_fee)
+    return vol
 
 
 async def main():
     rpc_url = "https://rpc.ankr.com/eth"
-    tokens = await get_token_address()
+    with open('chains_by_number_only_for_mexc.json') as f:
+        chains = json.load(f)
     while True:
-        try:
-            async with httpx.AsyncClient(
-                    limits=httpx.Limits(max_keepalive_connections=3000, max_connections=3000),
-                    timeout=60,
-                    # mounts=proxy_mounts
-                    verify=False 
-                ) as client:
-                one_eth = await get_eth_price(client)
-                one_eth = int(one_eth['toAmount'])/(10**6) 
-                web_3 = Web3(Web3.HTTPProvider(rpc_url))
-                gas = web_3.eth.gas_price/10**18
-                mn = gas*one_eth
+        with open('list_of_pairs_mexc.json') as f:
+            pairs = json.load(f)
+        with open('tokens_mexc_by_chains.json') as f:
+            tokens_with_and_dep = json.load(f)
+        usdt_token = tokens_with_and_dep['USDT']
 
-                with open('tokens_mexc_by_chains.json') as f:
-                    tokens_with_and_dep = json.load(f)
-                dict_of_inf = {}
-                for v in tokens_with_and_dep.values():
-                    for i in v["networkList"]:
-                        if i["network"] == "Ethereum(ERC20)":
-                            dict_of_inf[i["coin"]] = i
-
+        # one_eth = await get_eth_price(client)
+        # one_eth = int(one_eth['toAmount'])/(10**6) 
+        # web_3 = Web3(Web3.HTTPProvider(rpc_url))
+        # gas = web_3.eth.gas_price/10**18
+        # mn = gas*one_eth
+        tasks = []
+        for pair in pairs:
+            tasks.append(check_prices(
+                tokens_with_and_dep[pair["symbol"][:-4]],
+                usdt_token,
+                chains
+            ))
+            if len(tasks) > 50:
+                await asyncio.gather(*tasks)
                 tasks = []
-                for token in tokens:
-                    try:
-                        _ = token['contract']
-                    except:
-                        continue
-                    vol = await fetch_volume(redis, token, dict_of_inf[token["symbol"][:-4]])
-                    if not vol:
-                        continue
-                    tasks.append(make_request( 
-                            client,
-                            token['contract'], 
-                            '0xdac17f958d2ee523a2206206994597c13d831ec7', 
-                            format(vol, '.0f'),
-                            1000000000,
-                            token["symbol"],
-                            f'{token["symbol"]}_F', 
-                            token['decimals'],
-                            6,
-                            mn
-                        ))
-                    if len(tasks) >= 10:
-                        await asyncio.gather(*tasks)
-                        tasks = []
-                if tasks:
-                    await asyncio.gather(*tasks)
+        if tasks:
+            await asyncio.gather(*tasks)
 
-        except Exception as e:
-            print(e)
+async def check_prices(main_token, usdt_token, chains):
+    try:
+        max_tokens = 0
+        max_usdt = 0
+        dictionary = {}
+        for i in main_token['networkList']:
+            chain_number = chains.get(i['network'])
+            if not chain_number:
+                continue
 
+            contract_address = i.get('contract')
+            if not contract_address:
+                continue
+            
+            decimals = i.get('decimals')
+            if not decimals:
+                continue
+
+            usdt_token_detect = [j for j in usdt_token['networkList'] if j['network'] == i['network']][0]
+
+
+            amount = await fetch_volume(i["coin"], i["withdrawFee"])
+            if amount is None:
+                continue
+            amount = format(amount*10**decimals, '.0f')
+            print(amount)
+            async with httpx.AsyncClient(
+                # mounts=proxy_mounts
+                verify=False
+            ) as client:
+                resp = await fetch(client, chain_number, contract_address, usdt_token_detect["contract"], amount)
+                if not resp.get("toAmount"):
+                    continue
+                if float(resp['toAmount']) > max_usdt:
+                    max_usdt = float(resp['toAmount'])
+                    dictionary["sell"] = max_usdt / 10**usdt_token_detect["decimals"]
+                    dictionary["chain_sell"] = i["network"]
+                amount_usdt = 1000*10**usdt_token_detect["decimals"]
+                resp = await fetch(client, chain_number, usdt_token_detect["contract"], contract_address, amount_usdt)
+                if not resp.get("toAmount"):
+                    continue
+                if float(resp['toAmount']) > max_tokens:
+                    max_tokens = float(resp['toAmount'])
+                    dictionary["buy"] = max_tokens / 10**decimals
+                    dictionary["chain_buy"] = i["network"]
+
+        if not dictionary.get("sell") or not dictionary.get("buy"):
+            return
+        
+        await redis.set(
+                    f'{i["coin"]}USDT@1INCH',
+                    json.dumps(
+                        [
+                            {'sell': int(dictionary["sell"]), "gas": 0, "chain": dictionary["chain_sell"]}, #временно 0
+                            {'buy': int(dictionary["buy"]), "gas": 0, "chain": dictionary["chain_buy"]},
+                            datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                        ]
+                    )
+                )
+    except Exception as e:
+        print(e)
 
         
 if __name__ == '__main__':

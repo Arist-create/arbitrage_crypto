@@ -3,7 +3,6 @@ import websockets
 import json
 import asyncio 
 from redis import redis
-from actualize import actualize
 
 
 async def get_quote(subscribe_list):
