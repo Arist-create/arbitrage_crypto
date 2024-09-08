@@ -12,7 +12,7 @@ class Mongo:
         # Создание коллекции (аналог таблицы в реляционных базах данных)
         self.mycollection = mydb[table]
         
-
+ 
     async def add(self, dictionary: dict):
         await self.mycollection.insert_one(dictionary)
     
