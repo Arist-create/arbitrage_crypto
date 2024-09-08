@@ -52,7 +52,7 @@ services:
     command: celery -A worker.celery worker -B -l info
  
   mongodb:
-    image: mongo:4.4
+    image: mongo:4.4 
     environment:
       MONGO_INITDB_ROOT_USERNAME: username
       MONGO_INITDB_ROOT_PASSWORD: password
