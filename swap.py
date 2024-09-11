@@ -76,8 +76,11 @@ async def main():
             if len(tasks) > 50:
                 await asyncio.gather(*tasks)
                 tasks = []
+                
         if tasks:
             await asyncio.gather(*tasks)
+
+
 
 async def check_prices(main_token, usdt_token, chains):
     try:
@@ -114,6 +117,7 @@ async def check_prices(main_token, usdt_token, chains):
                     continue
                 if float(resp['toAmount']) > max_usdt:
                     max_usdt = float(resp['toAmount'])
+                    dictionary["gas_sell"] = float(resp['gas'])
                     dictionary["sell"] = max_usdt / 10**usdt_token_detect["decimals"]
                     dictionary["chain_sell"] = i["network"]
                 amount_usdt = 1000*10**usdt_token_detect["decimals"]
@@ -122,6 +126,7 @@ async def check_prices(main_token, usdt_token, chains):
                     continue
                 if float(resp['toAmount']) > max_tokens:
                     max_tokens = float(resp['toAmount'])
+                    dictionary["gas_buy"] = float(resp['gas'])
                     dictionary["buy"] = max_tokens / 10**decimals
                     dictionary["chain_buy"] = i["network"]
 
@@ -132,8 +137,8 @@ async def check_prices(main_token, usdt_token, chains):
                     f'{i["coin"]}USDT@1INCH',
                     json.dumps(
                         [
-                            {'sell': int(dictionary["sell"]), "gas": 0, "chain": dictionary["chain_sell"]}, #временно 0
-                            {'buy': int(dictionary["buy"]), "gas": 0, "chain": dictionary["chain_buy"]},
+                            {'sell': int(dictionary["sell"]), "gas": dictionary["gas_sell"], "chain": dictionary["chain_sell"]},
+                            {'buy': int(dictionary["buy"]), "gas": dictionary["gas_buy"], "chain": dictionary["chain_buy"]},
                             datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                         ]
                     )

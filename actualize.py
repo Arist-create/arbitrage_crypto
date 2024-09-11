@@ -79,7 +79,7 @@ async def get_pairs(): #переписать на получение из фай
     # сохранить список в json файл
     with open('list_of_pairs_mexc.json', 'w') as f:
         json.dump(arr, f, indent=4)
-
+    
 
 async def get_tokens_by_goplus():
     with open('tokens_mexc_by_chains.json') as f1, open('chains_by_number_only_for_mexc.json') as f2: 

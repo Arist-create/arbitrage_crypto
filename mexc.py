@@ -25,9 +25,12 @@ async def get_quote(subscribe_list):
                             )
 
                     except Exception as e:
+                        
                         print(e)
+                        await asyncio.sleep(10)
         except Exception as e:
             print(e)
+            await asyncio.sleep(10)
 
 async def main():
     with open('list_of_pairs_mexc.json') as f:

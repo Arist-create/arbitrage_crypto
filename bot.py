@@ -1,10 +1,9 @@
 import time
 from aiogram import types, executor
-from aiogram import Bot, Dispatcher
+from aiogram import Bot, Dispatcher 
 from redis import redis
 import json
-from web3 import Web3
-from swap import get_eth_price
+from commission_for_chains import get_gas_price_in_usdt
 import datetime
 import asyncio
 from mongo import trades_db, settings_db, goplus_db
@@ -61,33 +60,46 @@ async def calc_vol_to_sell_on_mexc_in_usdt(arr, target_value):
 
 async def buy_on_mexc(mexc, one_inch, info, goplus):
     if info["withdrawEnable"] == False:
-        return None, None
+        return None, None, None
     mexc_vol, orders = await calc_vol_in_usdt(mexc['asks'])
     if mexc_vol < 1000:
-        return None, None
+        return None, None, None
     one_inch_vol = one_inch[0]['sell']
+
+    with open('chains_by_gas_price.json') as f:
+        chains_by_gas_price = json.load(f)
+    gas_price = chains_by_gas_price[info["network"]]
     gas = one_inch[0]['gas']
+    commission = gas_price * gas
+
     tax = goplus["sell_tax"]
     if tax == '':
         tax = 0
     one_inch_vol = one_inch_vol - (one_inch_vol * float(tax))
-    profit = (one_inch_vol - mexc_vol) - gas
 
-    return profit, orders
+    profit = (one_inch_vol - mexc_vol) - commission
+
+    return profit, orders, commission
  
 async def buy_on_one_inch(mexc, one_inch, info, goplus):
     if info["depositEnable"] == False:
-        return None, None
+        return None, None, None, None
     one_inch_vol = one_inch[1]['buy']
-    gas = one_inch[1]['gas']
+
     tax = goplus["buy_tax"]
     if tax == '':
         tax = 0
     one_inch_vol = one_inch_vol - (one_inch_vol * float(tax))
     mexc_vol, orders = await calc_vol_to_sell_on_mexc_in_usdt(mexc['bids'], one_inch_vol)
-    profit = (mexc_vol - 1000) - gas
+    with open('chains_by_gas_price.json') as f:
+        chains_by_gas_price = json.load(f)
+    gas_price = chains_by_gas_price[info["network"]]
+    gas = one_inch[1]['gas']
+    commission = gas_price * gas
+    gas_for_withdraw = gas_price * 21000
+    profit = (mexc_vol - 1000) - commission - gas_for_withdraw
 
-    return profit, orders
+    return profit, orders, commission, gas_for_withdraw
 
 @dp.message_handler(commands=['start'])
 async def message_id(message: types.Message):
@@ -158,27 +170,17 @@ async def message_id(message: types.Message):
 
 @dp.message_handler(commands=['scan'])
 async def message_id(message: types.Message):
-    await bot.send_message(message.chat.id, "Scanning...")
     with open ('list_of_pairs_mexc.json') as f:
         pairs = json.load(f)
+    await bot.send_message(message.chat.id, "Scanning...")
     while True:
+        await get_gas_price_in_usdt()
         target_profit = await settings_db.get("number", 1)
         if not target_profit:
             target_profit = 0
         else:
             target_profit = float(target_profit["target_profit"])
-            
-        # rpc_url = "https://rpc.ankr.com/eth"
-        # async with httpx.AsyncClient(
-        #                 limits=httpx.Limits(max_keepalive_connections=3000, max_connections=3000),
-        #                 timeout=60,
-        #                 verify=False,
-        #                 mounts={"https://": httpx.AsyncHTTPTransport(proxy="socks5://proxy_user:wcPYZj5Zlj@62.133.62.154:41257", verify=False)}
-        #             ) as client:
-        #     one_eth = await get_eth_price(client)
-        # web_3 = Web3(Web3.HTTPProvider(rpc_url))
-        # gas = web_3.eth.gas_price/10**18
-        # gas_for_withdraw = gas*int(one_eth["toAmount"])
+        
         with open('tokens_mexc_by_chains.json') as f:
             tokens_with_and_dep = json.load(f)
         arr = set()
@@ -203,14 +205,22 @@ async def message_id(message: types.Message):
             if not goplus_buy or not goplus_sell:
                 continue
 
-            profit_mexc, orders_to_buy = await buy_on_mexc(mexc, one_inch, info_buy, goplus_buy) 
-            profit_one_inch, orders_to_sell= await buy_on_one_inch(mexc, one_inch, info_sell, goplus_sell)
+            profit_mexc, orders_to_buy, gas_buy = await buy_on_mexc(mexc, one_inch, info_buy, goplus_buy) 
+            profit_one_inch, orders_to_sell, gas_sell, gas_for_withdraw = await buy_on_one_inch(mexc, one_inch, info_sell, goplus_sell)
             
             if not profit_mexc or not profit_one_inch:
                 continue
             if profit_mexc < target_profit and profit_one_inch < target_profit:
                 continue
-            message = f'\n mexc: {float(profit_mexc):.2f} \n orders_to_buy: {orders_to_buy} \n chain_buy: {chain_buy} \n one_inch: {float(profit_one_inch):.2f} \n orders_to_sell: {orders_to_sell} \n chain_sell: {chain_sell}'
+            message = f'\n mexc: {float(profit_mexc):.2f} \
+                \n orders_to_buy: {orders_to_buy} \
+                \n gas_buy: {gas_buy} \
+                \n chain_buy: {chain_buy} \n \
+                \n one_inch: {float(profit_one_inch):.2f} \
+                \n orders_to_sell: {orders_to_sell} \
+                \n gas_sell: {gas_sell} \
+                \n gas_for_withdraw: {gas_for_withdraw} \
+                \n chain_sell: {chain_sell}'
             line = {"symbol": pair["symbol"], 
                     "message": message,
                     "start_time": start_time,
@@ -227,7 +237,6 @@ async def message_id(message: types.Message):
                 await trades_db.delete("symbol", i["symbol"])
 
 if __name__ == '__main__':
-    # создать папку если её нет 
     while True:
         try:
             executor.start_polling(dp, skip_updates=True)

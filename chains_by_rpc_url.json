@@ -1,0 +1,8 @@
+{
+    "Ethereum(ERC20)": "https://rpc.ankr.com/eth",
+    "Arbitrum One(ARB)": "https://rpc.ankr.com/arbitrum",
+    "Optimism(OP)": "https://rpc.ankr.com/optimism",
+    "Polygon(MATIC)": "https://rpc.ankr.com/polygon",
+    "BNB Smart Chain(BEP20)": "https://rpc.ankr.com/bsc",
+    "Avalanche C Chain(AVAX CCHAIN)": "https://rpc.ankr.com/avalanche"
+}

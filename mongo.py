@@ -22,7 +22,7 @@ class Mongo:
     async def get_all(self):
         return await self.mycollection.find().to_list(length=None)
 
-    async def get(self, key, value):
+    async def get(self, key, value): 
         return await self.mycollection.find_one({key: value})
 
     async def update(self, key, value, dictionary):

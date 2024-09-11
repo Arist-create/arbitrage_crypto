@@ -390,9 +390,20 @@
 # for i in data.result:
 #     print(i)
 
-import requests
+# import requests
 
-resp = requests.get("https://api.gopluslabs.io/api/v1/token_security/1?contract_addresses=0x25bE643995fA9F077c7349FB78d13c5ee3fc11d6",
-                    proxies={"https": "socks5://QFJKFyXIDB:PoCuFiLDL7@109.120.147.37:46328"})
+# resp = requests.get("https://api.gopluslabs.io/api/v1/token_security/1?contract_addresses=0x25bE643995fA9F077c7349FB78d13c5ee3fc11d6",
+#                     proxies={"https": "socks5://QFJKFyXIDB:PoCuFiLDL7@109.120.147.37:46328"})
 
-print(resp.json())
+# print(resp.json())
+from web3 import Web3
+arbitrum_rpc_url = "https://arb1.arbitrum.io/rpc"
+web3 = Web3(Web3.HTTPProvider(arbitrum_rpc_url))
+gas = web3.eth.gas_price
+
+print(gas)
+
+eth_rpc_url = "https://rpc.ankr.com/eth"
+web3 = Web3(Web3.HTTPProvider(eth_rpc_url))
+gas = web3.eth.gas_price
+print(gas)
