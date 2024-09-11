@@ -220,7 +220,7 @@ async def message_id(message: types.Message):
                 \n orders_to_sell: {orders_to_sell} \
                 \n gas_sell: {gas_sell} \
                 \n gas_for_withdraw: {gas_for_withdraw} \
-                \n chain_sell: {chain_sell}'
+                \n chain_sell: {chain_sell} \n'
             line = {"symbol": pair["symbol"], 
                     "message": message,
                     "start_time": start_time,

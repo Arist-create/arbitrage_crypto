@@ -33,23 +33,5 @@ async def get_gas_price_in_usdt():
         json.dump(dictionary, f, indent=4)
         
 
-# async def get_commission_for_withdraw(chain_name):
-#     with open("chains_by_rpc_url.json") as f:
-#         urls = json.load(f)
-#     url = urls.get(chain_name)
-#     if not url:
-#         return 0
-#     gas_price = await get_gas_price(url)
-#     gas_price = gas_price*21000/10**18
-#     with open("chains_by_token_for_commission.json") as f:
-#         tokens = json.load(f)
-#     token = tokens.get(chain_name)
-#     if not token:
-#         return 0
-#     pair = token+"USDT@MEXC"
-#     token_price = await get_commission_token_price(pair)
-#     return gas_price * token_price
-    
-
 
     

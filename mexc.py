@@ -8,7 +8,7 @@ from redis import redis
 async def get_quote(subscribe_list):
     while True: 
         try:
-            async with websockets.connect('wss://wbs.mexc.com/ws', ping_interval=5, ping_timeout=30) as websocket:
+            async with websockets.connect('wss://wbs.mexc.com/ws', ping_interval=5, ping_timeout=None) as websocket:
                 await websocket.send(
                     json.dumps({
                         "method": "SUBSCRIPTION",
@@ -25,7 +25,6 @@ async def get_quote(subscribe_list):
                             )
 
                     except Exception as e:
-                        
                         print(e)
                         await asyncio.sleep(10)
         except Exception as e:
