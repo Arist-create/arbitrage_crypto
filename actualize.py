@@ -78,8 +78,7 @@ async def get_pairs(): #переписать на получение из фай
     print(len(arr))
     # сохранить список в json файл
     with open('list_of_pairs_mexc.json', 'w') as f:
-        json.dump(arr, f, indent=4)
-    
+        json.dump(arr, f, indent=4) 
 
 async def get_tokens_by_goplus():
     with open('tokens_mexc_by_chains.json') as f1, open('chains_by_number_only_for_mexc.json') as f2: 
@@ -96,18 +95,6 @@ async def get_tokens_by_goplus():
 
             contract_address = i.get("contract")
             if not contract_address:
-                continue
-
-            check = await goplus_db.get("contract_address", contract_address.lower()) 
-            if check:
-                while True:
-                    count = await goplus_db.count("contract_address", contract_address.lower())
-                    if count > 1:
-                        await goplus_db.delete("contract_address", contract_address.lower())
-                        print("deleted")
-                    else:
-                        break
-                
                 continue
 
             if flag==1:
@@ -127,7 +114,11 @@ async def get_tokens_by_goplus():
                     "contract_address": contract_address.lower()
                 }
                 dictionary.update(resp)
-                await goplus_db.add(dictionary)
+                check = await goplus_db.get("contract_address", contract_address.lower())
+                if check:
+                    await goplus_db.update("contract_address", contract_address.lower(), dictionary)
+                else:
+                    await goplus_db.add(dictionary)
             except Exception as e:
                 print(e)
 

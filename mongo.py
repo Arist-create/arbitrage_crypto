@@ -19,6 +19,9 @@ class Mongo:
     async def delete(self, key, value):
         await self.mycollection.delete_one({f"{key}": value})
 
+    async def delete_all(self):
+        await self.mycollection.delete_many({})
+
     async def get_all(self):
         return await self.mycollection.find().to_list(length=None)
 
@@ -38,5 +41,4 @@ class Mongo:
 trades_db = Mongo("trades")
 settings_db = Mongo("settings")
 goplus_db = Mongo("goplus")
-
 
