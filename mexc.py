@@ -32,7 +32,7 @@ async def get_quote(subscribe_list):
                     )
                 await websocket.close()
         except:
-            pass
+            await asyncio.sleep(10)
 async def stop():
     await asyncio.sleep(3600)
     global stop_task
