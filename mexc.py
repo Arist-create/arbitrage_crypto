@@ -7,29 +7,32 @@ from redis import redis
 stop_task = False
 
 async def get_quote(subscribe_list):
-    try:
-        async with websockets.connect('wss://wbs.mexc.com/ws', ping_interval=5, ping_timeout=None) as websocket:
-            await websocket.send(
-                json.dumps({
-                    "method": "SUBSCRIPTION",
-                    "params": subscribe_list
-                })
-            )
-            while True:
-                if stop_task:
-                    break
-                data = await websocket.recv()
-                data = json.loads(data)
-                pair = data.get("s")
-                if not pair: 
-                    continue
-                await redis.set(
+    while True:
+        if stop_task:
+            break
+        try:
+            async with websockets.connect('wss://wbs.mexc.com/ws', ping_interval=5, ping_timeout=None) as websocket:
+                await websocket.send(
+                    json.dumps({
+                        "method": "SUBSCRIPTION",
+                        "params": subscribe_list
+                    })
+                )
+                while True:
+                    if stop_task:
+                        break
+                    data = await websocket.recv()
+                    data = json.loads(data)
+                    pair = data.get("s")
+                    if not pair: 
+                        continue
+                    await redis.set(
                     f'{pair}@MEXC',
                         json.dumps(data["d"])
-                )
-            await websocket.close()
-    except:
-        pass
+                    )
+                await websocket.close()
+        except:
+            pass
 async def stop():
     await asyncio.sleep(3600)
     global stop_task
