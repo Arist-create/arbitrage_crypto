@@ -84,7 +84,7 @@ async def buy_on_mexc(mexc, one_inch, info, goplus):
     return profit, orders, commission
  
 async def buy_on_one_inch(mexc, one_inch, info, goplus):
-    if (goplus.get("is_anti_whale", 0) != 1) or (goplus.get("is_honeypot", 1) != 1) or (goplus.get("cannot_buy", 1) != 1) or (goplus.get("cannot_sell_all", 1) != 1):
+    if (goplus.get("is_anti_whale", 0) == 1) or (goplus.get("is_honeypot", 1) == 1) or (goplus.get("cannot_buy", 1) == 1) or (goplus.get("cannot_sell_all", 1) == 1):
         return None, None, None, None
     if info["depositEnable"] == False:
         return None, None, None, None
