@@ -99,13 +99,12 @@ async def check_prices(main_token, usdt_token, chains, gas_price):
             if i.get("withdrawTips") or i.get("depositTips"):
                 continue
 
-            security = await goplus_db.get("contract_address", contract_address.lower())
-            if not security:
+            goplus = await goplus_db.get("contract_address", contract_address.lower())
+            if not goplus:
                 continue
-            if not security.get("is_honeypot") or not security.get("is_anti_whale") or not security.get("cannot_buy") or not security.get("cannot_sell_all"):
+            if (goplus.get("is_anti_whale", 0) == 1) or (goplus.get("is_honeypot", 0) == 1) or (goplus.get("cannot_buy", 0) == 1) or (goplus.get("cannot_sell_all", 0) == 1):
                 continue
-            if security["is_honeypot"] != (0 or None) or security["is_anti_whale"] != (0 or None) or security["cannot_buy"] != (0 or None) or security["cannot_sell_all"] != (0 or None):
-                continue
+
 
             decimals = i.get('decimals')
             if not decimals:
