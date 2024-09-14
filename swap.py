@@ -102,9 +102,11 @@ async def check_prices(main_token, usdt_token, chains, gas_price):
             security = await goplus_db.get("contract_address", contract_address.lower())
             if not security:
                 continue
-            if security.get("is_honeypot", 0) or security.get("is_anti_whale", 0) or security.get("cannot_buy", 0) or security.get("cannot_sell_all", 0):
+            if not security.get("is_honeypot") or not security.get("is_anti_whale") or not security.get("cannot_buy") or not security.get("cannot_sell_all"):
                 continue
-            
+            if security["is_honeypot"] != (0 or None) or security["is_anti_whale"] != (0 or None) or security["cannot_buy"] != (0 or None) or security["cannot_sell_all"] != (0 or None):
+                continue
+
             decimals = i.get('decimals')
             if not decimals:
                 continue
@@ -128,7 +130,7 @@ async def check_prices(main_token, usdt_token, chains, gas_price):
                 if check > max_usdt:
                     max_usdt = check
                     dictionary["gas_sell"] = float(resp['gas'])
-                    dictionary["sell"] = check
+                    dictionary["sell"] = float(resp['toAmount'])/10**usdt_token_detect["decimals"]
                     dictionary["chain_sell"] = i["network"]
                 amount_usdt = 1000*10**usdt_token_detect["decimals"]
                 resp = await fetch(client, chain_number, usdt_token_detect["contract"], contract_address, amount_usdt)
@@ -138,7 +140,7 @@ async def check_prices(main_token, usdt_token, chains, gas_price):
                 if check > max_tokens:
                     max_tokens = check
                     dictionary["gas_buy"] = float(resp['gas'])
-                    dictionary["buy"] = check
+                    dictionary["buy"] = float(resp['toAmount'])/10**decimals
                     dictionary["chain_buy"] = i["network"]
 
         if not dictionary.get("sell") or not dictionary.get("buy"):

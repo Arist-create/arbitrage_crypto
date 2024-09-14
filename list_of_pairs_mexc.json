@@ -1307,10 +1307,10 @@
         "baseAsset": "DXD",
         "baseAssetPrecision": 2,
         "quoteAsset": "USDT",
-        "quotePrecision": 21,
-        "quoteAssetPrecision": 21,
+        "quotePrecision": 24,
+        "quoteAssetPrecision": 24,
         "baseCommissionPrecision": 2,
-        "quoteCommissionPrecision": 21,
+        "quoteCommissionPrecision": 24,
         "orderTypes": [
             "LIMIT",
             "LIMIT_MAKER"
@@ -2758,37 +2758,6 @@
         "tradeSideType": 1
     },
     {
-        "symbol": "CHAMBSUSDT",
-        "status": "1",
-        "baseAsset": "CHAMBS",
-        "baseAssetPrecision": 2,
-        "quoteAsset": "USDT",
-        "quotePrecision": 9,
-        "quoteAssetPrecision": 9,
-        "baseCommissionPrecision": 2,
-        "quoteCommissionPrecision": 9,
-        "orderTypes": [
-            "LIMIT",
-            "MARKET",
-            "LIMIT_MAKER"
-        ],
-        "isSpotTradingAllowed": true,
-        "isMarginTradingAllowed": false,
-        "quoteAmountPrecision": "1.000000000000000000000000000000",
-        "baseSizePrecision": "0",
-        "permissions": [
-            "SPOT"
-        ],
-        "filters": [],
-        "maxQuoteAmount": "2000000.000000000000000000000000000000",
-        "makerCommission": "0",
-        "takerCommission": "0.0002",
-        "quoteAmountPrecisionMarket": "1.000000000000000000000000000000",
-        "maxQuoteAmountMarket": "100000.000000000000000000000000000000",
-        "fullName": "Chambs",
-        "tradeSideType": 1
-    },
-    {
         "symbol": "QTZUSDT",
         "status": "1",
         "baseAsset": "QTZ",
@@ -2879,37 +2848,6 @@
         "quoteAmountPrecisionMarket": "1.000000000000000000000000000000",
         "maxQuoteAmountMarket": "100000.000000000000000000000000000000",
         "fullName": "DAI",
-        "tradeSideType": 1
-    },
-    {
-        "symbol": "CPLUSDT",
-        "status": "1",
-        "baseAsset": "CPL",
-        "baseAssetPrecision": 2,
-        "quoteAsset": "USDT",
-        "quotePrecision": 28,
-        "quoteAssetPrecision": 28,
-        "baseCommissionPrecision": 2,
-        "quoteCommissionPrecision": 28,
-        "orderTypes": [
-            "LIMIT",
-            "MARKET",
-            "LIMIT_MAKER"
-        ],
-        "isSpotTradingAllowed": true,
-        "isMarginTradingAllowed": false,
-        "quoteAmountPrecision": "1.000000000000000000000000000000",
-        "baseSizePrecision": "0",
-        "permissions": [
-            "SPOT"
-        ],
-        "filters": [],
-        "maxQuoteAmount": "2000000.000000000000000000000000000000",
-        "makerCommission": "0",
-        "takerCommission": "0.0002",
-        "quoteAmountPrecisionMarket": "1.000000000000000000000000000000",
-        "maxQuoteAmountMarket": "100000.000000000000000000000000000000",
-        "fullName": "ChainPL",
         "tradeSideType": 1
     },
     {
@@ -3910,10 +3848,10 @@
         "baseAsset": "CRCD",
         "baseAssetPrecision": 2,
         "quoteAsset": "USDT",
-        "quotePrecision": 27,
-        "quoteAssetPrecision": 27,
+        "quotePrecision": 28,
+        "quoteAssetPrecision": 28,
         "baseCommissionPrecision": 2,
-        "quoteCommissionPrecision": 27,
+        "quoteCommissionPrecision": 28,
         "orderTypes": [
             "LIMIT",
             "MARKET",
@@ -5733,6 +5671,37 @@
         "tradeSideType": 1
     },
     {
+        "symbol": "DOGELONUSDT",
+        "status": "1",
+        "baseAsset": "DOGELON",
+        "baseAssetPrecision": 0,
+        "quoteAsset": "USDT",
+        "quotePrecision": 14,
+        "quoteAssetPrecision": 14,
+        "baseCommissionPrecision": 0,
+        "quoteCommissionPrecision": 14,
+        "orderTypes": [
+            "LIMIT",
+            "MARKET",
+            "LIMIT_MAKER"
+        ],
+        "isSpotTradingAllowed": true,
+        "isMarginTradingAllowed": false,
+        "quoteAmountPrecision": "1.000000000000000000000000000000",
+        "baseSizePrecision": "0",
+        "permissions": [
+            "SPOT"
+        ],
+        "filters": [],
+        "maxQuoteAmount": "2000000.000000000000000000000000000000",
+        "makerCommission": "0",
+        "takerCommission": "0.0002",
+        "quoteAmountPrecisionMarket": "1.000000000000000000000000000000",
+        "maxQuoteAmountMarket": "100000.000000000000000000000000000000",
+        "fullName": "DEPT Of GOV EFF",
+        "tradeSideType": 1
+    },
+    {
         "symbol": "BLOCKASSETUSDT",
         "status": "1",
         "baseAsset": "BLOCKASSET",
@@ -7218,6 +7187,37 @@
         "quoteAmountPrecisionMarket": "1.000000000000000000000000000000",
         "maxQuoteAmountMarket": "100000.000000000000000000000000000000",
         "fullName": "MILLE CHAIN",
+        "tradeSideType": 1
+    },
+    {
+        "symbol": "DIDUSDT",
+        "status": "1",
+        "baseAsset": "DID",
+        "baseAssetPrecision": 2,
+        "quoteAsset": "USDT",
+        "quotePrecision": 2,
+        "quoteAssetPrecision": 2,
+        "baseCommissionPrecision": 2,
+        "quoteCommissionPrecision": 2,
+        "orderTypes": [
+            "LIMIT",
+            "MARKET",
+            "LIMIT_MAKER"
+        ],
+        "isSpotTradingAllowed": true,
+        "isMarginTradingAllowed": false,
+        "quoteAmountPrecision": "1.000000000000000000000000000000",
+        "baseSizePrecision": "0",
+        "permissions": [
+            "SPOT"
+        ],
+        "filters": [],
+        "maxQuoteAmount": "2000000.000000000000000000000000000000",
+        "makerCommission": "0",
+        "takerCommission": "0.0002",
+        "quoteAmountPrecisionMarket": "1.000000000000000000000000000000",
+        "maxQuoteAmountMarket": "100000.000000000000000000000000000000",
+        "fullName": "Divap",
         "tradeSideType": 1
     },
     {
@@ -8838,10 +8838,10 @@
         "baseAsset": "FN",
         "baseAssetPrecision": 2,
         "quoteAsset": "USDT",
-        "quotePrecision": 7,
-        "quoteAssetPrecision": 7,
+        "quotePrecision": 8,
+        "quoteAssetPrecision": 8,
         "baseCommissionPrecision": 2,
-        "quoteCommissionPrecision": 7,
+        "quoteCommissionPrecision": 8,
         "orderTypes": [
             "LIMIT",
             "MARKET",
@@ -8962,10 +8962,10 @@
         "baseAsset": "MTPE",
         "baseAssetPrecision": 2,
         "quoteAsset": "USDT",
-        "quotePrecision": 6,
-        "quoteAssetPrecision": 6,
+        "quotePrecision": 7,
+        "quoteAssetPrecision": 7,
         "baseCommissionPrecision": 2,
-        "quoteCommissionPrecision": 6,
+        "quoteCommissionPrecision": 7,
         "orderTypes": [
             "LIMIT",
             "MARKET",
@@ -11997,10 +11997,10 @@
         "baseAsset": "SOFI",
         "baseAssetPrecision": 2,
         "quoteAsset": "USDT",
-        "quotePrecision": 5,
-        "quoteAssetPrecision": 5,
+        "quotePrecision": 6,
+        "quoteAssetPrecision": 6,
         "baseCommissionPrecision": 2,
-        "quoteCommissionPrecision": 5,
+        "quoteCommissionPrecision": 6,
         "orderTypes": [
             "LIMIT",
             "MARKET",
@@ -16987,10 +16987,10 @@
         "baseAsset": "MEME314",
         "baseAssetPrecision": 2,
         "quoteAsset": "USDT",
-        "quotePrecision": 18,
-        "quoteAssetPrecision": 18,
+        "quotePrecision": 21,
+        "quoteAssetPrecision": 21,
         "baseCommissionPrecision": 2,
-        "quoteCommissionPrecision": 18,
+        "quoteCommissionPrecision": 21,
         "orderTypes": [
             "LIMIT",
             "MARKET",
@@ -17010,6 +17010,37 @@
         "quoteAmountPrecisionMarket": "1.000000000000000000000000000000",
         "maxQuoteAmountMarket": "100000.000000000000000000000000000000",
         "fullName": "Sbfmackerel",
+        "tradeSideType": 1
+    },
+    {
+        "symbol": "MBPCOINUSDT",
+        "status": "1",
+        "baseAsset": "MBPCOIN",
+        "baseAssetPrecision": 2,
+        "quoteAsset": "USDT",
+        "quotePrecision": 5,
+        "quoteAssetPrecision": 5,
+        "baseCommissionPrecision": 2,
+        "quoteCommissionPrecision": 5,
+        "orderTypes": [
+            "LIMIT",
+            "MARKET",
+            "LIMIT_MAKER"
+        ],
+        "isSpotTradingAllowed": true,
+        "isMarginTradingAllowed": false,
+        "quoteAmountPrecision": "1.000000000000000000000000000000",
+        "baseSizePrecision": "0",
+        "permissions": [
+            "SPOT"
+        ],
+        "filters": [],
+        "maxQuoteAmount": "2000000.000000000000000000000000000000",
+        "makerCommission": "0",
+        "takerCommission": "0.0002",
+        "quoteAmountPrecisionMarket": "1.000000000000000000000000000000",
+        "maxQuoteAmountMarket": "100000.000000000000000000000000000000",
+        "fullName": "MBP COIN",
         "tradeSideType": 1
     },
     {
@@ -20738,10 +20769,10 @@
         "baseAsset": "CHICA",
         "baseAssetPrecision": 2,
         "quoteAsset": "USDT",
-        "quotePrecision": 7,
-        "quoteAssetPrecision": 7,
+        "quotePrecision": 8,
+        "quoteAssetPrecision": 8,
         "baseCommissionPrecision": 2,
-        "quoteCommissionPrecision": 7,
+        "quoteCommissionPrecision": 8,
         "orderTypes": [
             "LIMIT",
             "MARKET",
@@ -22071,10 +22102,10 @@
         "baseAsset": "AERA",
         "baseAssetPrecision": 2,
         "quoteAsset": "USDT",
-        "quotePrecision": 26,
-        "quoteAssetPrecision": 26,
+        "quotePrecision": 28,
+        "quoteAssetPrecision": 28,
         "baseCommissionPrecision": 2,
-        "quoteCommissionPrecision": 26,
+        "quoteCommissionPrecision": 28,
         "orderTypes": [
             "LIMIT",
             "MARKET",
@@ -23771,37 +23802,6 @@
         "tradeSideType": 1
     },
     {
-        "symbol": "TUEUSDT",
-        "status": "1",
-        "baseAsset": "TUE",
-        "baseAssetPrecision": 2,
-        "quoteAsset": "USDT",
-        "quotePrecision": 28,
-        "quoteAssetPrecision": 28,
-        "baseCommissionPrecision": 2,
-        "quoteCommissionPrecision": 28,
-        "orderTypes": [
-            "LIMIT",
-            "MARKET",
-            "LIMIT_MAKER"
-        ],
-        "isSpotTradingAllowed": true,
-        "isMarginTradingAllowed": false,
-        "quoteAmountPrecision": "1.000000000000000000000000000000",
-        "baseSizePrecision": "0",
-        "permissions": [
-            "SPOT"
-        ],
-        "filters": [],
-        "maxQuoteAmount": "2000000.000000000000000000000000000000",
-        "makerCommission": "0",
-        "takerCommission": "0.0002",
-        "quoteAmountPrecisionMarket": "1.000000000000000000000000000000",
-        "maxQuoteAmountMarket": "100000.000000000000000000000000000000",
-        "fullName": "TecUise",
-        "tradeSideType": 1
-    },
-    {
         "symbol": "NRKUSDT",
         "status": "1",
         "baseAsset": "NRK",
@@ -24365,10 +24365,10 @@
         "baseAsset": "PIZZA1",
         "baseAssetPrecision": 2,
         "quoteAsset": "USDT",
-        "quotePrecision": 8,
-        "quoteAssetPrecision": 8,
+        "quotePrecision": 11,
+        "quoteAssetPrecision": 11,
         "baseCommissionPrecision": 2,
-        "quoteCommissionPrecision": 8,
+        "quoteCommissionPrecision": 11,
         "orderTypes": [
             "LIMIT",
             "MARKET",
@@ -24985,10 +24985,10 @@
         "baseAsset": "CASP",
         "baseAssetPrecision": 2,
         "quoteAsset": "USDT",
-        "quotePrecision": 27,
-        "quoteAssetPrecision": 27,
+        "quotePrecision": 28,
+        "quoteAssetPrecision": 28,
         "baseCommissionPrecision": 2,
-        "quoteCommissionPrecision": 27,
+        "quoteCommissionPrecision": 28,
         "orderTypes": [
             "LIMIT",
             "LIMIT_MAKER"
@@ -26777,37 +26777,6 @@
         "tradeSideType": 1
     },
     {
-        "symbol": "MEMEEUSDT",
-        "status": "1",
-        "baseAsset": "MEMEE",
-        "baseAssetPrecision": 2,
-        "quoteAsset": "USDT",
-        "quotePrecision": 28,
-        "quoteAssetPrecision": 28,
-        "baseCommissionPrecision": 2,
-        "quoteCommissionPrecision": 28,
-        "orderTypes": [
-            "LIMIT",
-            "MARKET",
-            "LIMIT_MAKER"
-        ],
-        "isSpotTradingAllowed": true,
-        "isMarginTradingAllowed": false,
-        "quoteAmountPrecision": "1.000000000000000000000000000000",
-        "baseSizePrecision": "0",
-        "permissions": [
-            "SPOT"
-        ],
-        "filters": [],
-        "maxQuoteAmount": "2000000.000000000000000000000000000000",
-        "makerCommission": "0",
-        "takerCommission": "0.0002",
-        "quoteAmountPrecisionMarket": "1.000000000000000000000000000000",
-        "maxQuoteAmountMarket": "100000.000000000000000000000000000000",
-        "fullName": "Medicure",
-        "tradeSideType": 1
-    },
-    {
         "symbol": "OMIUSDT",
         "status": "1",
         "baseAsset": "OMI",
@@ -27278,10 +27247,10 @@
         "baseAsset": "GEGS",
         "baseAssetPrecision": 2,
         "quoteAsset": "USDT",
-        "quotePrecision": 11,
-        "quoteAssetPrecision": 11,
+        "quotePrecision": 12,
+        "quoteAssetPrecision": 12,
         "baseCommissionPrecision": 2,
-        "quoteCommissionPrecision": 11,
+        "quoteCommissionPrecision": 12,
         "orderTypes": [
             "LIMIT",
             "MARKET",
@@ -29820,10 +29789,10 @@
         "baseAsset": "CENS",
         "baseAssetPrecision": 0,
         "quoteAsset": "USDT",
-        "quotePrecision": 13,
-        "quoteAssetPrecision": 13,
+        "quotePrecision": 14,
+        "quoteAssetPrecision": 14,
         "baseCommissionPrecision": 0,
-        "quoteCommissionPrecision": 13,
+        "quoteCommissionPrecision": 14,
         "orderTypes": [
             "LIMIT",
             "MARKET",
@@ -30935,10 +30904,10 @@
         "baseAsset": "ICLOUD",
         "baseAssetPrecision": 2,
         "quoteAsset": "USDT",
-        "quotePrecision": 7,
-        "quoteAssetPrecision": 7,
+        "quotePrecision": 10,
+        "quoteAssetPrecision": 10,
         "baseCommissionPrecision": 2,
-        "quoteCommissionPrecision": 7,
+        "quoteCommissionPrecision": 10,
         "orderTypes": [
             "LIMIT",
             "MARKET",
@@ -31028,10 +30997,10 @@
         "baseAsset": "DOGE1",
         "baseAssetPrecision": 0,
         "quoteAsset": "USDT",
-        "quotePrecision": 16,
-        "quoteAssetPrecision": 16,
+        "quotePrecision": 20,
+        "quoteAssetPrecision": 20,
         "baseCommissionPrecision": 0,
-        "quoteCommissionPrecision": 16,
+        "quoteCommissionPrecision": 20,
         "orderTypes": [
             "LIMIT",
             "MARKET",
@@ -33193,37 +33162,6 @@
         "tradeSideType": 1
     },
     {
-        "symbol": "GDMUSDT",
-        "status": "1",
-        "baseAsset": "GDM",
-        "baseAssetPrecision": 2,
-        "quoteAsset": "USDT",
-        "quotePrecision": 28,
-        "quoteAssetPrecision": 28,
-        "baseCommissionPrecision": 2,
-        "quoteCommissionPrecision": 28,
-        "orderTypes": [
-            "LIMIT",
-            "MARKET",
-            "LIMIT_MAKER"
-        ],
-        "isSpotTradingAllowed": true,
-        "isMarginTradingAllowed": false,
-        "quoteAmountPrecision": "1.000000000000000000000000000000",
-        "baseSizePrecision": "0",
-        "permissions": [
-            "SPOT"
-        ],
-        "filters": [],
-        "maxQuoteAmount": "2000000.000000000000000000000000000000",
-        "makerCommission": "0",
-        "takerCommission": "0.0002",
-        "quoteAmountPrecisionMarket": "1.000000000000000000000000000000",
-        "maxQuoteAmountMarket": "100000.000000000000000000000000000000",
-        "fullName": "GredonMe",
-        "tradeSideType": 1
-    },
-    {
         "symbol": "GXEUSDT",
         "status": "1",
         "baseAsset": "GXE",
@@ -34275,6 +34213,37 @@
         "quoteAmountPrecisionMarket": "1.000000000000000000000000000000",
         "maxQuoteAmountMarket": "100000.000000000000000000000000000000",
         "fullName": "ZURRENCY",
+        "tradeSideType": 1
+    },
+    {
+        "symbol": "ASCUSDT",
+        "status": "1",
+        "baseAsset": "ASC",
+        "baseAssetPrecision": 2,
+        "quoteAsset": "USDT",
+        "quotePrecision": 7,
+        "quoteAssetPrecision": 7,
+        "baseCommissionPrecision": 2,
+        "quoteCommissionPrecision": 7,
+        "orderTypes": [
+            "LIMIT",
+            "MARKET",
+            "LIMIT_MAKER"
+        ],
+        "isSpotTradingAllowed": true,
+        "isMarginTradingAllowed": false,
+        "quoteAmountPrecision": "1.000000000000000000000000000000",
+        "baseSizePrecision": "0",
+        "permissions": [
+            "SPOT"
+        ],
+        "filters": [],
+        "maxQuoteAmount": "2000000.000000000000000000000000000000",
+        "makerCommission": "0",
+        "takerCommission": "0.0002",
+        "quoteAmountPrecisionMarket": "1.000000000000000000000000000000",
+        "maxQuoteAmountMarket": "100000.000000000000000000000000000000",
+        "fullName": "AssetCast",
         "tradeSideType": 1
     },
     {
@@ -36391,10 +36360,10 @@
         "baseAsset": "CATS1",
         "baseAssetPrecision": 2,
         "quoteAsset": "USDT",
-        "quotePrecision": 21,
-        "quoteAssetPrecision": 21,
+        "quotePrecision": 24,
+        "quoteAssetPrecision": 24,
         "baseCommissionPrecision": 2,
-        "quoteCommissionPrecision": 21,
+        "quoteCommissionPrecision": 24,
         "orderTypes": [
             "LIMIT",
             "MARKET",
@@ -38181,36 +38150,6 @@
         "tradeSideType": 1
     },
     {
-        "symbol": "GAMESUSDT",
-        "status": "1",
-        "baseAsset": "GAMES",
-        "baseAssetPrecision": 2,
-        "quoteAsset": "USDT",
-        "quotePrecision": 8,
-        "quoteAssetPrecision": 8,
-        "baseCommissionPrecision": 2,
-        "quoteCommissionPrecision": 8,
-        "orderTypes": [
-            "LIMIT",
-            "LIMIT_MAKER"
-        ],
-        "isSpotTradingAllowed": false,
-        "isMarginTradingAllowed": false,
-        "quoteAmountPrecision": "1.000000000000000000000000000000",
-        "baseSizePrecision": "0",
-        "permissions": [
-            "SPOT"
-        ],
-        "filters": [],
-        "maxQuoteAmount": "2000000.000000000000000000000000000000",
-        "makerCommission": "0",
-        "takerCommission": "0.0002",
-        "quoteAmountPrecisionMarket": "1.000000000000000000000000000000",
-        "maxQuoteAmountMarket": "100000.000000000000000000000000000000",
-        "fullName": "Gaming Stars",
-        "tradeSideType": 1
-    },
-    {
         "symbol": "VRLUSDT",
         "status": "1",
         "baseAsset": "VRL",
@@ -38371,10 +38310,10 @@
         "baseAsset": "LCI",
         "baseAssetPrecision": 2,
         "quoteAsset": "USDT",
-        "quotePrecision": 5,
-        "quoteAssetPrecision": 5,
+        "quotePrecision": 6,
+        "quoteAssetPrecision": 6,
         "baseCommissionPrecision": 2,
-        "quoteCommissionPrecision": 5,
+        "quoteCommissionPrecision": 6,
         "orderTypes": [
             "LIMIT",
             "MARKET",
@@ -42085,6 +42024,37 @@
         "tradeSideType": 1
     },
     {
+        "symbol": "DEVUSDT",
+        "status": "1",
+        "baseAsset": "DEV",
+        "baseAssetPrecision": 2,
+        "quoteAsset": "USDT",
+        "quotePrecision": 5,
+        "quoteAssetPrecision": 5,
+        "baseCommissionPrecision": 2,
+        "quoteCommissionPrecision": 5,
+        "orderTypes": [
+            "LIMIT",
+            "MARKET",
+            "LIMIT_MAKER"
+        ],
+        "isSpotTradingAllowed": true,
+        "isMarginTradingAllowed": false,
+        "quoteAmountPrecision": "1.000000000000000000000000000000",
+        "baseSizePrecision": "0",
+        "permissions": [
+            "SPOT"
+        ],
+        "filters": [],
+        "maxQuoteAmount": "2000000.000000000000000000000000000000",
+        "makerCommission": "0",
+        "takerCommission": "0.0002",
+        "quoteAmountPrecisionMarket": "1.000000000000000000000000000000",
+        "maxQuoteAmountMarket": "100000.000000000000000000000000000000",
+        "fullName": "MY DOG IS THE DEV",
+        "tradeSideType": 1
+    },
+    {
         "symbol": "IOSTUSDT",
         "status": "1",
         "baseAsset": "IOST",
@@ -43578,10 +43548,10 @@
         "baseAsset": "PBO",
         "baseAssetPrecision": 2,
         "quoteAsset": "USDT",
-        "quotePrecision": 5,
-        "quoteAssetPrecision": 5,
+        "quotePrecision": 6,
+        "quoteAssetPrecision": 6,
         "baseCommissionPrecision": 2,
-        "quoteCommissionPrecision": 5,
+        "quoteCommissionPrecision": 6,
         "orderTypes": [
             "LIMIT",
             "MARKET",
@@ -45526,37 +45496,6 @@
         "tradeSideType": 1
     },
     {
-        "symbol": "BNYUSDT",
-        "status": "1",
-        "baseAsset": "BNY",
-        "baseAssetPrecision": 2,
-        "quoteAsset": "USDT",
-        "quotePrecision": 28,
-        "quoteAssetPrecision": 28,
-        "baseCommissionPrecision": 2,
-        "quoteCommissionPrecision": 28,
-        "orderTypes": [
-            "LIMIT",
-            "MARKET",
-            "LIMIT_MAKER"
-        ],
-        "isSpotTradingAllowed": true,
-        "isMarginTradingAllowed": false,
-        "quoteAmountPrecision": "1.000000000000000000000000000000",
-        "baseSizePrecision": "0",
-        "permissions": [
-            "SPOT"
-        ],
-        "filters": [],
-        "maxQuoteAmount": "2000000.000000000000000000000000000000",
-        "makerCommission": "0",
-        "takerCommission": "0.0002",
-        "quoteAmountPrecisionMarket": "1.000000000000000000000000000000",
-        "maxQuoteAmountMarket": "100000.000000000000000000000000000000",
-        "fullName": "Bunny Box",
-        "tradeSideType": 1
-    },
-    {
         "symbol": "CTXCUSDT",
         "status": "1",
         "baseAsset": "CTXC",
@@ -45934,10 +45873,10 @@
         "baseAsset": "TRBS",
         "baseAssetPrecision": 2,
         "quoteAsset": "USDT",
-        "quotePrecision": 18,
-        "quoteAssetPrecision": 18,
+        "quotePrecision": 21,
+        "quoteAssetPrecision": 21,
         "baseCommissionPrecision": 2,
-        "quoteCommissionPrecision": 18,
+        "quoteCommissionPrecision": 21,
         "orderTypes": [
             "LIMIT",
             "MARKET",
@@ -48041,10 +47980,10 @@
         "baseAsset": "PEPE8",
         "baseAssetPrecision": 2,
         "quoteAsset": "USDT",
-        "quotePrecision": 21,
-        "quoteAssetPrecision": 21,
+        "quotePrecision": 23,
+        "quoteAssetPrecision": 23,
         "baseCommissionPrecision": 2,
-        "quoteCommissionPrecision": 21,
+        "quoteCommissionPrecision": 23,
         "orderTypes": [
             "LIMIT",
             "MARKET",
@@ -48374,37 +48313,6 @@
         "quoteAmountPrecisionMarket": "1.000000000000000000000000000000",
         "maxQuoteAmountMarket": "100000.000000000000000000000000000000",
         "fullName": "Sea Pearl",
-        "tradeSideType": 1
-    },
-    {
-        "symbol": "SKYAIUSDT",
-        "status": "1",
-        "baseAsset": "SKYAI",
-        "baseAssetPrecision": 2,
-        "quoteAsset": "USDT",
-        "quotePrecision": 28,
-        "quoteAssetPrecision": 28,
-        "baseCommissionPrecision": 2,
-        "quoteCommissionPrecision": 28,
-        "orderTypes": [
-            "LIMIT",
-            "MARKET",
-            "LIMIT_MAKER"
-        ],
-        "isSpotTradingAllowed": true,
-        "isMarginTradingAllowed": false,
-        "quoteAmountPrecision": "1.000000000000000000000000000000",
-        "baseSizePrecision": "0",
-        "permissions": [
-            "SPOT"
-        ],
-        "filters": [],
-        "maxQuoteAmount": "2000000.000000000000000000000000000000",
-        "makerCommission": "0",
-        "takerCommission": "0.0002",
-        "quoteAmountPrecisionMarket": "1.000000000000000000000000000000",
-        "maxQuoteAmountMarket": "100000.000000000000000000000000000000",
-        "fullName": "Skytoken",
         "tradeSideType": 1
     },
     {
@@ -50862,10 +50770,10 @@
         "baseAsset": "FANTOM",
         "baseAssetPrecision": 2,
         "quoteAsset": "USDT",
-        "quotePrecision": 18,
-        "quoteAssetPrecision": 18,
+        "quotePrecision": 21,
+        "quoteAssetPrecision": 21,
         "baseCommissionPrecision": 2,
-        "quoteCommissionPrecision": 18,
+        "quoteCommissionPrecision": 21,
         "orderTypes": [
             "LIMIT",
             "MARKET",
@@ -50916,37 +50824,6 @@
         "quoteAmountPrecisionMarket": "1.000000000000000000000000000000",
         "maxQuoteAmountMarket": "100000.000000000000000000000000000000",
         "fullName": "KGB Protocol",
-        "tradeSideType": 1
-    },
-    {
-        "symbol": "EHQUSDT",
-        "status": "1",
-        "baseAsset": "EHQ",
-        "baseAssetPrecision": 2,
-        "quoteAsset": "USDT",
-        "quotePrecision": 28,
-        "quoteAssetPrecision": 28,
-        "baseCommissionPrecision": 2,
-        "quoteCommissionPrecision": 28,
-        "orderTypes": [
-            "LIMIT",
-            "MARKET",
-            "LIMIT_MAKER"
-        ],
-        "isSpotTradingAllowed": true,
-        "isMarginTradingAllowed": false,
-        "quoteAmountPrecision": "1.000000000000000000000000000000",
-        "baseSizePrecision": "0",
-        "permissions": [
-            "SPOT"
-        ],
-        "filters": [],
-        "maxQuoteAmount": "2000000.000000000000000000000000000000",
-        "makerCommission": "0",
-        "takerCommission": "0.0002",
-        "quoteAmountPrecisionMarket": "1.000000000000000000000000000000",
-        "maxQuoteAmountMarket": "100000.000000000000000000000000000000",
-        "fullName": "EhaQuest",
         "tradeSideType": 1
     },
     {
@@ -51814,6 +51691,37 @@
         "quoteAmountPrecisionMarket": "1.000000000000000000000000000000",
         "maxQuoteAmountMarket": "100000.000000000000000000000000000000",
         "fullName": "LUFFY",
+        "tradeSideType": 1
+    },
+    {
+        "symbol": "MAOUSDT",
+        "status": "1",
+        "baseAsset": "MAO",
+        "baseAssetPrecision": 2,
+        "quoteAsset": "USDT",
+        "quotePrecision": 5,
+        "quoteAssetPrecision": 5,
+        "baseCommissionPrecision": 2,
+        "quoteCommissionPrecision": 5,
+        "orderTypes": [
+            "LIMIT",
+            "MARKET",
+            "LIMIT_MAKER"
+        ],
+        "isSpotTradingAllowed": true,
+        "isMarginTradingAllowed": false,
+        "quoteAmountPrecision": "1.000000000000000000000000000000",
+        "baseSizePrecision": "0",
+        "permissions": [
+            "SPOT"
+        ],
+        "filters": [],
+        "maxQuoteAmount": "2000000.000000000000000000000000000000",
+        "makerCommission": "0",
+        "takerCommission": "0.0002",
+        "quoteAmountPrecisionMarket": "1.000000000000000000000000000000",
+        "maxQuoteAmountMarket": "100000.000000000000000000000000000000",
+        "fullName": "Mao",
         "tradeSideType": 1
     },
     {
@@ -57680,10 +57588,10 @@
         "baseAsset": "KRIPTO",
         "baseAssetPrecision": 2,
         "quoteAsset": "USDT",
-        "quotePrecision": 7,
-        "quoteAssetPrecision": 7,
+        "quotePrecision": 8,
+        "quoteAssetPrecision": 8,
         "baseCommissionPrecision": 2,
-        "quoteCommissionPrecision": 7,
+        "quoteCommissionPrecision": 8,
         "orderTypes": [
             "LIMIT",
             "MARKET",
@@ -60651,37 +60559,6 @@
         "tradeSideType": 1
     },
     {
-        "symbol": "BRAINERSUSDT",
-        "status": "1",
-        "baseAsset": "BRAINERS",
-        "baseAssetPrecision": 2,
-        "quoteAsset": "USDT",
-        "quotePrecision": 5,
-        "quoteAssetPrecision": 5,
-        "baseCommissionPrecision": 2,
-        "quoteCommissionPrecision": 5,
-        "orderTypes": [
-            "LIMIT",
-            "MARKET",
-            "LIMIT_MAKER"
-        ],
-        "isSpotTradingAllowed": false,
-        "isMarginTradingAllowed": false,
-        "quoteAmountPrecision": "1.000000000000000000000000000000",
-        "baseSizePrecision": "0",
-        "permissions": [
-            "SPOT"
-        ],
-        "filters": [],
-        "maxQuoteAmount": "2000000.000000000000000000000000000000",
-        "makerCommission": "0",
-        "takerCommission": "0.0002",
-        "quoteAmountPrecisionMarket": "1.000000000000000000000000000000",
-        "maxQuoteAmountMarket": "100000.000000000000000000000000000000",
-        "fullName": "Brainers",
-        "tradeSideType": 1
-    },
-    {
         "symbol": "MCHCUSDT",
         "status": "1",
         "baseAsset": "MCHC",
@@ -61431,10 +61308,10 @@
         "baseAsset": "MEMEHA1",
         "baseAssetPrecision": 2,
         "quoteAsset": "USDT",
-        "quotePrecision": 24,
-        "quoteAssetPrecision": 24,
+        "quotePrecision": 26,
+        "quoteAssetPrecision": 26,
         "baseCommissionPrecision": 2,
-        "quoteCommissionPrecision": 24,
+        "quoteCommissionPrecision": 26,
         "orderTypes": [
             "LIMIT",
             "LIMIT_MAKER"
@@ -61554,10 +61431,10 @@
         "baseAsset": "GRPH",
         "baseAssetPrecision": 2,
         "quoteAsset": "USDT",
-        "quotePrecision": 5,
-        "quoteAssetPrecision": 5,
+        "quotePrecision": 6,
+        "quoteAssetPrecision": 6,
         "baseCommissionPrecision": 2,
-        "quoteCommissionPrecision": 5,
+        "quoteCommissionPrecision": 6,
         "orderTypes": [
             "LIMIT",
             "MARKET",
@@ -61647,10 +61524,10 @@
         "baseAsset": "TURBO1",
         "baseAssetPrecision": 2,
         "quoteAsset": "USDT",
-        "quotePrecision": 21,
-        "quoteAssetPrecision": 21,
+        "quotePrecision": 24,
+        "quoteAssetPrecision": 24,
         "baseCommissionPrecision": 2,
-        "quoteCommissionPrecision": 21,
+        "quoteCommissionPrecision": 24,
         "orderTypes": [
             "LIMIT",
             "MARKET",
@@ -61864,10 +61741,10 @@
         "baseAsset": "HTK",
         "baseAssetPrecision": 2,
         "quoteAsset": "USDT",
-        "quotePrecision": 22,
-        "quoteAssetPrecision": 22,
+        "quotePrecision": 23,
+        "quoteAssetPrecision": 23,
         "baseCommissionPrecision": 2,
-        "quoteCommissionPrecision": 22,
+        "quoteCommissionPrecision": 23,
         "orderTypes": [
             "LIMIT",
             "MARKET",
@@ -63531,6 +63408,37 @@
         "tradeSideType": 1
     },
     {
+        "symbol": "DOMOUSDT",
+        "status": "1",
+        "baseAsset": "DOMO",
+        "baseAssetPrecision": 2,
+        "quoteAsset": "USDT",
+        "quotePrecision": 6,
+        "quoteAssetPrecision": 6,
+        "baseCommissionPrecision": 2,
+        "quoteCommissionPrecision": 6,
+        "orderTypes": [
+            "LIMIT",
+            "MARKET",
+            "LIMIT_MAKER"
+        ],
+        "isSpotTradingAllowed": true,
+        "isMarginTradingAllowed": false,
+        "quoteAmountPrecision": "1.000000000000000000000000000000",
+        "baseSizePrecision": "0",
+        "permissions": [
+            "SPOT"
+        ],
+        "filters": [],
+        "maxQuoteAmount": "2000000.000000000000000000000000000000",
+        "makerCommission": "0",
+        "takerCommission": "0.0002",
+        "quoteAmountPrecisionMarket": "1.000000000000000000000000000000",
+        "maxQuoteAmountMarket": "100000.000000000000000000000000000000",
+        "fullName": "Dony Montana",
+        "tradeSideType": 1
+    },
+    {
         "symbol": "SORAUSDT",
         "status": "1",
         "baseAsset": "SORA",
@@ -64590,10 +64498,10 @@
         "baseAsset": "W3G",
         "baseAssetPrecision": 2,
         "quoteAsset": "USDT",
-        "quotePrecision": 6,
-        "quoteAssetPrecision": 6,
+        "quotePrecision": 7,
+        "quoteAssetPrecision": 7,
         "baseCommissionPrecision": 2,
-        "quoteCommissionPrecision": 6,
+        "quoteCommissionPrecision": 7,
         "orderTypes": [
             "LIMIT",
             "MARKET",
@@ -65055,10 +64963,10 @@
         "baseAsset": "CWD",
         "baseAssetPrecision": 2,
         "quoteAsset": "USDT",
-        "quotePrecision": 24,
-        "quoteAssetPrecision": 24,
+        "quotePrecision": 27,
+        "quoteAssetPrecision": 27,
         "baseCommissionPrecision": 2,
-        "quoteCommissionPrecision": 24,
+        "quoteCommissionPrecision": 27,
         "orderTypes": [
             "LIMIT",
             "MARKET",
@@ -67223,10 +67131,10 @@
         "baseAsset": "XUA",
         "baseAssetPrecision": 2,
         "quoteAsset": "USDT",
-        "quotePrecision": 20,
-        "quoteAssetPrecision": 20,
+        "quotePrecision": 22,
+        "quoteAssetPrecision": 22,
         "baseCommissionPrecision": 2,
-        "quoteCommissionPrecision": 20,
+        "quoteCommissionPrecision": 22,
         "orderTypes": [
             "LIMIT",
             "MARKET",
@@ -68360,7 +68268,7 @@
         "takerCommission": "0.0002",
         "quoteAmountPrecisionMarket": "1.000000000000000000000000000000",
         "maxQuoteAmountMarket": "100000.000000000000000000000000000000",
-        "fullName": "Klaytn",
+        "fullName": "Kaia",
         "tradeSideType": 1
     },
     {
@@ -71995,10 +71903,10 @@
         "baseAsset": "CML",
         "baseAssetPrecision": 2,
         "quoteAsset": "USDT",
-        "quotePrecision": 25,
-        "quoteAssetPrecision": 25,
+        "quotePrecision": 28,
+        "quoteAssetPrecision": 28,
         "baseCommissionPrecision": 2,
-        "quoteCommissionPrecision": 25,
+        "quoteCommissionPrecision": 28,
         "orderTypes": [
             "LIMIT",
             "MARKET",
@@ -72212,10 +72120,10 @@
         "baseAsset": "REL",
         "baseAssetPrecision": 2,
         "quoteAsset": "USDT",
-        "quotePrecision": 6,
-        "quoteAssetPrecision": 6,
+        "quotePrecision": 7,
+        "quoteAssetPrecision": 7,
         "baseCommissionPrecision": 2,
-        "quoteCommissionPrecision": 6,
+        "quoteCommissionPrecision": 7,
         "orderTypes": [
             "LIMIT",
             "MARKET",
@@ -73668,10 +73576,10 @@
         "baseAsset": "HADES",
         "baseAssetPrecision": 2,
         "quoteAsset": "USDT",
-        "quotePrecision": 22,
-        "quoteAssetPrecision": 22,
+        "quotePrecision": 24,
+        "quoteAssetPrecision": 24,
         "baseCommissionPrecision": 2,
-        "quoteCommissionPrecision": 22,
+        "quoteCommissionPrecision": 24,
         "orderTypes": [
             "LIMIT",
             "MARKET",
@@ -74001,6 +73909,37 @@
         "quoteAmountPrecisionMarket": "1.000000000000000000000000000000",
         "maxQuoteAmountMarket": "100000.000000000000000000000000000000",
         "fullName": "Batsean",
+        "tradeSideType": 1
+    },
+    {
+        "symbol": "AFOUSDT",
+        "status": "1",
+        "baseAsset": "AFO",
+        "baseAssetPrecision": 2,
+        "quoteAsset": "USDT",
+        "quotePrecision": 7,
+        "quoteAssetPrecision": 7,
+        "baseCommissionPrecision": 2,
+        "quoteCommissionPrecision": 7,
+        "orderTypes": [
+            "LIMIT",
+            "MARKET",
+            "LIMIT_MAKER"
+        ],
+        "isSpotTradingAllowed": true,
+        "isMarginTradingAllowed": false,
+        "quoteAmountPrecision": "1.000000000000000000000000000000",
+        "baseSizePrecision": "0",
+        "permissions": [
+            "SPOT"
+        ],
+        "filters": [],
+        "maxQuoteAmount": "2000000.000000000000000000000000000000",
+        "makerCommission": "0",
+        "takerCommission": "0.0002",
+        "quoteAmountPrecisionMarket": "1.000000000000000000000000000000",
+        "maxQuoteAmountMarket": "100000.000000000000000000000000000000",
+        "fullName": "AI Finance",
         "tradeSideType": 1
     },
     {
@@ -74404,37 +74343,6 @@
         "quoteAmountPrecisionMarket": "1.000000000000000000000000000000",
         "maxQuoteAmountMarket": "100000.000000000000000000000000000000",
         "fullName": "Monstraverse",
-        "tradeSideType": 1
-    },
-    {
-        "symbol": "VTPUSDT",
-        "status": "1",
-        "baseAsset": "VTP",
-        "baseAssetPrecision": 2,
-        "quoteAsset": "USDT",
-        "quotePrecision": 28,
-        "quoteAssetPrecision": 28,
-        "baseCommissionPrecision": 2,
-        "quoteCommissionPrecision": 28,
-        "orderTypes": [
-            "LIMIT",
-            "MARKET",
-            "LIMIT_MAKER"
-        ],
-        "isSpotTradingAllowed": true,
-        "isMarginTradingAllowed": false,
-        "quoteAmountPrecision": "1.000000000000000000000000000000",
-        "baseSizePrecision": "0",
-        "permissions": [
-            "SPOT"
-        ],
-        "filters": [],
-        "maxQuoteAmount": "2000000.000000000000000000000000000000",
-        "makerCommission": "0",
-        "takerCommission": "0.0002",
-        "quoteAmountPrecisionMarket": "1.000000000000000000000000000000",
-        "maxQuoteAmountMarket": "100000.000000000000000000000000000000",
-        "fullName": "VenturiosPath",
         "tradeSideType": 1
     },
     {
@@ -75430,6 +75338,37 @@
         "tradeSideType": 1
     },
     {
+        "symbol": "QTLXUSDT",
+        "status": "1",
+        "baseAsset": "QTLX",
+        "baseAssetPrecision": 2,
+        "quoteAsset": "USDT",
+        "quotePrecision": 5,
+        "quoteAssetPrecision": 5,
+        "baseCommissionPrecision": 2,
+        "quoteCommissionPrecision": 5,
+        "orderTypes": [
+            "LIMIT",
+            "MARKET",
+            "LIMIT_MAKER"
+        ],
+        "isSpotTradingAllowed": true,
+        "isMarginTradingAllowed": false,
+        "quoteAmountPrecision": "1.000000000000000000000000000000",
+        "baseSizePrecision": "0",
+        "permissions": [
+            "SPOT"
+        ],
+        "filters": [],
+        "maxQuoteAmount": "2000000.000000000000000000000000000000",
+        "makerCommission": "0",
+        "takerCommission": "0.0002",
+        "quoteAmountPrecisionMarket": "1.000000000000000000000000000000",
+        "maxQuoteAmountMarket": "100000.000000000000000000000000000000",
+        "fullName": "Quantlytica",
+        "tradeSideType": 1
+    },
+    {
         "symbol": "DUROVUSDT",
         "status": "1",
         "baseAsset": "DUROV",
@@ -75652,10 +75591,10 @@
         "baseAsset": "RIXEN",
         "baseAssetPrecision": 2,
         "quoteAsset": "USDT",
-        "quotePrecision": 5,
-        "quoteAssetPrecision": 5,
+        "quotePrecision": 7,
+        "quoteAssetPrecision": 7,
         "baseCommissionPrecision": 2,
-        "quoteCommissionPrecision": 5,
+        "quoteCommissionPrecision": 7,
         "orderTypes": [
             "LIMIT",
             "MARKET",
@@ -76828,10 +76767,10 @@
         "baseAsset": "MET",
         "baseAssetPrecision": 2,
         "quoteAsset": "USDT",
-        "quotePrecision": 10,
-        "quoteAssetPrecision": 10,
+        "quotePrecision": 13,
+        "quoteAssetPrecision": 13,
         "baseCommissionPrecision": 2,
-        "quoteCommissionPrecision": 10,
+        "quoteCommissionPrecision": 13,
         "orderTypes": [
             "LIMIT",
             "MARKET",
@@ -77696,10 +77635,10 @@
         "baseAsset": "SMARTBOX",
         "baseAssetPrecision": 2,
         "quoteAsset": "USDT",
-        "quotePrecision": 23,
-        "quoteAssetPrecision": 23,
+        "quotePrecision": 25,
+        "quoteAssetPrecision": 25,
         "baseCommissionPrecision": 2,
-        "quoteCommissionPrecision": 23,
+        "quoteCommissionPrecision": 25,
         "orderTypes": [
             "LIMIT",
             "MARKET",
@@ -81470,6 +81409,37 @@
         "quoteAmountPrecisionMarket": "1.000000000000000000000000000000",
         "maxQuoteAmountMarket": "100000.000000000000000000000000000000",
         "fullName": "Cleo Tech",
+        "tradeSideType": 1
+    },
+    {
+        "symbol": "GFFUSDT",
+        "status": "1",
+        "baseAsset": "GFF",
+        "baseAssetPrecision": 2,
+        "quoteAsset": "USDT",
+        "quotePrecision": 7,
+        "quoteAssetPrecision": 7,
+        "baseCommissionPrecision": 2,
+        "quoteCommissionPrecision": 7,
+        "orderTypes": [
+            "LIMIT",
+            "MARKET",
+            "LIMIT_MAKER"
+        ],
+        "isSpotTradingAllowed": true,
+        "isMarginTradingAllowed": false,
+        "quoteAmountPrecision": "1.000000000000000000000000000000",
+        "baseSizePrecision": "0",
+        "permissions": [
+            "SPOT"
+        ],
+        "filters": [],
+        "maxQuoteAmount": "2000000.000000000000000000000000000000",
+        "makerCommission": "0",
+        "takerCommission": "0.0002",
+        "quoteAmountPrecisionMarket": "1.000000000000000000000000000000",
+        "maxQuoteAmountMarket": "100000.000000000000000000000000000000",
+        "fullName": "Giraffe",
         "tradeSideType": 1
     },
     {
@@ -85352,10 +85322,10 @@
         "baseAsset": "SFE",
         "baseAssetPrecision": 2,
         "quoteAsset": "USDT",
-        "quotePrecision": 7,
-        "quoteAssetPrecision": 7,
+        "quotePrecision": 8,
+        "quoteAssetPrecision": 8,
         "baseCommissionPrecision": 2,
-        "quoteCommissionPrecision": 7,
+        "quoteCommissionPrecision": 8,
         "orderTypes": [
             "LIMIT",
             "MARKET",
@@ -85786,10 +85756,10 @@
         "baseAsset": "VIP",
         "baseAssetPrecision": 2,
         "quoteAsset": "USDT",
-        "quotePrecision": 9,
-        "quoteAssetPrecision": 9,
+        "quotePrecision": 12,
+        "quoteAssetPrecision": 12,
         "baseCommissionPrecision": 2,
-        "quoteCommissionPrecision": 9,
+        "quoteCommissionPrecision": 12,
         "orderTypes": [
             "LIMIT",
             "MARKET",
