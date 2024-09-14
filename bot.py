@@ -59,7 +59,7 @@ async def calc_vol_to_sell_on_mexc_in_usdt(arr, target_value):
 
 
 async def buy_on_mexc(mexc, one_inch, info, goplus):
-    if goplus["is_anti_whale"] == 1 or goplus["is_honeypot"] == 1 or goplus["connot_buy"] == 1 or goplus["connot_sell_all"] == 1:
+    if goplus["is_anti_whale"] == 1 or goplus["is_honeypot"] == 1 or goplus["cannot_buy"] == 1 or goplus["cannot_sell_all"] == 1:
         return None, None, None
     if info["withdrawEnable"] == False:
         return None, None, None
