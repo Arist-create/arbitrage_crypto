@@ -209,9 +209,6 @@ async def message_id(message: types.Message):
             if not goplus_buy or not goplus_sell:
                 continue
 
-            buy_tips = f'{info_buy["withdrawTips"]}\n{info_buy["depositTips"]}\n'
-            sell_tips = f'{info_sell["withdrawTips"]}\n{info_sell["depositTips"]}\n'
-
             profit_mexc, orders_to_buy, gas_buy = await buy_on_mexc(mexc, one_inch, info_buy, goplus_buy) 
             profit_one_inch, orders_to_sell, gas_sell, gas_for_withdraw = await buy_on_one_inch(mexc, one_inch, info_sell, goplus_sell)
             
@@ -219,17 +216,17 @@ async def message_id(message: types.Message):
                 continue
             if profit_mexc < target_profit and profit_one_inch < target_profit:
                 continue
+            if info_buy.get("withdrawTips") or info_sell.get("withdrawTips") or info_buy.get("depositTips") or info_sell.get("depositTips"):
+                continue
             message = f'\n mexc: {float(profit_mexc):.2f} \
                 \n orders_to_buy: {orders_to_buy} \
                 \n gas_buy: {gas_buy} \
-                \n chain_buy: {chain_buy} \
-                \n buy_tips: {buy_tips} \n \
+                \n chain_buy: {chain_buy} \n \
                 \n one_inch: {float(profit_one_inch):.2f} \
                 \n orders_to_sell: {orders_to_sell} \
                 \n gas_sell: {gas_sell} \
                 \n gas_for_withdraw: {gas_for_withdraw} \
-                \n chain_sell: {chain_sell} \
-                \n sell_tips: {sell_tips} \n'
+                \n chain_sell: {chain_sell} \n '
             line = {"symbol": pair["symbol"], 
                     "message": message,
                     "start_time": start_time,

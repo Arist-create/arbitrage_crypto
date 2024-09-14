@@ -115,19 +115,21 @@ async def check_prices(main_token, usdt_token, chains):
                 resp = await fetch(client, chain_number, contract_address, usdt_token_detect["contract"], amount)
                 if not resp.get("toAmount"):
                     continue
-                if float(resp['toAmount']) > max_usdt:
-                    max_usdt = float(resp['toAmount'])
+                check = float(resp['toAmount'])/10**usdt_token_detect["decimals"]
+                if check > max_usdt:
+                    max_usdt = check
                     dictionary["gas_sell"] = float(resp['gas'])
-                    dictionary["sell"] = max_usdt / 10**usdt_token_detect["decimals"]
+                    dictionary["sell"] = check
                     dictionary["chain_sell"] = i["network"]
                 amount_usdt = 1000*10**usdt_token_detect["decimals"]
                 resp = await fetch(client, chain_number, usdt_token_detect["contract"], contract_address, amount_usdt)
                 if not resp.get("toAmount"):
                     continue
-                if float(resp['toAmount']) > max_tokens:
-                    max_tokens = float(resp['toAmount'])
+                check = float(resp['toAmount'])/10**decimals
+                if check > max_tokens:
+                    max_tokens = check
                     dictionary["gas_buy"] = float(resp['gas'])
-                    dictionary["buy"] = max_tokens / 10**decimals
+                    dictionary["buy"] = check
                     dictionary["chain_buy"] = i["network"]
 
         if not dictionary.get("sell") or not dictionary.get("buy"):
