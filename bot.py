@@ -175,10 +175,7 @@ async def message_id(message: types.Message):
     await bot.send_message(message.chat.id, "Scanning...")
     while True:
         target_profit = await settings_db.get("number", 1)
-        if not target_profit:
-            target_profit = 0
-        else:
-            target_profit = float(target_profit["target_profit"])
+        target_profit = float(target_profit["target_profit"]) if target_profit else 0.0
         
         with open('tokens_mexc_by_chains.json') as f:
             tokens_with_and_dep = json.load(f)
@@ -192,8 +189,7 @@ async def message_id(message: types.Message):
             mexc = await redis.get(f'{pair["symbol"]}@MEXC')
             mexc = json.loads(mexc)
             info = tokens_with_and_dep[pair['symbol'][:-4]]["networkList"]
-            if not one_inch[0].get("chain"):
-                continue
+
             chain_buy = one_inch[0]["chain"]
             chain_sell = one_inch[1]["chain"]
             info_buy = [i for i in info if i["network"] == chain_buy][0]

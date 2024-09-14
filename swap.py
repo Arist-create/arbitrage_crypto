@@ -160,9 +160,6 @@ async def check_prices(main_token, usdt_token, chains, gas_price):
 
         
 if __name__ == '__main__':
-    while True:
-        try:
-            asyncio.run(main())
-        except Exception as e:
-            print(e)
+    asyncio.run(main())
+    
     
