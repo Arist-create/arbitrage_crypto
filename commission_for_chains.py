@@ -4,7 +4,8 @@ from redis import redis
 
 async def get_gas_price(rpc_url):
     w3 = Web3(Web3.HTTPProvider(rpc_url))
-    return w3.eth.gas_price
+    gas = w3.eth.gas_price
+    return gas
 
 async def get_commission_token_price(pair):
     orders = await redis.get(pair)
