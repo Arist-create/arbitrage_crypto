@@ -3,8 +3,9 @@ import json
 import asyncio
 import httpx
 from redis import redis
-from web3 import Web3
+from mongo import goplus_db
 import datetime
+from commission_for_chains import get_gas_price_in_usdt
 
 proxy_mounts={"https://": httpx.AsyncHTTPTransport(proxy="socks5://proxy_user:wcPYZj5Zlj@62.133.62.154:41257")}
 
@@ -51,27 +52,26 @@ async def fetch_volume(coin, withdraw_fee):
 
 
 async def main():
-    rpc_url = "https://rpc.ankr.com/eth"
     with open('chains_by_number_only_for_mexc.json') as f:
         chains = json.load(f)
     while True:
+        await get_gas_price_in_usdt()
         with open('list_of_pairs_mexc.json') as f:
             pairs = json.load(f)
         with open('tokens_mexc_by_chains.json') as f:
             tokens_with_and_dep = json.load(f)
         usdt_token = tokens_with_and_dep['USDT']
-
-        # one_eth = await get_eth_price(client)
-        # one_eth = int(one_eth['toAmount'])/(10**6) 
-        # web_3 = Web3(Web3.HTTPProvider(rpc_url))
-        # gas = web_3.eth.gas_price/10**18
-        # mn = gas*one_eth
+        with open('chains_by_gas_price.json') as f:
+            gas_price = json.load(f)
+        
         tasks = []
         for pair in pairs:
+            main_token = tokens_with_and_dep[pair["symbol"][:-4]]
             tasks.append(check_prices(
-                tokens_with_and_dep[pair["symbol"][:-4]],
+                main_token,
                 usdt_token,
-                chains
+                chains,
+                gas_price
             ))
             if len(tasks) > 50:
                 await asyncio.gather(*tasks)
@@ -82,7 +82,7 @@ async def main():
 
 
 
-async def check_prices(main_token, usdt_token, chains):
+async def check_prices(main_token, usdt_token, chains, gas_price):
     try:
         max_tokens = 0
         max_usdt = 0
@@ -94,6 +94,10 @@ async def check_prices(main_token, usdt_token, chains):
 
             contract_address = i.get('contract')
             if not contract_address:
+                continue
+
+            security = await goplus_db.get("contract_address", contract_address.lower())
+            if security["is_honeypot"] or security["is_anti_whale"] or security["cannot_buy"] or security["cannot_sell_all"]:
                 continue
             
             decimals = i.get('decimals')
@@ -115,7 +119,7 @@ async def check_prices(main_token, usdt_token, chains):
                 resp = await fetch(client, chain_number, contract_address, usdt_token_detect["contract"], amount)
                 if not resp.get("toAmount"):
                     continue
-                check = float(resp['toAmount'])/10**usdt_token_detect["decimals"]
+                check = float(resp['toAmount'])/10**usdt_token_detect["decimals"] - float(resp["gas"])*gas_price[i["network"]]
                 if check > max_usdt:
                     max_usdt = check
                     dictionary["gas_sell"] = float(resp['gas'])
@@ -125,7 +129,7 @@ async def check_prices(main_token, usdt_token, chains):
                 resp = await fetch(client, chain_number, usdt_token_detect["contract"], contract_address, amount_usdt)
                 if not resp.get("toAmount"):
                     continue
-                check = float(resp['toAmount'])/10**decimals
+                check = float(resp['toAmount'])/10**decimals - float(resp["gas"])*gas_price[i["network"]]
                 if check > max_tokens:
                     max_tokens = check
                     dictionary["gas_buy"] = float(resp['gas'])

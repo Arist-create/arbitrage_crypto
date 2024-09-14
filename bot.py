@@ -59,8 +59,6 @@ async def calc_vol_to_sell_on_mexc_in_usdt(arr, target_value):
 
 
 async def buy_on_mexc(mexc, one_inch, info, goplus):
-    if (goplus.get("is_anti_whale", 0) == 1) or (goplus.get("is_honeypot", 0) == 1) or (goplus.get("cannot_buy", 0) == 1) or (goplus.get("cannot_sell_all", 0) == 1):
-        return None, None, None
     if info["withdrawEnable"] == False:
         return None, None, None
     mexc_vol, orders = await calc_vol_in_usdt(mexc['asks'])
@@ -84,8 +82,6 @@ async def buy_on_mexc(mexc, one_inch, info, goplus):
     return profit, orders, commission
  
 async def buy_on_one_inch(mexc, one_inch, info, goplus):
-    if (goplus.get("is_anti_whale", 0) == 1) or (goplus.get("is_honeypot", 0) == 1) or (goplus.get("cannot_buy", 0) == 1) or (goplus.get("cannot_sell_all", 0) == 1):
-        return None, None, None, None
     if info["depositEnable"] == False:
         return None, None, None, None
     one_inch_vol = one_inch[1]['buy']
@@ -178,7 +174,6 @@ async def message_id(message: types.Message):
         pairs = json.load(f)
     await bot.send_message(message.chat.id, "Scanning...")
     while True:
-        await get_gas_price_in_usdt()
         target_profit = await settings_db.get("number", 1)
         if not target_profit:
             target_profit = 0
