@@ -59,6 +59,8 @@ async def calc_vol_to_sell_on_mexc_in_usdt(arr, target_value):
 
 
 async def buy_on_mexc(mexc, one_inch, info, goplus):
+    if goplus["is_anti_whale"] == 1 or goplus["is_honeypot"] == 1 or goplus["connot_buy"] == 1 or goplus["connot_sell_all"] == 1:
+        return None, None, None
     if info["withdrawEnable"] == False:
         return None, None, None
     mexc_vol, orders = await calc_vol_in_usdt(mexc['asks'])
@@ -82,6 +84,8 @@ async def buy_on_mexc(mexc, one_inch, info, goplus):
     return profit, orders, commission
  
 async def buy_on_one_inch(mexc, one_inch, info, goplus):
+    if goplus["is_anti_whale"] == 1 or goplus["is_honeypot"] == 1 or goplus["cannot_buy"] == 1 or goplus["cannot_sell_all"] == 1:
+        return None, None, None, None
     if info["depositEnable"] == False:
         return None, None, None, None
     one_inch_vol = one_inch[1]['buy']
@@ -205,6 +209,9 @@ async def message_id(message: types.Message):
             if not goplus_buy or not goplus_sell:
                 continue
 
+            buy_tips = f'{goplus_buy["withdrawTips"]}\n{goplus_buy["depositTips"]}\n'
+            sell_tips = f'{goplus_sell["withdrawTips"]}\n{goplus_sell["depositTips"]}\n'
+
             profit_mexc, orders_to_buy, gas_buy = await buy_on_mexc(mexc, one_inch, info_buy, goplus_buy) 
             profit_one_inch, orders_to_sell, gas_sell, gas_for_withdraw = await buy_on_one_inch(mexc, one_inch, info_sell, goplus_sell)
             
@@ -216,11 +223,13 @@ async def message_id(message: types.Message):
                 \n orders_to_buy: {orders_to_buy} \
                 \n gas_buy: {gas_buy} \
                 \n chain_buy: {chain_buy} \n \
+                \n buy_tips: {buy_tips} \n \
                 \n one_inch: {float(profit_one_inch):.2f} \
                 \n orders_to_sell: {orders_to_sell} \
                 \n gas_sell: {gas_sell} \
                 \n gas_for_withdraw: {gas_for_withdraw} \
-                \n chain_sell: {chain_sell} \n'
+                \n chain_sell: {chain_sell} \n \
+                \n sell_tips: {sell_tips} \n'
             line = {"symbol": pair["symbol"], 
                     "message": message,
                     "start_time": start_time,

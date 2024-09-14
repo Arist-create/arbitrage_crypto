@@ -33,6 +33,7 @@ async def get_quote(subscribe_list):
                 await websocket.close()
         except:
             await asyncio.sleep(10)
+
 async def stop():
     await asyncio.sleep(3600)
     global stop_task
@@ -54,9 +55,6 @@ async def main():
         await asyncio.gather(*tasks)
         global stop_task
         stop_task = False
-
-
-
 
 
 if __name__ == '__main__':
