@@ -17,7 +17,7 @@ dp = Dispatcher(bot)
 
 async def calc_vol_in_usdt(arr):
     total_cost = 0.0
-    target_value = 1000.0
+    target_value = 3000.0
     total_volume = 0.0
     k = 0
     for i in arr:
@@ -62,7 +62,7 @@ async def buy_on_mexc(mexc, one_inch, info, goplus):
     if info["withdrawEnable"] == False:
         return None, None, None
     mexc_vol, orders = await calc_vol_in_usdt(mexc['asks'])
-    if mexc_vol < 1000:
+    if mexc_vol < 3000:
         return None, None, None
     one_inch_vol = one_inch[0]['sell']
 
@@ -97,7 +97,7 @@ async def buy_on_one_inch(mexc, one_inch, info, goplus):
     gas = one_inch[1]['gas']
     commission = gas_price * gas
     gas_for_withdraw = gas_price * 21000
-    profit = (mexc_vol - 1000) - commission - gas_for_withdraw
+    profit = (mexc_vol - 3000) - commission - gas_for_withdraw
 
     return profit, orders, commission, gas_for_withdraw
 
