@@ -30,8 +30,7 @@ async def get_gas_price_in_usdt():
         token_price = await get_commission_token_price(pair)
         commission = gas_price*token_price
         dictionary[chain_name] = commission
-    with open("chains_by_gas_price.json", "w") as f:
-        json.dump(dictionary, f, indent=4)
+    await redis.set("chains_by_gas_price", json.dumps(dictionary))
         
 
 

@@ -60,8 +60,10 @@ async def main():
         with open('tokens_mexc_by_chains.json') as f:
             tokens_with_and_dep = json.load(f)
         usdt_token = tokens_with_and_dep['USDT']
-        with open('chains_by_gas_price.json') as f:
-            gas_price = json.load(f)
+        gas_price = await redis.get("chains_by_gas_price")
+        if not gas_price:
+            continue
+        gas_price = json.loads(gas_price)
         
         tasks = []
         for pair in pairs:

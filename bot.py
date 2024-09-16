@@ -65,8 +65,10 @@ async def buy_on_mexc(mexc, one_inch, info, goplus):
         return None, None, None
     one_inch_vol = one_inch[0]['sell']
 
-    with open('chains_by_gas_price.json') as f:
-        chains_by_gas_price = json.load(f)
+    chains_by_gas_price = await redis.get("chains_by_gas_price")
+    if not chains_by_gas_price:
+        return None, None, None
+    chains_by_gas_price = json.loads(chains_by_gas_price)
     gas_price = chains_by_gas_price[info["network"]]
     gas = one_inch[0]['gas']
     commission = gas_price * gas
@@ -90,8 +92,10 @@ async def buy_on_one_inch(mexc, one_inch, info, goplus):
         tax = 0
     one_inch_vol = one_inch_vol - (one_inch_vol * float(tax))
     mexc_vol, orders = await calc_vol_to_sell_on_mexc_in_usdt(mexc['bids'], one_inch_vol)
-    with open('chains_by_gas_price.json') as f:
-        chains_by_gas_price = json.load(f)
+    chains_by_gas_price = await redis.get("chains_by_gas_price")
+    if not chains_by_gas_price:
+        return None, None, None, None
+    chains_by_gas_price = json.loads(chains_by_gas_price)
     gas_price = chains_by_gas_price[info["network"]]
     gas = one_inch[1]['gas']
     commission = gas_price * gas
