@@ -110,8 +110,10 @@ async def message_id(message: types.Message):
     string = ""
     for trade in trades:
         string += f'{trade["symbol"]}: {trade["message"]}\n'
-
-    await bot.send_message(message.chat.id, string)
+    try:
+        await bot.send_message(message.chat.id, string)
+    except Exception as e:
+        await bot.send_message(message.chat.id, e)
 
 @dp.message_handler(commands=['settings'])
 async def message_id(message: types.Message):
@@ -170,55 +172,65 @@ async def message_id(message: types.Message):
         with open('tokens_mexc_by_chains.json') as f:
             tokens_with_and_dep = json.load(f)
         arr = set()
-        start_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        tasks = []
         for pair in pairs:
-            one_inch = await redis.get(f'{pair["symbol"]}@1INCH')
-            if not one_inch:
+            tasks.append(get_profit(pair, tokens_with_and_dep, target_profit))
+        results = await asyncio.gather(*tasks)
+        for result in results:
+            if not result:
                 continue
-            one_inch = json.loads(one_inch)
-            mexc = await redis.get(f'{pair["symbol"]}@MEXC')
-            mexc = json.loads(mexc)
-            info = tokens_with_and_dep[pair['symbol'][:-4]]["networkList"]
-
-            chain_buy = one_inch[0]["chain"]
-            chain_sell = one_inch[1]["chain"]
-            info_buy = [i for i in info if i["network"] == chain_buy][0]
-            info_sell = [i for i in info if i["network"] == chain_sell][0]
-            
-            goplus_buy = await goplus_db.get("contract_address", info_buy["contract"].lower())
-            goplus_sell = await goplus_db.get("contract_address", info_sell["contract"].lower())
-            if not goplus_buy or not goplus_sell:
-                continue
-
-            profit_mexc, orders_to_buy, gas_buy = await buy_on_mexc(mexc, one_inch, info_buy, goplus_buy) 
-            profit_one_inch, orders_to_sell, gas_sell, gas_for_withdraw = await buy_on_one_inch(mexc, one_inch, info_sell, goplus_sell)
-            
-            if not profit_mexc or not profit_one_inch:
-                continue
-            if profit_mexc < target_profit and profit_one_inch < target_profit:
-                continue
-            if info_buy.get("withdrawTips") or info_sell.get("withdrawTips") or info_buy.get("depositTips") or info_sell.get("depositTips"):
-                continue
-            message = f'\n mexc: {float(profit_mexc):.2f} \
-                \n orders_to_buy: {orders_to_buy} \
-                \n gas_buy: {gas_buy} \
-                \n chain_buy: {chain_buy} \n \
-                \n one_inch: {float(profit_one_inch):.2f} \
-                \n orders_to_sell: {orders_to_sell} \
-                \n gas_sell: {gas_sell} \
-                \n gas_for_withdraw: {gas_for_withdraw} \
-                \n chain_sell: {chain_sell} \n '
-            line = {"symbol": pair["symbol"], 
-                    "message": message,
-                    "start_time": start_time,
-                    "notify": False}
-            await trades_db.update("symbol", pair["symbol"], {"message": message}, True)
-            arr.add(line["symbol"])
+            arr.add(result["symbol"])
+            await trades_db.update("symbol", result["symbol"], result, True)
 
         current_trades = await trades_db.get_all()
         for i in current_trades:
-            if i["symbol"] not in arr:
-                await trades_db.delete("symbol", i["symbol"])
+            if i["symbol"] in arr:
+                continue
+            await trades_db.delete("symbol", i["symbol"])
+
+
+async def get_profit(pair, tokens_with_and_dep, target_profit):
+    start_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    one_inch = await redis.get(f'{pair["symbol"]}@1INCH')
+    if not one_inch:
+        return None
+    one_inch = json.loads(one_inch)
+    mexc = await redis.get(f'{pair["symbol"]}@MEXC')
+    mexc = json.loads(mexc)
+    info = tokens_with_and_dep[pair['symbol'][:-4]]["networkList"]
+
+    chain_buy = one_inch[0]["chain"]
+    chain_sell = one_inch[1]["chain"]
+    info_buy = [i for i in info if i["network"] == chain_buy][0]
+    info_sell = [i for i in info if i["network"] == chain_sell][0]
+    
+    goplus_buy = await goplus_db.get("contract_address", info_buy["contract"].lower())
+    goplus_sell = await goplus_db.get("contract_address", info_sell["contract"].lower())
+    if not goplus_buy or not goplus_sell:
+        return None
+
+    profit_mexc, orders_to_buy, gas_buy = await buy_on_mexc(mexc, one_inch, info_buy, goplus_buy) 
+    profit_one_inch, orders_to_sell, gas_sell, gas_for_withdraw = await buy_on_one_inch(mexc, one_inch, info_sell, goplus_sell)
+    
+    if not profit_mexc or not profit_one_inch:
+        return None
+    if profit_mexc < target_profit and profit_one_inch < target_profit:
+        return None
+    if info_buy.get("withdrawTips") or info_sell.get("withdrawTips") or info_buy.get("depositTips") or info_sell.get("depositTips"):
+        return None
+    message = f'\n mexc: {float(profit_mexc):.2f} \
+        \n orders_to_buy: {orders_to_buy} \
+        \n gas_buy: {gas_buy} \
+        \n chain_buy: {chain_buy} \n \
+        \n one_inch: {float(profit_one_inch):.2f} \
+        \n orders_to_sell: {orders_to_sell} \
+        \n gas_sell: {gas_sell} \
+        \n gas_for_withdraw: {gas_for_withdraw} \
+        \n chain_sell: {chain_sell} \n '
+    return {"symbol": pair["symbol"], 
+            "message": message,
+            "start_time": start_time,
+            "notify": False}
 
 if __name__ == '__main__':
     while True:
