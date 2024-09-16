@@ -16,6 +16,9 @@ class Mongo:
     async def add(self, dictionary: dict):
         await self.mycollection.insert_one(dictionary)
     
+    async def add_many(self, dictionary: list):
+        await self.mycollection.insert_many(dictionary)
+    
     async def delete(self, key, value):
         await self.mycollection.delete_one({f"{key}": value})
 
@@ -28,8 +31,8 @@ class Mongo:
     async def get(self, key, value): 
         return await self.mycollection.find_one({key: value})
 
-    async def update(self, key, value, dictionary):
-        await self.mycollection.update_one({key: value}, {"$set": dictionary})
+    async def update(self, key, value, dictionary, upsert=False):
+        await self.mycollection.update_one({key: value}, {"$set": dictionary}, upsert=upsert)
     
     async def count(self, key, value):
         return await self.mycollection.count_documents({f"{key}": value})
@@ -41,4 +44,6 @@ class Mongo:
 trades_db = Mongo("trades")
 settings_db = Mongo("settings")
 goplus_db = Mongo("goplus")
+list_of_pairs_mexc_db = Mongo("list_of_pairs_mexc")
+
 

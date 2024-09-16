@@ -1,11 +1,11 @@
-from mongo import goplus_db
+from mongo import goplus_db, list_of_pairs_mexc_db
 import requests
 import json
 import time
 import hmac
 import hashlib
 import httpx
-
+import asyncio
 
 async def get_decimals_mexc():
     resp = requests.get(
@@ -76,9 +76,7 @@ async def get_pairs(): #переписать на получение из фай
         and i.get("quoteAsset") == 'USDT'
     ]
     print(len(arr))
-    # сохранить список в json файл
-    with open('list_of_pairs_mexc.json', 'w') as f:
-        json.dump(arr, f, indent=4) 
+    await asyncio.gather(*[list_of_pairs_mexc_db.update("symbol", i["symbol"], i, True) for i in arr])
 
 async def get_tokens_by_goplus():
     with open('tokens_mexc_by_chains.json') as f1, open('chains_by_number_only_for_mexc.json') as f2: 
@@ -114,11 +112,7 @@ async def get_tokens_by_goplus():
                     "contract_address": contract_address.lower()
                 }
                 dictionary.update(resp)
-                check = await goplus_db.get("contract_address", contract_address.lower())
-                if check:
-                    await goplus_db.update("contract_address", contract_address.lower(), dictionary)
-                else:
-                    await goplus_db.add(dictionary)
+                await goplus_db.update("contract_address", contract_address.lower(), dictionary, True)
             except Exception as e:
                 print(e)
 

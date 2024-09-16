@@ -3,7 +3,7 @@ import json
 import asyncio
 import httpx
 from redis import redis
-from mongo import goplus_db
+from mongo import goplus_db, list_of_pairs_mexc_db
 import datetime
 from commission_for_chains import get_gas_price_in_usdt
 
@@ -56,8 +56,7 @@ async def main():
         chains = json.load(f)
     while True:
         await get_gas_price_in_usdt()
-        with open('list_of_pairs_mexc.json') as f:
-            pairs = json.load(f)
+        pairs = await list_of_pairs_mexc_db.get_all()
         with open('tokens_mexc_by_chains.json') as f:
             tokens_with_and_dep = json.load(f)
         usdt_token = tokens_with_and_dep['USDT']

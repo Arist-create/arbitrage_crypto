@@ -3,7 +3,7 @@ import websockets
 import json
 import asyncio 
 from redis import redis
-
+from mongo import list_of_pairs_mexc_db
 stop_task = False
 
 async def get_quote(subscribe_list):
@@ -42,8 +42,7 @@ async def stop():
 async def main():
     while True:
         print("start")
-        with open('list_of_pairs_mexc.json') as f:
-            pairs = json.load(f)
+        pairs = await list_of_pairs_mexc_db.get_all()
         subscribe_list = [f'spot@public.limit.depth.v3.api@{pair["symbol"]}@20' for pair in pairs]
         
         tasks = []

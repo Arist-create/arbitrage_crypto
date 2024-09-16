@@ -3,10 +3,9 @@ from aiogram import types, executor
 from aiogram import Bot, Dispatcher 
 from redis import redis
 import json
-from commission_for_chains import get_gas_price_in_usdt
 import datetime
 import asyncio
-from mongo import trades_db, settings_db, goplus_db
+from mongo import trades_db, settings_db, goplus_db, list_of_pairs_mexc_db
 API_TOKEN = '7473932480:AAHvJvYndS0-blMx8U-w57BBjMuUTl01E7E' #прод
 # API_TOKEN = '6769001742:AAGW0d_60IymQPl8ef4U7Pvun3aIYf0aBPc'
 
@@ -150,30 +149,21 @@ async def message_id(message: types.Message):
 @dp.message_handler(lambda message: message.text and ':' in message.text.lower())
 async def message_id(message: types.Message):
     life_time_target = float(message.text[1:])
-    check = await settings_db.get("number", 1)
-    if not check:
-        await settings_db.add({"life_time_target": 0.0, "number": 1})
-    else:
-        await settings_db.update("number", 1, {"life_time_target": life_time_target})
+    await settings_db.update("number", 1, {"life_time_target": life_time_target}, True)
     await bot.send_message(message.chat.id, "Done")
 
 @dp.message_handler(lambda message: message.text and '.' in message.text.lower())
 async def message_id(message: types.Message):
     target_profit = float(message.text[1:])
-    check = await settings_db.get("number", 1)
-    if not check:
-        await settings_db.add({"target_profit": 0.0, "number": 1})
-    else:
-        await settings_db.update("number", 1, {"target_profit": target_profit})
+    await settings_db.update("number", 1, {"target_profit": target_profit}, True)
     await bot.send_message(message.chat.id, "Done")
 
 
 @dp.message_handler(commands=['scan'])
 async def message_id(message: types.Message):
-    with open ('list_of_pairs_mexc.json') as f:
-        pairs = json.load(f)
     await bot.send_message(message.chat.id, "Scanning...")
     while True:
+        pairs = await list_of_pairs_mexc_db.get_all()
         target_profit = await settings_db.get("number", 1)
         target_profit = float(target_profit["target_profit"]) if target_profit else 0.0
         
@@ -222,10 +212,7 @@ async def message_id(message: types.Message):
                     "message": message,
                     "start_time": start_time,
                     "notify": False}
-            check = await trades_db.get("symbol", pair["symbol"])
-            if not check:
-                await trades_db.add(line)
-            await trades_db.update("symbol", pair["symbol"], {"message": message})
+            await trades_db.update("symbol", pair["symbol"], {"message": message}, True)
             arr.add(line["symbol"])
 
         current_trades = await trades_db.get_all()
