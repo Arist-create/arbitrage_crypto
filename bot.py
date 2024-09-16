@@ -164,9 +164,9 @@ async def message_id(message: types.Message):
     await settings_db.update("number", 1, {"target_profit": target_profit}, True)
     await bot.send_message(message.chat.id, "Done")
 
-
-async def scanning():
-    await bot.send_message(1317668838, "Scanning...")
+@dp.message_handler(commands=['scan'])
+async def message_id(message: types.Message):
+    await bot.send_message(message.chat.id, "Scanning...")
     while True:
         pairs = await list_of_pairs_mexc_db.get_all()
         target_profit = await settings_db.get("number", 1)
@@ -245,16 +245,10 @@ async def get_profit(pair, tokens_with_and_dep, target_profit):
             "start_time": start_time,
             "notify": False}
 
-
-async def on_startup(_):
-    task1 = asyncio.create_task(scanning)
-    await asyncio.gather(task1)
-
-
 if __name__ == '__main__':
     while True:
         try:
-            executor.start_polling(dp, skip_updates=True, on_startup=on_startup)
+            executor.start_polling(dp, skip_updates=True)
         except Exception as e:
             print(f"Error: {e}")
             time.sleep(5)
