@@ -179,12 +179,22 @@ async def message_id(message: types.Message):
         tasks = []
         for pair in pairs:
             tasks.append(get_profit(pair, tokens_with_and_dep, target_profit))
-        results = await asyncio.gather(*tasks)
-        for result in results:
-            if not result:
-                continue
-            arr.add(result["symbol"])
-            await trades_db.update("symbol", result["symbol"], result, True)
+            if len(tasks) > 100:
+                results = await asyncio.gather(*tasks)
+                for result in results:
+                    if not result:
+                        continue
+                    arr.add(result["symbol"])
+                    await trades_db.update("symbol", result["symbol"], result, True)
+                tasks = []
+
+        if tasks:
+            results = await asyncio.gather(*tasks)
+            for result in results:
+                if not result:
+                    continue
+                arr.add(result["symbol"])
+                await trades_db.update("symbol", result["symbol"], result, True)
 
         current_trades = await trades_db.get_all()
         for i in current_trades:
