@@ -72,13 +72,13 @@ async def buy_on_mexc(mexc, one_inch, info, goplus):
     gas_price = chains_by_gas_price[info["network"]]
     gas = one_inch[0]['gas']
     commission = gas_price * gas
-
+    gas_for_withdraw = gas_price * 21000
     tax = goplus["sell_tax"]
     if tax == '':
         tax = 0
     one_inch_vol = one_inch_vol - (one_inch_vol * float(tax))
 
-    profit = (one_inch_vol - mexc_vol) - commission
+    profit = (one_inch_vol - mexc_vol) - commission - gas_for_withdraw
 
     return profit, orders, commission
  
@@ -178,7 +178,7 @@ async def message_id(message: types.Message):
         tasks = []
         for pair in pairs:
             tasks.append(get_profit(pair, tokens_with_and_dep, target_profit))
-            if len(tasks) > 50:
+            if len(tasks) > 10:
                 results = await asyncio.gather(*tasks)
                 for result in results:
                     if not result:
