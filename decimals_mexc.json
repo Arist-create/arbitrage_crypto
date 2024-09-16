@@ -5,7 +5,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 85,
+                "fee": 104,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -415,7 +415,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 252,
+                "fee": 253,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -601,7 +601,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 0.020361,
+                "fee": 0.020575,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -3827,7 +3827,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 20003,
+                "fee": 25721,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -4013,7 +4013,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 48661,
+                "fee": 48560.0,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -5083,7 +5083,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 135,
+                "fee": 136,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -5323,7 +5323,7 @@
             {
                 "chain": "BNB Smart Chain(BEP20)",
                 "precision": 18,
-                "fee": 921,
+                "fee": 927,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 16,
@@ -5339,12 +5339,12 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 2,
+                "fee": 3,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
                 "withdraw_limit_max": 300005,
-                "withdraw_limit_min": 2.676
+                "withdraw_limit_min": 3.6
             }
         ],
         "full_name": "Arkham"
@@ -7491,7 +7491,7 @@
             {
                 "chain": "BNB Smart Chain(BEP20)",
                 "precision": 9,
-                "fee": 7995905842494,
+                "fee": 8041157148903,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 16,
@@ -7571,7 +7571,7 @@
             {
                 "chain": "BNB Smart Chain(BEP20)",
                 "precision": 9,
-                "fee": 26,
+                "fee": 25,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 16,
@@ -8525,7 +8525,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 180.0,
+                "fee": 248,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -9339,7 +9339,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 3514,
+                "fee": 3502,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -9877,7 +9877,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 9,
-                "fee": 3060.0,
+                "fee": 3101,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -10607,7 +10607,7 @@
             {
                 "chain": "BNB Smart Chain(BEP20)",
                 "precision": 18,
-                "fee": 594,
+                "fee": 607,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 16,
@@ -11357,7 +11357,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 100360.0,
+                "fee": 101658,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -12821,7 +12821,7 @@
             {
                 "chain": "BNB Smart Chain(BEP20)",
                 "precision": 18,
-                "fee": 4612,
+                "fee": 3864,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 16,
@@ -14565,7 +14565,7 @@
             {
                 "chain": "BNB Smart Chain(BEP20)",
                 "precision": 18,
-                "fee": 0.06,
+                "fee": 0.05,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 16,
@@ -15119,7 +15119,7 @@
             {
                 "chain": "BNB Smart Chain(BEP20)",
                 "precision": 9,
-                "fee": 481156163,
+                "fee": 488222929,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 16,
@@ -15167,7 +15167,7 @@
             {
                 "chain": "BNB Smart Chain(BEP20)",
                 "precision": 9,
-                "fee": 2573583,
+                "fee": 2582635,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 16,
@@ -15987,7 +15987,7 @@
             {
                 "chain": "BNB Smart Chain(BEP20)",
                 "precision": 18,
-                "fee": 1694389702,
+                "fee": 1710437888,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 16,
@@ -16727,7 +16727,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 118,
+                "fee": 119,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -17617,7 +17617,7 @@
             {
                 "chain": "BNB Smart Chain(BEP20)",
                 "precision": 8,
-                "fee": 71015,
+                "fee": 71919,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 16,
@@ -20579,7 +20579,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 411,
+                "fee": 417,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -22035,7 +22035,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 9,
+                "fee": 10.0,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -22715,7 +22715,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 9,
-                "fee": 490.0,
+                "fee": 492,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -24239,7 +24239,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 658,
+                "fee": 694,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -24991,7 +24991,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 7696,
+                "fee": 7860.0,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -25247,7 +25247,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 510.0,
+                "fee": 556,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -25973,12 +25973,12 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 9,
-                "fee": 0.00141268,
+                "fee": 0.0015784,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
                 "withdraw_limit_max": 76.92307692307692,
-                "withdraw_limit_min": 0.001553112
+                "withdraw_limit_min": 0.00189408
             }
         ],
         "full_name": "Etheism"
@@ -26783,7 +26783,7 @@
             {
                 "chain": "BNB Smart Chain(BEP20)",
                 "precision": 18,
-                "fee": 26,
+                "fee": 24,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 16,
@@ -26979,7 +26979,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 7432505,
+                "fee": 13062740.0,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -28231,7 +28231,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 1.86,
+                "fee": 2.1,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -28455,7 +28455,7 @@
             {
                 "chain": "BNB Smart Chain(BEP20)",
                 "precision": 18,
-                "fee": 6.297243435e+18,
+                "fee": 6.7852301625e+18,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 16,
@@ -29039,7 +29039,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 4146,
+                "fee": 4485,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -29857,7 +29857,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 1.41,
+                "fee": 1.5,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -29953,7 +29953,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 145,
+                "fee": 139,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -30097,7 +30097,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 9,
-                "fee": 392,
+                "fee": 387,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -30645,7 +30645,7 @@
             {
                 "chain": "BNB Smart Chain(BEP20)",
                 "precision": 9,
-                "fee": 1247,
+                "fee": 1229,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 16,
@@ -31489,7 +31489,7 @@
             {
                 "chain": "BNB Smart Chain(BEP20)",
                 "precision": 18,
-                "fee": 88,
+                "fee": 92,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 16,
@@ -31691,7 +31691,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 12930897,
+                "fee": 12879535,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -32165,7 +32165,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 9,
-                "fee": 2213557,
+                "fee": 2117318,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -32787,12 +32787,12 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 8,
-                "fee": 145,
+                "fee": 153,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
                 "withdraw_limit_max": 10000000.0,
-                "withdraw_limit_min": 152.4
+                "withdraw_limit_min": 183.6
             }
         ],
         "full_name": "Gala"
@@ -33639,7 +33639,7 @@
             {
                 "chain": "BNB Smart Chain(BEP20)",
                 "precision": 18,
-                "fee": 47152,
+                "fee": 47419,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 16,
@@ -34459,12 +34459,12 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 29,
+                "fee": 30.0,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
                 "withdraw_limit_max": 4000000.0,
-                "withdraw_limit_min": 30.0
+                "withdraw_limit_min": 36
             }
         ],
         "full_name": "GamerCoin"
@@ -36323,7 +36323,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 9,
-                "fee": 657,
+                "fee": 677,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -38459,7 +38459,7 @@
             {
                 "chain": "BNB Smart Chain(BEP20)",
                 "precision": 18,
-                "fee": 185,
+                "fee": 184,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 16,
@@ -39151,7 +39151,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 9,
-                "fee": 42934,
+                "fee": 43939,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -40917,7 +40917,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 10.0,
+                "fee": 11,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -41023,7 +41023,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 86,
+                "fee": 87,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -41545,7 +41545,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 9,
-                "fee": 19659,
+                "fee": 19758,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -42849,7 +42849,7 @@
             {
                 "chain": "BNB Smart Chain(BEP20)",
                 "precision": 18,
-                "fee": 81,
+                "fee": 83,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 16,
@@ -42993,7 +42993,7 @@
             {
                 "chain": "BNB Smart Chain(BEP20)",
                 "precision": 9,
-                "fee": 104,
+                "fee": 103,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 16,
@@ -44447,7 +44447,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 199628,
+                "fee": 222139,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -45087,7 +45087,7 @@
             {
                 "chain": "BNB Smart Chain(BEP20)",
                 "precision": 6,
-                "fee": 24,
+                "fee": 25,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 16,
@@ -45853,7 +45853,7 @@
             {
                 "chain": "BNB Smart Chain(BEP20)",
                 "precision": 18,
-                "fee": 441,
+                "fee": 427,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 16,
@@ -46029,7 +46029,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 513,
+                "fee": 516,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -46221,7 +46221,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 12,
+                "fee": 13,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -46317,7 +46317,7 @@
             {
                 "chain": "BNB Smart Chain(BEP20)",
                 "precision": 18,
-                "fee": 969,
+                "fee": 974,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 16,
@@ -46807,7 +46807,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 11206,
+                "fee": 11471,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -47607,12 +47607,12 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 136,
+                "fee": 712,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
                 "withdraw_limit_max": 14000000.0,
-                "withdraw_limit_min": 592.8
+                "withdraw_limit_min": 854.4
             }
         ],
         "full_name": "Lovely Inu"
@@ -48577,7 +48577,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 46849,
+                "fee": 50424,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -48763,7 +48763,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 9,
-                "fee": 557350625,
+                "fee": 555020660.0,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -49305,7 +49305,7 @@
             {
                 "chain": "BNB Smart Chain(BEP20)",
                 "precision": 18,
-                "fee": 391,
+                "fee": 393,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 16,
@@ -49757,7 +49757,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 1.32,
+                "fee": 1.44,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -50235,7 +50235,7 @@
             {
                 "chain": "BNB Smart Chain(BEP20)",
                 "precision": 8,
-                "fee": 1,
+                "fee": 0.25,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 16,
@@ -51231,7 +51231,7 @@
             {
                 "chain": "BNB Smart Chain(BEP20)",
                 "precision": 18,
-                "fee": 132,
+                "fee": 137,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 16,
@@ -53439,7 +53439,7 @@
             {
                 "chain": "BNB Smart Chain(BEP20)",
                 "precision": 18,
-                "fee": 0.07,
+                "fee": 0.06,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 16,
@@ -53663,7 +53663,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 5088495,
+                "fee": 5068375,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -56007,7 +56007,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 9593641,
+                "fee": 9640413,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -56641,7 +56641,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 9,
-                "fee": 45,
+                "fee": 44,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -56955,7 +56955,7 @@
             {
                 "chain": "BNB Smart Chain(BEP20)",
                 "precision": 18,
-                "fee": 6,
+                "fee": 5,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 16,
@@ -57731,7 +57731,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 9,
-                "fee": 33652,
+                "fee": 34640.0,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -58759,7 +58759,7 @@
             {
                 "chain": "BNB Smart Chain(BEP20)",
                 "precision": 18,
-                "fee": 10578,
+                "fee": 10435,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 16,
@@ -60683,7 +60683,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 8,
-                "fee": 254,
+                "fee": 256,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -60837,7 +60837,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 35,
+                "fee": 34,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -60949,7 +60949,7 @@
             {
                 "chain": "BNB Smart Chain(BEP20)",
                 "precision": 18,
-                "fee": 42,
+                "fee": 43,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 16,
@@ -60965,7 +60965,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 648,
+                "fee": 645,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -61157,7 +61157,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 288,
+                "fee": 309,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -62825,7 +62825,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 32949540.0,
+                "fee": 36368408,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -62841,7 +62841,7 @@
             {
                 "chain": "BNB Smart Chain(BEP20)",
                 "precision": 18,
-                "fee": 88,
+                "fee": 89,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 16,
@@ -62905,7 +62905,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 0.65,
+                "fee": 0.69,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -63001,7 +63001,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 346952,
+                "fee": 349905,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -63241,7 +63241,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 0.86,
+                "fee": 0.91,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -63885,7 +63885,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 171,
+                "fee": 172,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -64949,7 +64949,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 12613,
+                "fee": 12522,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -65891,7 +65891,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 17136503,
+                "fee": 16432136,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -65971,7 +65971,7 @@
             {
                 "chain": "BNB Smart Chain(BEP20)",
                 "precision": 18,
-                "fee": 858,
+                "fee": 849,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 16,
@@ -67741,7 +67741,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 0.0184,
+                "fee": 0.021,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -67773,7 +67773,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 22,
+                "fee": 21,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -68549,7 +68549,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 1.37,
+                "fee": 1.3,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -69443,7 +69443,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 299,
+                "fee": 320.0,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -70427,7 +70427,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 509,
+                "fee": 511,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -71669,7 +71669,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 90.0,
+                "fee": 102,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -72597,7 +72597,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 726,
+                "fee": 723,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -73801,7 +73801,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 8,
-                "fee": 4,
+                "fee": 5,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -73993,7 +73993,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 4463,
+                "fee": 4760.0,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -74009,7 +74009,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 110793,
+                "fee": 119822,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -74189,7 +74189,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 2946,
+                "fee": 3279,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -75787,12 +75787,12 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 9,
+                "fee": 10.0,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
                 "withdraw_limit_max": 666666.666666,
-                "withdraw_limit_min": 10.0
+                "withdraw_limit_min": 12
             }
         ],
         "full_name": "Swarm Markets"
@@ -76085,7 +76085,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 1762,
+                "fee": 2222,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -77029,7 +77029,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 0.55,
+                "fee": 0.53,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -77337,7 +77337,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 0.47,
+                "fee": 0.57,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -78781,7 +78781,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 37,
+                "fee": 38,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -78935,7 +78935,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 485,
+                "fee": 488,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -79057,7 +79057,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 141,
+                "fee": 148,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -81087,7 +81087,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 0.39,
+                "fee": 0.49,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -81657,7 +81657,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 8,
-                "fee": 0.2,
+                "fee": 0.21,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -82035,7 +82035,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 9,
-                "fee": 30.0,
+                "fee": 31,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -82943,7 +82943,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 40.0,
+                "fee": 39,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -83931,7 +83931,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 289183152,
+                "fee": 294300085,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -84203,7 +84203,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 9,
-                "fee": 2550645997,
+                "fee": 2432069742,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -84709,7 +84709,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 613,
+                "fee": 586,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -85001,7 +85001,7 @@
             {
                 "chain": "BNB Smart Chain(BEP20)",
                 "precision": 18,
-                "fee": 1553,
+                "fee": 1574,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 16,
@@ -87607,7 +87607,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 0.1584,
+                "fee": 0.1535,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -87783,7 +87783,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 574,
+                "fee": 569,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -88187,7 +88187,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 918,
+                "fee": 973,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -88623,7 +88623,7 @@
             {
                 "chain": "BNB Smart Chain(BEP20)",
                 "precision": 18,
-                "fee": 314,
+                "fee": 318,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 16,
@@ -88831,7 +88831,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 13385,
+                "fee": 13320.0,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -89385,7 +89385,7 @@
             {
                 "chain": "BNB Smart Chain(BEP20)",
                 "precision": 18,
-                "fee": 21,
+                "fee": 23,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 16,
@@ -90509,7 +90509,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 3222,
+                "fee": 3283,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -91669,7 +91669,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 6,
-                "fee": 0.000937,
+                "fee": 0.00103,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -91807,7 +91807,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 41,
+                "fee": 38,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
@@ -92143,7 +92143,7 @@
             {
                 "chain": "Ethereum(ERC20)",
                 "precision": 18,
-                "fee": 28313599,
+                "fee": 27642164,
                 "is_withdraw_enabled": true,
                 "is_deposit_enabled": true,
                 "deposit_min_confirm": 96,
