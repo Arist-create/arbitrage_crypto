@@ -207,7 +207,7 @@ async def get_profit(pair, target_profit):
     one_inch = json.loads(one_inch)
     mexc = await redis.get(f'{pair["symbol"]}@MEXC')
     mexc = json.loads(mexc)
-    info = await tokens_mexc_by_chains_db.get("coin", [pair['symbol'][:-4]])
+    info = await tokens_mexc_by_chains_db.get("coin", pair['symbol'][:-4])
     info = info["networkList"]
 
     chain_buy = one_inch[0]["chain"]

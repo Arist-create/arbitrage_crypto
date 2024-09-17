@@ -8,7 +8,7 @@ celery = Celery(__name__,
         "some_sched": {
             "task": "create_task",
             "schedule": crontab(
-                minute=f"*/{60}"
+                minute=f"*/{1}"
             ),
         }
     })
