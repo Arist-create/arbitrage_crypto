@@ -3,7 +3,7 @@ import json
 import asyncio
 import httpx
 from redis import redis
-from mongo import goplus_db, list_of_pairs_mexc_db
+from mongo import goplus_db, list_of_pairs_mexc_db, tokens_mexc_by_chains_db
 import datetime
 from commission_for_chains import get_gas_price_in_usdt
 
@@ -57,9 +57,7 @@ async def main():
     while True:
         await get_gas_price_in_usdt()
         pairs = await list_of_pairs_mexc_db.get_all()
-        with open('tokens_mexc_by_chains.json') as f:
-            tokens_with_and_dep = json.load(f)
-        usdt_token = tokens_with_and_dep['USDT']
+        usdt_token = await tokens_mexc_by_chains_db.get("coin", 'USDT') 
         gas_price = await redis.get("chains_by_gas_price")
         if not gas_price:
             continue
@@ -67,7 +65,7 @@ async def main():
         
         tasks = []
         for pair in pairs:
-            main_token = tokens_with_and_dep[pair["symbol"][:-4]]
+            main_token = await tokens_mexc_by_chains_db.get("coin", pair['symbol'][:-4])
             tasks.append(check_prices(
                 main_token,
                 usdt_token,

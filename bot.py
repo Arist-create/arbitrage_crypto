@@ -5,7 +5,7 @@ from redis import redis
 import json
 import datetime
 import asyncio
-from mongo import trades_db, settings_db, goplus_db, list_of_pairs_mexc_db
+from mongo import trades_db, settings_db, goplus_db, list_of_pairs_mexc_db, tokens_mexc_by_chains_db
 API_TOKEN = '7473932480:AAHvJvYndS0-blMx8U-w57BBjMuUTl01E7E' #прод
 # API_TOKEN = '6769001742:AAGW0d_60IymQPl8ef4U7Pvun3aIYf0aBPc'
 
@@ -171,13 +171,10 @@ async def message_id(message: types.Message):
         pairs = await list_of_pairs_mexc_db.get_all()
         target_profit = await settings_db.get("number", 1)
         target_profit = float(target_profit["target_profit"]) if target_profit else 0.0
-        
-        with open('tokens_mexc_by_chains.json') as f:
-            tokens_with_and_dep = json.load(f)
         arr = set()
         tasks = []
         for pair in pairs:
-            tasks.append(get_profit(pair, tokens_with_and_dep, target_profit))
+            tasks.append(get_profit(pair, target_profit))
             if len(tasks) > 2:
                 results = await asyncio.gather(*tasks)
                 for result in results:
@@ -202,7 +199,7 @@ async def message_id(message: types.Message):
             await trades_db.delete("symbol", i["symbol"])
 
 
-async def get_profit(pair, tokens_with_and_dep, target_profit):
+async def get_profit(pair, target_profit):
     start_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     one_inch = await redis.get(f'{pair["symbol"]}@1INCH')
     if not one_inch:
@@ -210,7 +207,8 @@ async def get_profit(pair, tokens_with_and_dep, target_profit):
     one_inch = json.loads(one_inch)
     mexc = await redis.get(f'{pair["symbol"]}@MEXC')
     mexc = json.loads(mexc)
-    info = tokens_with_and_dep[pair['symbol'][:-4]]["networkList"]
+    info = await tokens_mexc_by_chains_db.get("coin", [pair['symbol'][:-4]])
+    info = info["networkList"]
 
     chain_buy = one_inch[0]["chain"]
     chain_sell = one_inch[1]["chain"]

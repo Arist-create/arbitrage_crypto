@@ -22,9 +22,6 @@ class Mongo:
     async def delete(self, key, value):
         await self.mycollection.delete_one({f"{key}": value})
 
-    async def delete_all(self):
-        await self.mycollection.delete_many({})
-
     async def get_all(self):
         return await self.mycollection.find().to_list(length=None)
 
@@ -33,17 +30,14 @@ class Mongo:
 
     async def update(self, key, value, dictionary, upsert=False):
         await self.mycollection.update_one({key: value}, {"$set": dictionary}, upsert=upsert)
-    
+        
     async def count(self, key, value):
         return await self.mycollection.count_documents({f"{key}": value})
 
 
 
- 
-
 trades_db = Mongo("trades")
 settings_db = Mongo("settings")
 goplus_db = Mongo("goplus")
 list_of_pairs_mexc_db = Mongo("list_of_pairs_mexc")
-
-
+tokens_mexc_by_chains_db = Mongo("tokens_mexc_by_chains")

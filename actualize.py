@@ -1,4 +1,4 @@
-from mongo import goplus_db, list_of_pairs_mexc_db
+from mongo import goplus_db, list_of_pairs_mexc_db, tokens_mexc_by_chains_db
 import requests
 import json
 import time
@@ -55,9 +55,8 @@ async def get_tokens_mexc_by_chains():
                 if i["network"] == j["chain"]:
                     i["decimals"] = j["precision"]
                     break
-
-    with open('tokens_mexc_by_chains.json', 'w') as f:
-        json.dump(dictionary, f, indent=4)
+        await tokens_mexc_by_chains_db.update("coin", v["coin"], v, True)
+    
 
 async def get_pairs(): #переписать на получение из файла а обновление сделать на актуализаторе
     resp = requests.get(
@@ -79,11 +78,12 @@ async def get_pairs(): #переписать на получение из фай
     await asyncio.gather(*[list_of_pairs_mexc_db.update("symbol", i["symbol"], i, True) for i in arr])
 
 async def get_tokens_by_goplus():
-    with open('tokens_mexc_by_chains.json') as f1, open('chains_by_number_only_for_mexc.json') as f2: 
-        tokens, chains = map(json.load, [f1, f2])
+    with open('chains_by_number_only_for_mexc.json') as f: 
+        chains = json.load(f)
+    tokens = await tokens_mexc_by_chains_db.get_all()
     flag = 1
     
-    for v in tokens.values():
+    for v in tokens:
         
         for i in v["networkList"]:
 
