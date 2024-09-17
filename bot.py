@@ -81,7 +81,7 @@ async def buy_on_mexc(mexc, one_inch, info, goplus):
     profit = (one_inch_vol - mexc_vol) - commission - gas_for_withdraw
 
     return profit, orders, commission
- 
+
 async def buy_on_one_inch(mexc, one_inch, info, goplus):
     if info["depositEnable"] == False:
         return None, None, None, None
@@ -178,7 +178,7 @@ async def message_id(message: types.Message):
         tasks = []
         for pair in pairs:
             tasks.append(get_profit(pair, tokens_with_and_dep, target_profit))
-            if len(tasks) > 5:
+            if len(tasks) > 2:
                 results = await asyncio.gather(*tasks)
                 for result in results:
                     if not result:
