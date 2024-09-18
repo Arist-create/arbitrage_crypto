@@ -206,7 +206,8 @@ async def get_profit(pair, tokens_info, target_profit, chains_by_gas_price, gopl
     if check:
         await trades_db.update("symbol", pair["symbol"], {"message": message})
     else:
-        await trades_db.add(item)
+        await trades_db.update("symbol", pair["symbol"], item, True)
+
     return item["symbol"]
 
 async def main():

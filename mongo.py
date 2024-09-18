@@ -13,11 +13,6 @@ class Mongo:
         self.mycollection = mydb[table]
         
  
-    async def add(self, dictionary: dict):
-        await self.mycollection.insert_one(dictionary)
-    
-    async def add_many(self, dictionary: list):
-        await self.mycollection.insert_many(dictionary)
     
     async def delete(self, key, value):
         await self.mycollection.delete_one({f"{key}": value})
