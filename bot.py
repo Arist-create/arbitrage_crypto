@@ -57,7 +57,7 @@ async def calc_vol_to_sell_on_mexc_in_usdt(arr, target_value):
     return total_cost, k
 
 
-async def buy_on_mexc(mexc, one_inch, info, goplus):
+async def buy_on_mexc(mexc, one_inch, info, goplus, chains_by_gas_price):
     if info["withdrawEnable"] == False:
         return None, None, None
     mexc_vol, orders = await calc_vol_in_usdt(mexc['asks'])
@@ -65,10 +65,6 @@ async def buy_on_mexc(mexc, one_inch, info, goplus):
         return None, None, None
     one_inch_vol = one_inch[0]['sell']
 
-    chains_by_gas_price = await redis.get("chains_by_gas_price")
-    if not chains_by_gas_price:
-        return None, None, None
-    chains_by_gas_price = json.loads(chains_by_gas_price)
     gas_price = chains_by_gas_price[info["network"]]
     gas = one_inch[0]['gas']
     commission = gas_price * gas
@@ -82,7 +78,7 @@ async def buy_on_mexc(mexc, one_inch, info, goplus):
 
     return profit, orders, commission
 
-async def buy_on_one_inch(mexc, one_inch, info, goplus):
+async def buy_on_one_inch(mexc, one_inch, info, goplus, chains_by_gas_price):
     if info["depositEnable"] == False:
         return None, None, None, None
     one_inch_vol = one_inch[1]['buy']
@@ -92,10 +88,6 @@ async def buy_on_one_inch(mexc, one_inch, info, goplus):
         tax = 0
     one_inch_vol = one_inch_vol - (one_inch_vol * float(tax))
     mexc_vol, orders = await calc_vol_to_sell_on_mexc_in_usdt(mexc['bids'], one_inch_vol)
-    chains_by_gas_price = await redis.get("chains_by_gas_price")
-    if not chains_by_gas_price:
-        return None, None, None, None
-    chains_by_gas_price = json.loads(chains_by_gas_price)
     gas_price = chains_by_gas_price[info["network"]]
     gas = one_inch[1]['gas']
     commission = gas_price * gas
@@ -171,11 +163,18 @@ async def message_id(message: types.Message):
         pairs = await list_of_pairs_mexc_db.get_all()
         target_profit = await settings_db.get("number", 1)
         target_profit = float(target_profit["target_profit"]) if target_profit else 0.0
+        tokens_info = await tokens_mexc_by_chains_db.get_all()
+        goplus = await goplus_db.get_all()
+
+        chains_by_gas_price = await redis.get("chains_by_gas_price")
+        if not chains_by_gas_price:
+            continue
+        chains_by_gas_price = json.loads(chains_by_gas_price)
         arr = set()
         tasks = []
         for pair in pairs:
-            tasks.append(get_profit(pair, target_profit))
-            if len(tasks) > 2:
+            tasks.append(get_profit(pair, tokens_info, target_profit, chains_by_gas_price, goplus))
+            if len(tasks) > 10:
                 results = await asyncio.gather(*tasks)
                 for result in results:
                     if not result:
@@ -199,7 +198,7 @@ async def message_id(message: types.Message):
             await trades_db.delete("symbol", i["symbol"])
 
 
-async def get_profit(pair, target_profit):
+async def get_profit(pair, tokens_info, target_profit, chains_by_gas_price, goplus):
     start_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     one_inch = await redis.get(f'{pair["symbol"]}@1INCH')
     if not one_inch:
@@ -207,21 +206,23 @@ async def get_profit(pair, target_profit):
     one_inch = json.loads(one_inch)
     mexc = await redis.get(f'{pair["symbol"]}@MEXC')
     mexc = json.loads(mexc)
-    info = await tokens_mexc_by_chains_db.get("coin", pair['symbol'][:-4])
-    info = info["networkList"]
+    tokens_info = [i for i in tokens_info if i["coin"] == pair["symbol"][:-4]][0]
+    info = tokens_info["networkList"]
 
     chain_buy = one_inch[0]["chain"]
     chain_sell = one_inch[1]["chain"]
-    info_buy = [i for i in info if i["network"] == chain_buy][0]
-    info_sell = [i for i in info if i["network"] == chain_sell][0]
+    info_buy = next((i for i in info if i["network"] == chain_buy), None)
+    info_sell = next((i for i in info if i["network"] == chain_sell), None)
+    if not info_buy or not info_sell:
+        return None
     
-    goplus_buy = await goplus_db.get("contract_address", info_buy["contract"].lower())
-    goplus_sell = await goplus_db.get("contract_address", info_sell["contract"].lower())
+    goplus_buy = next((i for i in goplus if i["contract_address"] == info_buy["contract"].lower()), None)
+    goplus_sell = next((i for i in goplus if i["contract_address"] == info_sell["contract"].lower()), None)
     if not goplus_buy or not goplus_sell:
         return None
 
-    profit_mexc, orders_to_buy, gas_buy = await buy_on_mexc(mexc, one_inch, info_buy, goplus_buy) 
-    profit_one_inch, orders_to_sell, gas_sell, gas_for_withdraw = await buy_on_one_inch(mexc, one_inch, info_sell, goplus_sell)
+    profit_mexc, orders_to_buy, gas_buy = await buy_on_mexc(mexc, one_inch, info_buy, goplus_buy, chains_by_gas_price) 
+    profit_one_inch, orders_to_sell, gas_sell, gas_for_withdraw = await buy_on_one_inch(mexc, one_inch, info_sell, goplus_sell, chains_by_gas_price)
     
     if not profit_mexc or not profit_one_inch:
         return None

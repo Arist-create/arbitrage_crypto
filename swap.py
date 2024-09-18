@@ -58,19 +58,22 @@ async def main():
         await get_gas_price_in_usdt()
         pairs = await list_of_pairs_mexc_db.get_all()
         usdt_token = await tokens_mexc_by_chains_db.get("coin", 'USDT') 
+        tokens = await tokens_mexc_by_chains_db.get_all()
         gas_price = await redis.get("chains_by_gas_price")
+        goplus = await goplus_db.get_all()
         if not gas_price:
             continue
         gas_price = json.loads(gas_price)
         
         tasks = []
         for pair in pairs:
-            main_token = await tokens_mexc_by_chains_db.get("coin", pair['symbol'][:-4])
+            main_token = [i for i in tokens if i['coin'] == pair['symbol'][:-4]][0]
             tasks.append(check_prices(
                 main_token,
                 usdt_token,
                 chains,
-                gas_price
+                gas_price,
+                goplus
             ))
             if len(tasks) > 50:
                 await asyncio.gather(*tasks)
@@ -81,7 +84,7 @@ async def main():
 
 
 
-async def check_prices(main_token, usdt_token, chains, gas_price):
+async def check_prices(main_token, usdt_token, chains, gas_price, goplus):
     try:
         max_tokens = 0
         max_usdt = 0
@@ -98,7 +101,7 @@ async def check_prices(main_token, usdt_token, chains, gas_price):
             if i.get("withdrawTips") or i.get("depositTips"):
                 continue
 
-            goplus = await goplus_db.get("contract_address", contract_address.lower())
+            goplus = next((j for j in goplus if j['contract_address'] == contract_address.lower()), None)
             if not goplus:
                 continue
             if (goplus.get("is_anti_whale", 0) == 1) or (goplus.get("is_honeypot", 0) == 1) or (goplus.get("cannot_buy", 0) == 1) or (goplus.get("cannot_sell_all", 0) == 1):
