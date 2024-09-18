@@ -124,6 +124,7 @@ async def scan():
         target_profit = float(target_profit["target_profit"]) if target_profit else 0.0
         tokens_info = await tokens_mexc_by_chains_db.get_all()
         goplus = await goplus_db.get_all()
+        trades = await trades_db.get_all()
 
         chains_by_gas_price = await redis.get("chains_by_gas_price")
         if not chains_by_gas_price:
@@ -132,14 +133,13 @@ async def scan():
         arr = set()
         tasks = []
         for pair in pairs:
-            tasks.append(get_profit(pair, tokens_info, target_profit, chains_by_gas_price, goplus))
-            if len(tasks) > 20:
+            tasks.append(get_profit(pair, tokens_info, target_profit, chains_by_gas_price, goplus, trades))
+            if len(tasks) > 30:
                 results = await asyncio.gather(*tasks)
                 for result in results:
                     if not result:
                         continue
-                    arr.add(result["symbol"])
-                    await trades_db.update("symbol", result["symbol"], result, True)
+                    arr.add(result)
                 tasks = []
 
         if tasks:
@@ -147,8 +147,7 @@ async def scan():
             for result in results:
                 if not result:
                     continue
-                arr.add(result["symbol"])
-                await trades_db.update("symbol", result["symbol"], result, True)
+                arr.add(result)
 
         current_trades = await trades_db.get_all()
         for i in current_trades:
@@ -157,7 +156,7 @@ async def scan():
             await trades_db.delete("symbol", i["symbol"])
 
 
-async def get_profit(pair, tokens_info, target_profit, chains_by_gas_price, goplus):
+async def get_profit(pair, tokens_info, target_profit, chains_by_gas_price, goplus, trades):
     start_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     one_inch = await redis.get(f'{pair["symbol"]}@1INCH')
     if not one_inch:
@@ -199,10 +198,16 @@ async def get_profit(pair, tokens_info, target_profit, chains_by_gas_price, gopl
         \n gas_sell: {gas_sell} \
         \n gas_for_withdraw_sell: {gas_for_withdraw_sell} \
         \n chain_sell: {chain_sell} \n '
-    return {"symbol": pair["symbol"], 
+    item = {"symbol": pair["symbol"], 
             "message": message,
             "start_time": start_time,
             "notify": False}
+    check = next((i for i in trades if i["symbol"] == pair["symbol"]), None)
+    if check:
+        await trades_db.update("symbol", pair["symbol"], {"message": message})
+    else:
+        await trades_db.add(item)
+    return item["symbol"]
 
 async def main():
     task1 = asyncio.create_task(scan())
