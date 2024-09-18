@@ -26,6 +26,7 @@ services:
     build: .
     # volumes:
     #   - .:/app
+    restart: always
     depends_on:
       redis:
         condition: service_healthy
@@ -41,11 +42,21 @@ services:
       redis:
         condition: service_healthy
     command: python bot.py
+  
+  scanner:
+    build: .
+    # volumes:
+    #   - .:/app
+    depends_on:
+      redis:
+        condition: service_healthy
+    command: python scanner.py
     
   worker:
     build: .
     # volumes:
     #   - .:/app
+    restart: always
     depends_on:
       redis:
         condition: service_healthy

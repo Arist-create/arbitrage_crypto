@@ -84,8 +84,11 @@ async def get_tokens_by_goplus():
     flag = 1
     
     for v in tokens:
+        networkList = v.get("networkList")
+        if not networkList:
+            continue
         
-        for i in v["networkList"]:
+        for i in networkList:
 
             chain_number = chains.get(i["network"])
             if not chain_number:
