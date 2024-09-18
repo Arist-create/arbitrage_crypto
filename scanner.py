@@ -134,7 +134,7 @@ async def scan():
         tasks = []
         for pair in pairs:
             tasks.append(get_profit(pair, tokens_info, target_profit, chains_by_gas_price, goplus, trades))
-            if len(tasks) > 30:
+            if len(tasks) > 10:
                 results = await asyncio.gather(*tasks)
                 for result in results:
                     if not result:

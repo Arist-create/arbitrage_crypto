@@ -75,7 +75,11 @@ async def get_pairs(): #переписать на получение из фай
         and i.get("quoteAsset") == 'USDT'
     ]
     print(len(arr))
-    await asyncio.gather(*[list_of_pairs_mexc_db.update("symbol", i["symbol"], i, True) for i in arr])
+    arr = [list_of_pairs_mexc_db.update("symbol", i["symbol"], i, True) for i in arr]
+    for i in range(0, len(arr), 20):
+        await asyncio.gather(*arr[i:i+20])
+
+    
 
 async def get_tokens_by_goplus():
     with open('chains_by_number_only_for_mexc.json') as f: 
