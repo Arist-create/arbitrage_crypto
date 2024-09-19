@@ -6,7 +6,7 @@ from celery.schedules import crontab
 celery = Celery(__name__, 
                 beat_schedule={
         "some_sched": {
-            "task": "go_plus",
+            "task": "go_plus_task",
             "schedule": crontab(
                 minute=f"*/{60}"
             ),
