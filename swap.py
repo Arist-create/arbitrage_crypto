@@ -143,8 +143,6 @@ async def check_prices(main_token, usdt_token, chains, gas_price, goplus):
                 continue
             check = float(resp['toAmount'])/10**decimals
             if check > max_tokens:
-                if i["coin"] == 'MKR':
-                    print(max_tokens)
                 max_tokens = check
                 dictionary["gas_buy"] = float(resp['gas'])
                 dictionary["buy"] = float(resp['toAmount'])/10**decimals
@@ -157,8 +155,8 @@ async def check_prices(main_token, usdt_token, chains, gas_price, goplus):
                 f'{i["coin"]}USDT@1INCH',
                 json.dumps(
                     [
-                        {'sell': int(dictionary["sell"]), "gas": dictionary["gas_sell"], "chain": dictionary["chain_sell"]},
-                        {'buy': int(dictionary["buy"]), "gas": dictionary["gas_buy"], "chain": dictionary["chain_buy"]},
+                        {'sell': float(dictionary["sell"]), "gas": dictionary["gas_sell"], "chain": dictionary["chain_sell"]},
+                        {'buy': float(dictionary["buy"]), "gas": dictionary["gas_buy"], "chain": dictionary["chain_buy"]},
                         datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                     ]
                 )
