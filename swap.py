@@ -78,7 +78,7 @@ async def main():
                 gas_price,
                 goplus
             ))
-            if len(tasks) > 50:
+            if len(tasks) > 25:
                 await asyncio.gather(*tasks)
                 tasks = []
                 
