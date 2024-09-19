@@ -123,7 +123,7 @@ async def check_prices(main_token, usdt_token, chains, gas_price, goplus):
         if amount is None:
             continue
         amount = format(amount*10**decimals, '.0f')
-        print(amount)
+        # print(amount)
         async with httpx.AsyncClient(
             # mounts=proxy_mounts
             verify=False
@@ -141,13 +141,15 @@ async def check_prices(main_token, usdt_token, chains, gas_price, goplus):
             resp = await fetch(client, chain_number, usdt_token_detect["contract"], contract_address, amount_usdt)
             if not resp.get("toAmount"):
                 continue
-            check = float(resp['toAmount'])/10**decimals - float(resp["gas"])*gas_price[i["network"]]
+            check = float(resp['toAmount'])/10**decimals
             if check > max_tokens:
+                if i["coin"] == 'MKR':
+                    print(max_tokens)
                 max_tokens = check
                 dictionary["gas_buy"] = float(resp['gas'])
                 dictionary["buy"] = float(resp['toAmount'])/10**decimals
                 dictionary["chain_buy"] = i["network"]
-
+            
     if not dictionary.get("sell") or not dictionary.get("buy"):
         return
     
