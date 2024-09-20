@@ -4,6 +4,7 @@ services:
 
   redis:
     image: redis:latest
+    restart: always
     ports:
       - "6379:6379"
     command: redis-server --appendonly yes
@@ -17,6 +18,7 @@ services:
     build: .
     # volumes:
     #   - .:/app
+    restart: always
     depends_on:
       redis:
         condition: service_healthy
@@ -38,6 +40,7 @@ services:
     build: .
     # volumes:
     #   - .:/app
+    restart: always
     depends_on:
       redis:
         condition: service_healthy
@@ -47,6 +50,7 @@ services:
     build: .
     # volumes:
     #   - .:/app
+    restart: always
     depends_on:
       redis:
         condition: service_healthy
@@ -64,6 +68,7 @@ services:
  
   mongodb:
     image: mongo:4.4 
+    restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: username
       MONGO_INITDB_ROOT_PASSWORD: password
