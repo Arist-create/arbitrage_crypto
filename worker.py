@@ -25,14 +25,8 @@ celery.conf.result_backend = "redis://redis:6379/1"
 
 @celery.task(name="go_plus_task")
 def go_plus_task():
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    loop.run_until_complete(get_tokens_by_goplus())
-    loop.close()
+    asyncio.run(get_tokens_by_goplus())
 
 @celery.task(name="actualize_task")
 def actualize_task():
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    loop.run_until_complete(actualize())
-    loop.close()
+    asyncio.run(actualize())

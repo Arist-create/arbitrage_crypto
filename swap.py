@@ -169,10 +169,7 @@ async def check_prices(main_token, usdt_token, chains, gas_price, goplus):
 if __name__ == '__main__':
     while True:
         try:
-            loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
-            loop.run_until_complete(main())
-            loop.close()
+            asyncio.run(main())
         except Exception as e:
             print(f"Error: {e}")
             time.sleep(5)
