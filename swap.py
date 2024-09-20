@@ -6,6 +6,7 @@ from redis import redis
 from mongo import goplus_db, list_of_pairs_mexc_db, tokens_mexc_by_chains_db
 import datetime
 from commission_for_chains import get_gas_price_in_usdt
+import time
 
 proxy_mounts={"https://": httpx.AsyncHTTPTransport(proxy="socks5://proxy_user:wcPYZj5Zlj@62.133.62.154:41257")}
 
@@ -167,9 +168,13 @@ async def check_prices(main_token, usdt_token, chains, gas_price, goplus):
         
 if __name__ == '__main__':
     while True:
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        loop.run_until_complete(main())
-        loop.close()
+        try:
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            loop.run_until_complete(main())
+            loop.close()
+        except Exception as e:
+            print(f"Error: {e}")
+            time.sleep(5)
     
     
