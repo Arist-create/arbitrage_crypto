@@ -103,57 +103,61 @@ async def notify():
         else:
             life_time_target = float(life_time_target["life_time_target"])
         arr = await trades_db.get_all()
-        if not arr:
+        if len(arr) == 0:
             continue
-        for trade in arr:
-            life_time = datetime.datetime.now() - datetime.datetime.strptime(trade["start_time"], "%Y-%m-%d %H:%M:%S")
+        for i in arr:
+            life_time = datetime.datetime.now() - datetime.datetime.strptime(i["start_time"], "%Y-%m-%d %H:%M:%S")
 
-            if trade["notify"]:
+            if i["notify"]:
                 continue
             if life_time.total_seconds() < life_time_target:
                 continue
-            await trades_db.update("symbol", trade["symbol"], {"notify": True})
-            await bot.send_message(1317668838, f'{trade["symbol"]}: {trade["message"]}')
+            await trades_db.update("symbol", i["symbol"], {"notify": True})
+            await bot.send_message(1317668838, f'{i["symbol"]}: {i["message"]}')
         await asyncio.sleep(5)
 
 async def scan():
     await bot.send_message(1317668838, "Hello")
     while True:
-        pairs = await list_of_pairs_mexc_db.get_all()
-        target_profit = await settings_db.get("number", 1)
-        target_profit = float(target_profit["target_profit"]) if target_profit else 0.0
-        tokens_info = await tokens_mexc_by_chains_db.get_all()
-        goplus = await goplus_db.get_all()
-        trades = await trades_db.get_all()
+        try:
+            pairs = await list_of_pairs_mexc_db.get_all()
+            target_profit = await settings_db.get("number", 1)
+            target_profit = float(target_profit["target_profit"]) if target_profit else 0.0
+            tokens_info = await tokens_mexc_by_chains_db.get_all()
+            goplus = await goplus_db.get_all()
+            trades = await trades_db.get_all()
 
-        chains_by_gas_price = await redis.get("chains_by_gas_price")
-        if not chains_by_gas_price:
-            continue
-        chains_by_gas_price = json.loads(chains_by_gas_price)
-        arr = set()
-        tasks = []
-        for pair in pairs:
-            tasks.append(get_profit(pair, tokens_info, target_profit, chains_by_gas_price, goplus, trades))
-            if len(tasks) > 10:
+            chains_by_gas_price = await redis.get("chains_by_gas_price")
+            if not chains_by_gas_price:
+                continue
+            chains_by_gas_price = json.loads(chains_by_gas_price)
+            arr = set()
+            tasks = []
+            for pair in pairs:
+                tasks.append(get_profit(pair, tokens_info, target_profit, chains_by_gas_price, goplus, trades))
+                if len(tasks) > 10:
+                    results = await asyncio.gather(*tasks)
+                    for result in results:
+                        if not result:
+                            continue
+                        arr.add(result)
+                    tasks = []
+
+            if tasks:
                 results = await asyncio.gather(*tasks)
                 for result in results:
                     if not result:
                         continue
                     arr.add(result)
-                tasks = []
 
-        if tasks:
-            results = await asyncio.gather(*tasks)
-            for result in results:
-                if not result:
+            current_trades = await trades_db.get_all()
+            for i in current_trades:
+                if i["symbol"] in arr:
                     continue
-                arr.add(result)
+                await trades_db.delete("symbol", i["symbol"])
 
-        current_trades = await trades_db.get_all()
-        for i in current_trades:
-            if i["symbol"] in arr:
-                continue
-            await trades_db.delete("symbol", i["symbol"])
+        except Exception as e:
+            print(e)
 
 
 async def get_profit(pair, tokens_info, target_profit, chains_by_gas_price, goplus, trades):

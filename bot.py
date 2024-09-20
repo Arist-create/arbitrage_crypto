@@ -19,6 +19,9 @@ async def message_id(message: types.Message):
 @dp.message_handler(commands=['show'])
 async def message_id(message: types.Message):
     trades = await trades_db.get_all()
+    if not trades:
+        await bot.send_message(message.chat.id, "No trades")
+        return
     string = ""
     for trade in trades:
         string += f'{trade["symbol"]}: {trade["message"]}\n'
