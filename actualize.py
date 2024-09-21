@@ -102,6 +102,14 @@ async def get_tokens_by_goplus():
             if not contract_address:
                 continue
 
+            while True:
+                count = await goplus_db.count("contract_address", contract_address.lower())
+                if count > 1:
+                    await goplus_db.delete("contract_address", contract_address.lower())
+                    continue
+                break
+                
+
             if flag==1:
                 proxies="socks5://proxy_user:wcPYZj5Zlj@62.133.62.154:41257"
                 flag = 2

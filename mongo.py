@@ -28,6 +28,9 @@ class Mongo:
         
     async def count(self, key, value):
         return await self.mycollection.count_documents({f"{key}": value})
+    
+    async def count(self, key, value):
+        return await self.mycollection.count_documents({f"{key}": value})
 
 
 
