@@ -403,7 +403,7 @@ gas = web3.eth.gas_price
 
 print(gas)
 
-eth_rpc_url = "https://rpc.ankr.com/eth"
+eth_rpc_url = "https://rpc.ankr.com/ton"
 web3 = Web3(Web3.HTTPProvider(eth_rpc_url))
 gas = web3.eth.gas_price
 print(gas)

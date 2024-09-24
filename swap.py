@@ -1,4 +1,4 @@
-
+from ton import ton
 import json
 import asyncio
 import httpx
@@ -18,7 +18,7 @@ async def fetch(client, chain_number, sell_token, buy_token, amount):
 async def get_eth_price(client):
     resp = await client.get('https://api-defillama.1inch.io/v5.2/1/quote?src=0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE&dst=0xdac17f958d2ee523a2206206994597c13d831ec7&amount=3000000000000000000&includeGas=true')
     return resp.json()
-    
+   
 
 async def calc_vol(arr):
     total_cost = 0.0
@@ -79,7 +79,7 @@ async def main():
                 gas_price,
                 goplus
             ))
-            if len(tasks) > 25:
+            if len(tasks) > 10:
                 await asyncio.gather(*tasks)
                 tasks = []
                 
@@ -125,6 +125,19 @@ async def check_prices(main_token, usdt_token, chains, gas_price, goplus):
             continue
         amount = format(amount*10**decimals, '.0f')
         # print(amount)
+        # if chain_number == 9000:
+        #     resp = await ton.get_price(contract_address, usdt_token_detect["contract"], amount)
+        #     max_usdt = resp["amount_out"]/10**usdt_token_detect["decimals"]
+        #     dictionary["gas_sell"] = 0
+        #     dictionary["sell"] = resp["amount_out"]/10**usdt_token_detect["decimals"]
+        #     dictionary["chain_sell"] = i["network"]
+        #     amount_usdt = 3000*10**usdt_token_detect["decimals"]
+        #     resp = await ton.get_price(usdt_token_detect["contract"], contract_address, amount_usdt)
+        #     max_tokens = resp["amount_out"]/10**decimals
+        #     dictionary["gas_buy"] = 0
+        #     dictionary["buy"] = resp["amount_out"]/10**decimals
+        #     dictionary["chain_buy"] = i["network"]
+            
         async with httpx.AsyncClient(
             # mounts=proxy_mounts
             verify=False

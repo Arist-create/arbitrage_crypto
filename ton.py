@@ -1,26 +1,24 @@
 from dedust import Asset, Factory, PoolType
-import json
 from pytoniq import LiteBalancer
-import asyncio
 
-async def main():
-    provider = LiteBalancer.from_mainnet_config(1)
-    await provider.start_up()
+class Ton:
+    def __init__(self):
+        self.provider = LiteBalancer.from_mainnet_config(1)
+    async def get_price(self, asset_in_address, asset_out_address, amount_in):
+        await self.provider.start_up()
 
-    SCALE_ADDRESS = "EQBlqsm144Dq6SjbPI4jjZvA1hqTIP3CvHovbIfW_t-SCALE"
+        asset_in = Asset.jetton(asset_in_address)
+        asset_out = Asset.jetton(asset_out_address)
 
-    TON = Asset.native()
-    SCALE = Asset.jetton(SCALE_ADDRESS)
+        pool = await Factory.get_pool(pool_type=PoolType.VOLATILE,
+                                      assets=[asset_in, asset_out],
+                                      provider=self.provider)
+                                        
+        price = (await pool.get_estimated_swap_out(asset_in=asset_in,
+                                                   amount_in=amount_in,
+                                                   provider=self.provider))
 
-    pool = await Factory.get_pool(pool_type=PoolType.VOLATILE,
-                                  assets=[TON, SCALE],
-                                  provider=provider)
-                                    
-    price = (await pool.get_estimated_swap_out(asset_in=TON,
-                                               amount_in=int(10*1e9),
-                                               provider=provider))
-    print(price)
+        await self.provider.close_all()
+        return price
 
-    await provider.close_all()
-
-asyncio.run(main())
+ton = Ton()
