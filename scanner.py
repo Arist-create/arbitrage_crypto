@@ -1,10 +1,11 @@
-from bot import bot
+from bot import bot, create_keyboard_for_notify
 import time
 import asyncio
 import json
-from mongo import list_of_pairs_mexc_db, trades_db, tokens_mexc_by_chains_db, goplus_db, settings_db
+from mongo import list_of_pairs_mexc_db, trades_db, tokens_mexc_by_chains_db, goplus_db, users_settings_db
 from redis import redis
 import datetime
+
 
 async def calc_vol_in_usdt(arr):
     total_cost = 0.0
@@ -97,85 +98,101 @@ async def buy_on_one_inch(mexc, one_inch, info, goplus, chains_by_gas_price):
 
 async def notify():
     while True:
-        life_time_target = await settings_db.get("number", 1)
-        if not life_time_target:
-            life_time_target = 0
-        else:
-            life_time_target = float(life_time_target["life_time_target"])
+        settings = await users_settings_db.get_all() 
         arr = await trades_db.get_all()
         if len(arr) == 0:
             continue
-        for i in arr:
-            life_time = datetime.datetime.now() - datetime.datetime.strptime(i["start_time"], "%Y-%m-%d %H:%M:%S")
-
-            if i["notify"]:
+        for user_settings in settings:
+            notify_is_on = user_settings["notify_is_on"]
+            if not notify_is_on:
                 continue
-            if life_time.total_seconds() < life_time_target:
-                continue
-            await trades_db.update("symbol", i["symbol"], {"notify": True})
-            await bot.send_message(1317668838, f'{i["symbol"]}: {i["message"]}')
-        await asyncio.sleep(5)
+            chat_id = user_settings["chat_id"]
+            life_time_target = float(user_settings["life_time_target"])
+            target_profit = float(user_settings["target_profit"])
+            for i in arr:
+                life_time = i["lifetime"]
+                if chat_id in i["notify"]:
+                    continue
+                if life_time < life_time_target:
+                    continue
+                if i["profit"] < target_profit:
+                    continue
+                try:
+                    keyboard = await create_keyboard_for_notify(i["symbol"])
+                    await bot.send_message(chat_id, i["message"], parse_mode='Markdown', reply_markup=keyboard)
+                    await trades_db.update("symbol", i["symbol"], {"notify": i["notify"] + [chat_id]})
+                except Exception as e:
+                    print(e)
+                await asyncio.sleep(3)
 
 async def scan():
     await bot.send_message(1317668838, "Hello")
+    with open('chains_by_number_only_for_mexc.json') as f:
+        chains_by_number = json.load(f)
+    with open('chains_for_defilama.json') as f:
+        chains_for_defilama = json.load(f)
     while True:
-        try:
-            pairs = await list_of_pairs_mexc_db.get_all()
-            target_profit = await settings_db.get("number", 1)
-            target_profit = float(target_profit["target_profit"]) if target_profit else 0.0
-            tokens_info = await tokens_mexc_by_chains_db.get_all()
-            goplus = await goplus_db.get_all()
-            trades = await trades_db.get_all()
+        pairs = await list_of_pairs_mexc_db.get_all()
+        target_profit = 0
+        tokens_info = await tokens_mexc_by_chains_db.get_all()
+        usdt_addresses = [i for i in tokens_info if i["coin"] == "USDT"][0]["networkList"]
+        
 
-            chains_by_gas_price = await redis.get("chains_by_gas_price")
-            if not chains_by_gas_price:
+        goplus = await goplus_db.get_all()
+        trades = await trades_db.get_all()
+
+        chains_by_gas_price = await redis.get("chains_by_gas_price")
+        if not chains_by_gas_price:
+            continue
+        chains_by_gas_price = json.loads(chains_by_gas_price)
+        arr = set()
+        tasks = []
+        for pair in pairs:
+            if pair["symbol"] in []:
                 continue
-            chains_by_gas_price = json.loads(chains_by_gas_price)
-            arr = set()
-            tasks = []
-            for pair in pairs:
-                tasks.append(get_profit(pair, tokens_info, target_profit, chains_by_gas_price, goplus, trades))
-                if len(tasks) > 5:
-                    results = await asyncio.gather(*tasks)
-                    for result in results:
-                        if not result:
-                            continue
-                        arr.add(result)
-                    tasks = []
-
-            if tasks:
+            tasks.append(get_profit(pair["symbol"], tokens_info, target_profit, chains_by_gas_price, goplus, trades, chains_by_number, usdt_addresses, chains_for_defilama))
+            if len(tasks) > 10:
                 results = await asyncio.gather(*tasks)
                 for result in results:
                     if not result:
                         continue
                     arr.add(result)
+                tasks = []
 
-            current_trades = await trades_db.get_all()
-            for i in current_trades:
-                if i["symbol"] in arr:
+        if tasks:
+            results = await asyncio.gather(*tasks)
+            for result in results:
+                if not result:
                     continue
-                await trades_db.delete("symbol", i["symbol"])
+                arr.add(result)
 
-        except Exception as e:
-            print(e)
+        current_trades = await trades_db.get_all()
+        for i in current_trades:
+            if i["symbol"] in arr:
+                continue
+            await trades_db.delete("symbol", i["symbol"])
 
 
-async def get_profit(pair, tokens_info, target_profit, chains_by_gas_price, goplus, trades):
+
+async def get_profit(symbol, tokens_info, target_profit, chains_by_gas_price, goplus, trades, chains_by_number, usdt_addresses, chains_for_defilama):
     start_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    one_inch = await redis.get(f'{pair["symbol"]}@1INCH')
+    one_inch = await redis.get(f'{symbol}@1INCH')
     if not one_inch:
         return None
     one_inch = json.loads(one_inch)
-    mexc = await redis.get(f'{pair["symbol"]}@MEXC')
+    mexc = await redis.get(f'{symbol}@MEXC')
     mexc = json.loads(mexc)
-    tokens_info = [i for i in tokens_info if i["coin"] == pair["symbol"][:-4]][0]
-    info = tokens_info["networkList"]
+    info = [i for i in tokens_info if i["coin"] == symbol[:-4]][0]["networkList"]
 
     chain_buy = one_inch[0]["chain"]
     chain_sell = one_inch[1]["chain"]
+    usdt_address_buy = [i for i in usdt_addresses if i["network"] == chain_buy][0]["contract"]
+    usdt_address_sell = [i for i in usdt_addresses if i["network"] == chain_sell][0]["contract"]
     info_buy = next((i for i in info if i["network"] == chain_buy), None)
     info_sell = next((i for i in info if i["network"] == chain_sell), None)
     if not info_buy or not info_sell:
+        return None
+    if info_buy.get("withdrawTips") or info_sell.get("withdrawTips") or info_buy.get("depositTips") or info_sell.get("depositTips"):
         return None
     
     goplus_buy = next((i for i in goplus if i["contract_address"] == info_buy["contract"].lower()), None)
@@ -183,34 +200,67 @@ async def get_profit(pair, tokens_info, target_profit, chains_by_gas_price, gopl
     if not goplus_buy or not goplus_sell:
         return None
 
-    profit_mexc, orders_to_buy, gas_buy, gas_for_withdraw_buy = await buy_on_mexc(mexc, one_inch, info_buy, goplus_buy, chains_by_gas_price) 
-    profit_one_inch, orders_to_sell, gas_sell, gas_for_withdraw_sell = await buy_on_one_inch(mexc, one_inch, info_sell, goplus_sell, chains_by_gas_price)
+    profit_mexc, orders_to_buy, gas_sell, gas_for_withdraw_sell = await buy_on_mexc(mexc, one_inch, info_buy, goplus_buy, chains_by_gas_price) 
+    if not profit_mexc:
+        return None
+    profit_one_inch, orders_to_sell, gas_buy, gas_for_withdraw_buy = await buy_on_one_inch(mexc, one_inch, info_sell, goplus_sell, chains_by_gas_price)
+    if not profit_one_inch:
+        return None
     
-    if not profit_mexc or not profit_one_inch:
+    trade = next((i for i in trades if i["symbol"] == symbol), None)
+    last_time = trade["start_time"] if trade else start_time
+    life_time = datetime.datetime.now() - datetime.datetime.strptime(last_time, "%Y-%m-%d %H:%M:%S")
+    total_seconds = int(life_time.total_seconds())
+    hours = total_seconds // 3600
+    minutes = (total_seconds % 3600) // 60
+    seconds = total_seconds % 60
+
+    # Форматируем строку
+    formatted_time_difference = f"{hours:02}:{minutes:02}:{seconds:02}"
+    
+    if profit_one_inch >= target_profit:
+        profit = profit_one_inch
+        message = (f'*{symbol[:-4]}/USDT({chain_sell}): Swap -> Mexc*' + '\n' + 
+            '\n' + f'_Contract:_ `{info_sell["contract"]}`' +
+            '\n' + f'_Commission for buying:_ *{goplus_sell["buy_tax"]}%*' +
+            '\n' + f'[GoPlus](https://gopluslabs.io/token-security/{chains_by_number[chain_sell]}/{info_sell["contract"]})' + '\n' +
+            '\n' + f'📗 | [Swap](https://swap.defillama.com/?chain={chains_for_defilama[f"{chain_sell}"]}&from={usdt_address_sell}&tab=swap&to={info_sell["contract"]}) |' + '\n' +
+            '\n' + f'📕 | [Mexc](https://www.mexc.com/ru-RU/exchange/{symbol[:-4]}_USDT) | [Deposit](https://www.mexc.com/ru-RU/assets/deposit/{symbol[:-4]})' +
+            '\n' + f'Orders: *{orders_to_sell}*' + '\n' +
+            '\n' + f'_Commision:_' +
+            '\n' + f'Gas for swap: *{float(gas_buy):.2f}$*' +
+            '\n' + f'Gas for withdraw: *{float(gas_for_withdraw_buy):.2f}$*' + '\n' +
+            '\n' + f'_Profit(considering commissions):_ *{profit_one_inch:.2f}$*' + '\n' +
+            '\n' + f'_Lifetime:_ *{formatted_time_difference}*')
+        
+
+    elif profit_mexc >= target_profit: 
+        profit = profit_mexc
+        message = (f'*{symbol[:-4]}/USDT({chain_buy}): Mexc -> Swap*' + '\n' +
+            '\n' + f'_Contract_: `{info_buy["contract"]}`' +
+            '\n' + f'_Commission for selling:_ {goplus_buy["sell_tax"]}%' +
+            '\n' + f'[GoPlus](https://gopluslabs.io/token-security/{chains_by_number[chain_buy]}/{info_buy["contract"]})' + '\n' +
+            '\n' + f'📗 | [Mexc](https://www.mexc.com/ru-RU/exchange/{symbol[:-4]}_USDT) | [Withdraw](https://www.mexc.com/ru-RU/assets/withdraw/{symbol[:-4]})' 
+            '\n' + f'Orders: *{orders_to_buy}*' + '\n' +
+            '\n' + f'📕 | [Swap](https://swap.defillama.com/?chain={chains_for_defilama[f"{chain_buy}"]}&from={info_buy["contract"]}&tab=swap&to={usdt_address_buy}) |' + '\n' + 
+            '\n' + f'_Commision:_' +
+            '\n' + f'Gas for swap: *{float(gas_sell):.2f}$*' +
+            '\n' + f'Gas for withdraw: *{float(gas_for_withdraw_sell):.2f}$*' + '\n' +
+            '\n' + f'_Profit(considering commissions):_ *{profit_mexc:.2f}$*' + '\n' +
+            '\n' + f'_Lifetime:_ *{formatted_time_difference}*')
+    else:
         return None
-    if profit_mexc < target_profit and profit_one_inch < target_profit:
-        return None
-    if info_buy.get("withdrawTips") or info_sell.get("withdrawTips") or info_buy.get("depositTips") or info_sell.get("depositTips"):
-        return None
-    message = f'\n mexc: {float(profit_mexc):.2f} \
-        \n orders_to_buy: {orders_to_buy} \
-        \n gas_buy: {gas_buy} \
-        \n gas_for_withdraw_buy: {gas_for_withdraw_buy} \
-        \n chain_buy: {chain_buy} \n \
-        \n one_inch: {float(profit_one_inch):.2f} \
-        \n orders_to_sell: {orders_to_sell} \
-        \n gas_sell: {gas_sell} \
-        \n gas_for_withdraw_sell: {gas_for_withdraw_sell} \
-        \n chain_sell: {chain_sell} \n '
-    item = {"symbol": pair["symbol"], 
+    item = {"symbol": symbol, 
+            "profit": profit,
             "message": message,
             "start_time": start_time,
-            "notify": False}
-    check = next((i for i in trades if i["symbol"] == pair["symbol"]), None)
+            "lifetime": total_seconds,
+            "notify": []}
+    check = [i for i in trades if i["symbol"] == symbol]
     if check:
-        await trades_db.update("symbol", pair["symbol"], {"message": message})
+        await trades_db.update("symbol", symbol, {"message": message, "profit": profit, "lifetime": total_seconds}, True)
     else:
-        await trades_db.update("symbol", pair["symbol"], item, True)
+        await trades_db.update("symbol", symbol, item, True)
 
     return item["symbol"]
 

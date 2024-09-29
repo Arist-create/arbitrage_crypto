@@ -35,7 +35,7 @@ class Mongo:
 
 
 trades_db = Mongo("trades")
-settings_db = Mongo("settings")
 goplus_db = Mongo("goplus")
 list_of_pairs_mexc_db = Mongo("list_of_pairs_mexc")
 tokens_mexc_by_chains_db = Mongo("tokens_mexc_by_chains")
+users_settings_db = Mongo("users_settings")

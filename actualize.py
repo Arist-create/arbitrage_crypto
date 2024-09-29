@@ -1,4 +1,4 @@
-from mongo import goplus_db, list_of_pairs_mexc_db, tokens_mexc_by_chains_db
+from mongo import goplus_db, list_of_pairs_mexc_db, tokens_mexc_by_chains_db, trades_db
 import requests
 import json
 import time
@@ -79,6 +79,60 @@ async def get_pairs(): #переписать на получение из фай
     for i in range(0, len(arr), 20):
         await asyncio.gather(*arr[i:i+20])
 
+async def get_tokens_by_goplus_for_trades():
+    with open('chains_by_number_only_for_mexc.json') as f: 
+        chains = json.load(f)
+    tokens = await tokens_mexc_by_chains_db.get_all()
+    trades = await trades_db.get_all()
+    trades = {i["symbol"] for i in trades}
+    
+    tokens = [i for i in tokens if f'{i["coin"]}USDT' in trades]
+    flag = 1
+    
+    for v in tokens:
+        networkList = v.get("networkList")
+        if not networkList:
+            continue
+        
+        for i in networkList:
+
+            chain_number = chains.get(i["network"])
+            if not chain_number:
+                continue
+
+            contract_address = i.get("contract")
+            if not contract_address:
+                continue
+
+            while True:
+                count = await goplus_db.count("contract_address", contract_address.lower())
+                if count > 1:
+                    await goplus_db.delete("contract_address", contract_address.lower())
+                    continue
+                break
+                
+
+            if flag==1:
+                proxies="socks5://proxy_user:wcPYZj5Zlj@62.133.62.154:41257"
+                flag = 2
+            elif flag==2:
+                proxies=None
+                flag = 3
+            else:
+                proxies="socks5://FH6kGDAALu:q8iRUSt1lz@185.200.188.109:54604"
+                flag = 1
+            try:
+                async with httpx.AsyncClient(mounts={"https://": httpx.AsyncHTTPTransport(proxy=proxies, verify=False)}) as client:
+                    resp = await client.get(f'https://api.gopluslabs.io/api/v1/token_security/{chain_number}?contract_addresses={contract_address}')
+                    resp = resp.json()["result"][f"{contract_address.lower()}"]
+                dictionary = {
+                    "contract_address": contract_address.lower()
+                }
+                dictionary.update(resp)
+                await goplus_db.update("contract_address", contract_address.lower(), dictionary, True)
+            except Exception as e:
+                print(e)
+
     
 
 async def get_tokens_by_goplus():
@@ -138,3 +192,4 @@ async def actualize():
     await get_pairs()
     await get_decimals_mexc()
     await get_tokens_mexc_by_chains()
+    await get_tokens_by_goplus_for_trades()

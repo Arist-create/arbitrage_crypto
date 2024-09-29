@@ -1,64 +1,177 @@
 import time
 from aiogram import types, executor
-from aiogram import Bot, Dispatcher 
-from mongo import trades_db, settings_db
+from aiogram import Bot, Dispatcher
+from mongo import trades_db, users_settings_db
+from aiogram.contrib.fsm_storage.memory import MemoryStorage
+from aiogram.dispatcher import FSMContext
+from aiogram.dispatcher.filters.state import State, StatesGroup
 
-API_TOKEN = '7473932480:AAHvJvYndS0-blMx8U-w57BBjMuUTl01E7E' #прод
+API_TOKEN = '7473932480:AAHvJvYndS0-blMx8U-w57BBjMuUTl01E7E'  # прод
 # API_TOKEN = '6769001742:AAGW0d_60IymQPl8ef4U7Pvun3aIYf0aBPc'
 
 bot = Bot(token=API_TOKEN)
 
+storage = MemoryStorage()
+dp = Dispatcher(bot, storage=storage)
 
-dp = Dispatcher(bot)
+async def create_keyboard(chat_id):
+    # Создаем кнопки с состоянием
+    user_settings = await users_settings_db.get("chat_id", chat_id)
+    button1_text = "✅" if user_settings["notify_is_on"] else "❌"
+
+    keyboard = types.InlineKeyboardMarkup()
+    keyboard.add(
+        types.InlineKeyboardButton(text=button1_text, callback_data="button1") 
+    )
+    return keyboard
+
+async def create_keyboard_for_notify(symbol):
+    # Создаем кнопки с состоянием
+    keyboard = types.InlineKeyboardMarkup()
+    keyboard.add(
+        types.InlineKeyboardButton(text='🔁', callback_data=symbol) 
+    )
+    return keyboard
+
+async def set_commands(dp):
+    commands = [
+        types.BotCommand(command="/change_settings", description="Изменить настройки"),
+        types.BotCommand(command="/notify", description="Уведомления"),
+        types.BotCommand(command="/show", description="Топ 5 арбитражных ситуаций"),
+        types.BotCommand(command="/settings", description="Просмотреть настройки уведомлений"),
+    ]
+    await bot.set_my_commands(commands)
 
 
-@dp.message_handler(commands=['start'])
-async def message_id(message: types.Message):
-    await bot.send_message(message.chat.id, f"Message ID: {message.message_id}. Chat ID: {message.chat.id}.")
+class Form(StatesGroup):
+    waiting_life_time_target = State()
+    waiting_target_profit = State()
+    waiting_notify_is_on = State()
 
-@dp.message_handler(commands=['show'])
-async def message_id(message: types.Message):
+
+@dp.message_handler(commands=['start'], state="*")
+async def message_id(message: types.Message, state: FSMContext):
+    await state.finish()
+
+    await bot.send_message(message.chat.id, f"Hello, {message.from_user.first_name}, for beginning please set up notification settings, use /change_settings")
+
+
+@dp.message_handler(commands=['change_settings'], state="*")
+async def message_id(message: types.Message, state: FSMContext):
+    await state.finish()
+
+    await bot.send_message(message.chat.id, "Enter target profit($):")
+    await Form.waiting_target_profit.set()
+
+@dp.message_handler(commands=["settings"], state="*")
+async def message_id(message: types.Message, state: FSMContext):
+    await state.finish()
+    settings = await users_settings_db.get("chat_id", message.chat.id)
+
+    await bot.send_message(message.chat.id, f"Target profit: {settings['target_profit']}$")
+    await bot.send_message(message.chat.id, f"Life time target: {settings['life_time_target']} seconds")
+
+@dp.message_handler(state=Form.waiting_target_profit)
+async def message_id(message: types.Message, state: FSMContext):
+    try:
+        target_profit = float(message.text)
+    except ValueError:
+        await bot.send_message(message.chat.id, "Target profit must be a positive number")
+        return
+    if target_profit < 0:
+        await bot.send_message(message.chat.id, "Target profit must be a positive number")
+        return
+    user_settings = {"target_profit": target_profit,
+        "chat_id": message.chat.id,
+        "notify_is_on": True}
+    await users_settings_db.update("chat_id", message.chat.id, user_settings, True)
+    await bot.send_message(message.chat.id, "Done")
+    await bot.send_message(message.chat.id, "Enter life time target(seconds):")
+    await Form.waiting_life_time_target.set()
+
+
+@dp.message_handler(state=Form.waiting_life_time_target)
+async def message_id(message: types.Message, state: FSMContext):
+    try:
+        life_time_target = float(message.text)
+    except ValueError:
+        await bot.send_message(message.chat.id, "Life time target must be a positive number")
+        return
+    if life_time_target < 0:
+        await bot.send_message(message.chat.id, "Life time target must be a positive number")
+        return
+    await users_settings_db.update("chat_id", message.chat.id, {"life_time_target": life_time_target})
+    await bot.send_message(message.chat.id, "Done")
+    await state.finish()
+
+
+@dp.message_handler(commands=['notify'], state="*")
+async def message_id(message: types.Message, state: FSMContext):
+    await state.finish()
+
+    if not await users_settings_db.get("chat_id", message.chat.id):
+        await bot.send_message(message.chat.id, "You have to set up notifications settings first, use /change_settings")
+        return
+    keyboard = await create_keyboard(message.chat.id)
+    await bot.send_message(message.chat.id, "Notifications", reply_markup=keyboard)
+    await Form.waiting_notify_is_on.set()
+
+
+@dp.callback_query_handler(lambda c: c.data in ["button1"], state=Form.waiting_notify_is_on)
+async def message_id(callback_query: types.CallbackQuery, state: FSMContext):
+    chat_id = callback_query.message.chat.id
+    user_settings = await users_settings_db.get("chat_id", chat_id)
+    await users_settings_db.update("chat_id", chat_id, {"notify_is_on": not user_settings["notify_is_on"]})
+    keyboard = await create_keyboard(chat_id)
+    
+    # Обновляем сообщение с новой клавиатурой
+    await bot.edit_message_reply_markup(chat_id, callback_query.message.message_id, reply_markup=keyboard)
+    
+    # Убираем индикатор загрузки на кнопке
+    await bot.answer_callback_query(callback_query.id)
+    await state.finish()
+
+@dp.callback_query_handler(lambda c: c.data not in ["button1"])
+async def message_id(callback_query: types.CallbackQuery):
+    chat_id = callback_query.message.chat.id
+    keyboard = await create_keyboard_for_notify(callback_query.data)
+    
+    trade = await trades_db.get("symbol", callback_query.data)
+
+    text = trade["message"] if trade else "Not found"
+    # Обновляем сообщение с новой клавиатурой
+    await bot.edit_message_text(text, chat_id=chat_id, message_id=callback_query.message.message_id, reply_markup=keyboard, parse_mode='Markdown')
+    
+    # Убираем индикатор загрузки на кнопке
+    await bot.answer_callback_query(callback_query.id)
+
+
+@dp.message_handler(commands=['show'], state="*")
+async def message_id(message: types.Message, state: FSMContext):
+    await state.finish()
     trades = await trades_db.get_all()
     if not trades:
         await bot.send_message(message.chat.id, "No trades")
         return
     string = ""
+    k = 0
+    trades = sorted(trades, key=lambda x: x["profit"], reverse=True)
     for trade in trades:
-        string += f'{trade["symbol"]}: {trade["message"]}\n'
+        if k >= 5:
+            break
+        string += f'{trade["message"]}\n\n' + \
+            '------------------------------'+'\n\n'
+        k += 1
     try:
-        await bot.send_message(message.chat.id, string)
+        await bot.send_message(message.chat.id, string, parse_mode='Markdown')
     except Exception as e:
         await bot.send_message(message.chat.id, e)
-
-@dp.message_handler(commands=['settings'])
-async def message_id(message: types.Message):
-    settings = await settings_db.get("number", 1)
-    if not settings:
-        return
-    string = ""
-    for k, v in settings.items():
-        string += f'{k}: {v}\n'
-
-    await bot.send_message(message.chat.id, string)
-
-
-@dp.message_handler(lambda message: message.text and ':' in message.text.lower())
-async def message_id(message: types.Message):
-    life_time_target = float(message.text[1:])
-    await settings_db.update("number", 1, {"life_time_target": life_time_target}, True)
-    await bot.send_message(message.chat.id, "Done")
-
-@dp.message_handler(lambda message: message.text and '.' in message.text.lower())
-async def message_id(message: types.Message):
-    target_profit = float(message.text[1:])
-    await settings_db.update("number", 1, {"target_profit": target_profit}, True)
-    await bot.send_message(message.chat.id, "Done")
 
 
 if __name__ == '__main__':
     while True:
         try:
-            executor.start_polling(dp, skip_updates=True)
+            executor.start_polling(dp, skip_updates=True, on_startup=set_commands)
         except Exception as e:
             print(f"Error: {e}")
             time.sleep(5)

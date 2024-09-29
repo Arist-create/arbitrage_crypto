@@ -79,7 +79,7 @@ async def main():
                 gas_price,
                 goplus
             ))
-            if len(tasks) > 10:
+            if len(tasks) > 30:
                 await asyncio.gather(*tasks)
                 tasks = []
                 
@@ -145,6 +145,8 @@ async def check_prices(main_token, usdt_token, chains, gas_price, goplus):
             try:
                 resp = await fetch(client, chain_number, contract_address, usdt_token_detect["contract"], amount)
                 if not resp.get("toAmount"):
+                    await redis.delete(f'{i["coin"]}USDT@1INCH')
+
                     continue
                 check = float(resp['toAmount'])/10**usdt_token_detect["decimals"] - float(resp["gas"])*gas_price[i["network"]]
                 if check > max_usdt:
@@ -155,6 +157,7 @@ async def check_prices(main_token, usdt_token, chains, gas_price, goplus):
                 amount_usdt = 3000*10**usdt_token_detect["decimals"]
                 resp = await fetch(client, chain_number, usdt_token_detect["contract"], contract_address, amount_usdt)
                 if not resp.get("toAmount"):
+                    await redis.delete(f'{i["coin"]}USDT@1INCH')
                     continue
                 check = float(resp['toAmount'])/10**decimals
                 if check > max_tokens:

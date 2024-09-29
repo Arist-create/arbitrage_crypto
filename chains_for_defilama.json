@@ -1,0 +1,8 @@
+{
+    "Ethereum(ERC20)": "ethereum",
+    "Arbitrum One(ARB)": "arbitrum",
+    "Optimism(OP)": "optimism",
+    "Polygon(MATIC)": "polygon",
+    "BNB Smart Chain(BEP20)": "bsc",
+    "Avalanche C Chain(AVAX CCHAIN)": "avax"
+}
