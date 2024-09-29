@@ -61,3 +61,4 @@ aiogram==2.23.1
 motor==3.5.1
 redis==4.5.4
 pymongo==4.7.3
+dedust==1.1.4
