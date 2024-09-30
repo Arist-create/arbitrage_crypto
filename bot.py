@@ -138,13 +138,14 @@ async def message_id(callback_query: types.CallbackQuery, state: FSMContext):
 
 @dp.callback_query_handler(lambda c: c.data not in ["button1"])
 async def message_id(callback_query: types.CallbackQuery):
-    chat_id = callback_query.message.chat.id
-    keyboard = await create_keyboard_for_notify(callback_query.data)
+    symbol = callback_query.data
     
-    trade = await trades_redis.get(callback_query.data)
+    trade = await trades_redis.get(symbol)
 
     text = json.loads(trade)["message"] if trade else "Not found"
     if callback_query.message.text != text:
+        chat_id = callback_query.message.chat.id
+        keyboard = await create_keyboard_for_notify(symbol)
         # Обновляем сообщение с новой клавиатурой
         await bot.edit_message_text(text, chat_id=chat_id, message_id=callback_query.message.message_id, reply_markup=keyboard, parse_mode='Markdown')
     
