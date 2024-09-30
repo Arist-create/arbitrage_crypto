@@ -138,6 +138,7 @@ async def message_id(callback_query: types.CallbackQuery, state: FSMContext):
 
 @dp.callback_query_handler(lambda c: c.data not in ["button1"])
 async def message_id(callback_query: types.CallbackQuery):
+    await bot.answer_callback_query(callback_query.id)
     symbol = callback_query.data
     
     trade = await trades_redis.get(symbol)
@@ -150,7 +151,6 @@ async def message_id(callback_query: types.CallbackQuery):
         await bot.edit_message_text(text, chat_id=chat_id, message_id=callback_query.message.message_id, reply_markup=keyboard, parse_mode='Markdown')
     
     # Убираем индикатор загрузки на кнопке
-    await bot.answer_callback_query(callback_query.id)
 
 
 @dp.message_handler(commands=['show_arbs'], state="*")
