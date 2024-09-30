@@ -50,8 +50,7 @@ async def main():
         tasks.append(stop())
 
         await asyncio.gather(*tasks)
-        global stop_task
-        stop_task = False
+        stop_event.clear() 
 
 
 if __name__ == '__main__':
