@@ -5,12 +5,10 @@ import asyncio
 from redis_facade import redis
 from mongo import list_of_pairs_mexc_db
 
-stop_task = False
+stop_event = asyncio.Event()
 
 async def get_quote(subscribe_list):
-    while True:
-        if stop_task:
-            break
+    while not stop_event.is_set():
         try:
             async with websockets.connect('wss://wbs.mexc.com/ws', ping_interval=5, ping_timeout=None) as websocket:
                 await websocket.send(
@@ -37,8 +35,7 @@ async def get_quote(subscribe_list):
 
 async def stop():
     await asyncio.sleep(3600)
-    global stop_task
-    stop_task = True
+    stop_event.set()
 
 async def main():
     while True:

@@ -149,8 +149,7 @@ async def message_id(callback_query: types.CallbackQuery):
         keyboard = await create_keyboard_for_notify(symbol)
         # Обновляем сообщение с новой клавиатурой
         await bot.edit_message_text(text, chat_id=chat_id, message_id=callback_query.message.message_id, reply_markup=keyboard, parse_mode='Markdown')
-    
-    # Убираем индикатор загрузки на кнопке
+
 
 
 @dp.message_handler(commands=['show_arbs'], state="*")
