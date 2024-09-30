@@ -143,7 +143,7 @@ async def message_id(callback_query: types.CallbackQuery):
     
     trade = await trades_redis.get(callback_query.data)
 
-    text = json.loads(trade["message"]) if trade else "Not found"
+    text = trade["message"] if trade else "Not found"
     # Обновляем сообщение с новой клавиатурой
     await bot.edit_message_text(text, chat_id=chat_id, message_id=callback_query.message.message_id, reply_markup=keyboard, parse_mode='Markdown')
     
