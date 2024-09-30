@@ -143,7 +143,7 @@ async def message_id(callback_query: types.CallbackQuery):
     
     trade = await trades_redis.get(symbol)
 
-    text = json.loads(trade)["message"] if trade else "Not found"
+    text = json.loads(trade)["message"] if trade else "Not found" 
     if callback_query.message.text != text:
         chat_id = callback_query.message.chat.id
         keyboard = await create_keyboard_for_notify(symbol)
