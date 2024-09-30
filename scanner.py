@@ -154,7 +154,7 @@ async def scan():
                 continue
             trade = next((i for i in trades if i["symbol"] == symbol), None)
             tasks.append(get_profit(symbol, tokens_info, target_profit, chains_by_gas_price, goplus, trade, chains_by_number, usdt_addresses, chains_for_defilama))
-            if len(tasks) >= 5:
+            if len(tasks) >= 2:
                 results = await asyncio.gather(*tasks)
                 for result in results:
                     if not result:
