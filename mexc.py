@@ -1,9 +1,10 @@
-
+import time
 import websockets
 import json
 import asyncio 
 from redis_facade import redis
 from mongo import list_of_pairs_mexc_db
+
 stop_task = False
 
 async def get_quote(subscribe_list):
@@ -57,4 +58,13 @@ async def main():
 
 
 if __name__ == '__main__':
-    asyncio.run(main())
+    while True:
+        try:
+            loop = asyncio.get_event_loop()
+            if loop.is_closed():
+                loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(loop)
+            loop.run_until_complete(main())
+        except Exception as e:
+            print(f"Error: {e}")
+            time.sleep(5)
