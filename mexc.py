@@ -8,7 +8,7 @@ from mongo import list_of_pairs_mexc_db
 stop_event = asyncio.Event()
 
 async def get_quote(subscribe_list):
-    while not stop_event.is_set():
+    while True:
         try:
             async with websockets.connect('wss://wbs.mexc.com/ws', ping_interval=5, ping_timeout=None) as websocket:
                 await websocket.send(
@@ -17,7 +17,7 @@ async def get_quote(subscribe_list):
                         "params": subscribe_list
                     })
                 )
-                while not stop_event.is_set():
+                while True:
                     data = await websocket.recv()
                     data = json.loads(data)
                     pair = data.get("s")
@@ -27,13 +27,12 @@ async def get_quote(subscribe_list):
                     f'{pair}@MEXC',
                         json.dumps(data["d"])
                     )
-                await websocket.close()
         except:
             await asyncio.sleep(10)
 
-async def stop():
-    await asyncio.sleep(3600)
-    stop_event.set()
+# async def stop():
+#     await asyncio.sleep(3600)
+#     stop_event.set()
 
 async def main():
     while True:
@@ -45,10 +44,16 @@ async def main():
         for i in range(0, len(subscribe_list), 20):
             chunk = subscribe_list[i:i + 20]
             tasks.append(get_quote(chunk))
-        tasks.append(stop())
+            if len(tasks) >= 10:
+                try:
+                    await asyncio.wait_for(asyncio.gather(*tasks), timeout=30)
+                except:
+                    pass
+                tasks = []
+        # tasks.append(stop())
 
-        await asyncio.gather(*tasks)
-        stop_event.clear() 
+        # await asyncio.gather(*tasks)
+        # stop_event.clear() 
 
 
 if __name__ == '__main__':
