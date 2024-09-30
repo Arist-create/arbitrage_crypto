@@ -1,6 +1,6 @@
 from web3 import Web3
 import json
-from redis import redis
+from redis_facade import redis
 
 async def get_gas_price(rpc_url):
     w3 = Web3(Web3.HTTPProvider(rpc_url))

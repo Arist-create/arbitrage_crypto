@@ -2,7 +2,7 @@
 import websockets
 import json
 import asyncio 
-from redis import redis
+from redis_facade import redis
 from mongo import list_of_pairs_mexc_db
 stop_task = False
 

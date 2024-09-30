@@ -1,5 +1,5 @@
 from mongo import goplus_db, list_of_pairs_mexc_db, tokens_mexc_by_chains_db
-from redis import trades_redis
+from redis_facade import trades_redis
 import requests
 import json
 import time

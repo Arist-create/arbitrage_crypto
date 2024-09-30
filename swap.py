@@ -2,7 +2,7 @@ from ton import ton
 import json
 import asyncio
 import httpx
-from redis import redis
+from redis_facade import redis
 from mongo import goplus_db, list_of_pairs_mexc_db, tokens_mexc_by_chains_db
 import datetime
 from commission_for_chains import get_gas_price_in_usdt

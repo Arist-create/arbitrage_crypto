@@ -3,7 +3,7 @@ import time
 import asyncio
 import json
 from mongo import list_of_pairs_mexc_db, tokens_mexc_by_chains_db, goplus_db, users_settings_db
-from redis import redis, trades_redis
+from redis_facade import redis, trades_redis
 import datetime
 import traceback
 
