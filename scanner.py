@@ -5,6 +5,7 @@ import json
 from mongo import list_of_pairs_mexc_db, tokens_mexc_by_chains_db, goplus_db, users_settings_db
 from redis import redis, trades_redis
 import datetime
+import traceback
 
 
 async def calc_vol_in_usdt(arr):
@@ -282,5 +283,5 @@ if __name__ == "__main__":
                 asyncio.set_event_loop(loop)
             loop.run_until_complete(main())
         except Exception as e:
-            print(f"Error: {e}")
+            print(traceback.format_exc())
             time.sleep(5)
