@@ -275,7 +275,7 @@ async def main():
 
 
 if __name__ == "__main__":
-    while True:
+    while True: 
         try:
             loop = asyncio.get_event_loop()
             if loop.is_closed():
