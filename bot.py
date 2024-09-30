@@ -35,10 +35,10 @@ async def create_keyboard_for_notify(symbol):
 
 async def set_commands(dp):
     commands = [
-        types.BotCommand(command="/change_settings", description="Изменить настройки"),
-        types.BotCommand(command="/notify", description="Уведомления"),
-        types.BotCommand(command="/show", description="Топ 5 арбитражных ситуаций"),
-        types.BotCommand(command="/settings", description="Просмотреть настройки уведомлений"),
+        types.BotCommand(command="/change_notify_settings", description="Изменить настройки"),
+        types.BotCommand(command="/notify_status", description="Статус уведомлений"),
+        types.BotCommand(command="/show_arbs", description="Топ 5 арбитражных ситуаций"),
+        types.BotCommand(command="/show_notify_settings", description="Просмотреть настройки уведомлений"),
     ]
     await bot.set_my_commands(commands)
 
@@ -56,23 +56,26 @@ async def message_id(message: types.Message, state: FSMContext):
     await bot.send_message(message.chat.id, f"Hello, {message.from_user.first_name}, for beginning please set up notification settings, use /change_settings")
 
 
-@dp.message_handler(commands=['change_settings'], state="*")
+@dp.message_handler(commands=['change_notify_settings'], state="*")
 async def message_id(message: types.Message, state: FSMContext):
     await state.finish()
 
     await bot.send_message(message.chat.id, "Enter target profit($):")
     await Form.waiting_target_profit.set()
 
-@dp.message_handler(commands=["settings"], state="*")
+@dp.message_handler(commands=["show_notify_settings"], state="*")
 async def message_id(message: types.Message, state: FSMContext):
     await state.finish()
     settings = await users_settings_db.get("chat_id", message.chat.id)
+    if not settings:
+        await bot.send_message(message.chat.id, "Settings not found, use /change_notify_settings")
+        return
 
     await bot.send_message(message.chat.id, f"Target profit: {settings['target_profit']}$")
     await bot.send_message(message.chat.id, f"Life time target: {settings['life_time_target']} seconds")
 
 @dp.message_handler(state=Form.waiting_target_profit)
-async def message_id(message: types.Message, state: FSMContext):
+async def message_id(message: types.Message):
     try:
         target_profit = float(message.text)
     except ValueError:
@@ -105,7 +108,7 @@ async def message_id(message: types.Message, state: FSMContext):
     await state.finish()
 
 
-@dp.message_handler(commands=['notify'], state="*")
+@dp.message_handler(commands=['notify_status'], state="*")
 async def message_id(message: types.Message, state: FSMContext):
     await state.finish()
 
@@ -146,7 +149,7 @@ async def message_id(callback_query: types.CallbackQuery):
     await bot.answer_callback_query(callback_query.id)
 
 
-@dp.message_handler(commands=['show'], state="*")
+@dp.message_handler(commands=['show_arbs'], state="*")
 async def message_id(message: types.Message, state: FSMContext):
     await state.finish()
     trades = await trades_db.get_all()

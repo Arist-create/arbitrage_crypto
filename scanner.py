@@ -148,7 +148,7 @@ async def scan():
         arr = set()
         tasks = []
         for pair in pairs:
-            if pair["symbol"] in []:
+            if pair["symbol"] in ["SEILORUSDT"]:
                 continue
             tasks.append(get_profit(pair["symbol"], tokens_info, target_profit, chains_by_gas_price, goplus, trades, chains_by_number, usdt_addresses, chains_for_defilama))
             if len(tasks) > 10:
