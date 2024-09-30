@@ -37,7 +37,7 @@ async def create_keyboard_for_notify(symbol):
 
 async def set_commands(dp):
     commands = [
-        types.BotCommand(command="/change_notify_settings", description="Изменить настройки"),
+        types.BotCommand(command="/change_notify_settings", description="Изменить настройки уведомлений"),
         types.BotCommand(command="/notify_status", description="Статус уведомлений"),
         types.BotCommand(command="/show_arbs", description="Топ 5 арбитражных ситуаций"),
         types.BotCommand(command="/show_notify_settings", description="Просмотреть настройки уведомлений"),

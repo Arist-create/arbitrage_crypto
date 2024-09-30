@@ -79,7 +79,7 @@ async def main():
                 gas_price,
                 goplus
             ))
-            if len(tasks) > 10:
+            if len(tasks) > 20:
                 await asyncio.gather(*tasks)
                 tasks = []
                 
@@ -188,7 +188,11 @@ async def check_prices(main_token, usdt_token, chains, gas_price, goplus):
 if __name__ == '__main__':
     while True:
         try:
-            asyncio.run(main())
+            loop = asyncio.get_event_loop()
+            if loop.is_closed():
+                loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(loop)
+            loop.run_until_complete(main())
         except Exception as e:
             print(f"Error: {e}")
             time.sleep(5)
