@@ -85,7 +85,7 @@ async def get_tokens_by_goplus_for_trades():
         chains = json.load(f)
     tokens = await tokens_mexc_by_chains_db.get_all()
     trades = await trades_redis.get_all()
-    trades = {i["symbol"] for i in trades}
+    trades = {i["symbol"] for i in trades} if trades else set()
     
     tokens = [i for i in tokens if f'{i["coin"]}USDT' in trades]
     flag = 1

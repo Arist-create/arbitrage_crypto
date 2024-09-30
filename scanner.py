@@ -120,7 +120,7 @@ async def notify():
                 try:
                     keyboard = await create_keyboard_for_notify(i["symbol"])
                     await bot.send_message(chat_id, i["message"], parse_mode='Markdown', reply_markup=keyboard)
-                    i["notify"] += [chat_id]
+                    i["notify"] = i["notify"] + [chat_id]
                     await trades_redis.set(i["symbol"], json.dumps(i))
                 except Exception as e:
                     print(e)
