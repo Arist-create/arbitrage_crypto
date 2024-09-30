@@ -44,7 +44,7 @@ async def main():
         for i in range(0, len(subscribe_list), 20):
             chunk = subscribe_list[i:i + 20]
             tasks.append(get_quote(chunk))
-            if len(tasks) >= 2:
+            if len(tasks) >= 5:
                 try:
                     await asyncio.wait_for(asyncio.gather(*tasks), timeout=30)
                 except:
