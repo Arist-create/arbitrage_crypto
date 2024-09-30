@@ -273,7 +273,11 @@ async def main():
 if __name__ == "__main__":
     while True:
         try:
-            asyncio.run(main())
+            loop = asyncio.get_event_loop()
+            if loop.is_closed():
+                loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(loop)
+            loop.run_until_complete(main())
         except Exception as e:
             print(f"Error: {e}")
             time.sleep(5)
