@@ -19,7 +19,8 @@ class RedisFacade:
         if not keys:
             return []
         list = await self.client.mget(keys)
-        return [json.loads(i) for i in list]    
+
+        return [json.loads(i) if i else None for i in list]    
 
 
 redis = RedisFacade('redis://redis:6379/0')
