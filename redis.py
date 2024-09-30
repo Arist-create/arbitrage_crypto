@@ -1,4 +1,5 @@
 import aioredis
+import json
 
 class RedisFacade:
     def __init__(self, url):
@@ -12,5 +13,14 @@ class RedisFacade:
     
     async def delete(self, key):
         return await self.client.delete(key)
-    
+
+    async def get_all(self):
+        keys = await self.client.keys()
+        if not keys:
+            return []
+        list = await self.client.mget(keys)
+        return [json.loads(i) for i in list]    
+
+
 redis = RedisFacade('redis://redis:6379/0')
+trades_redis = RedisFacade('redis://redis:6379/2')

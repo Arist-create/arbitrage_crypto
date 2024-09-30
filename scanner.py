@@ -2,8 +2,8 @@ from bot import bot, create_keyboard_for_notify
 import time
 import asyncio
 import json
-from mongo import list_of_pairs_mexc_db, trades_db, tokens_mexc_by_chains_db, goplus_db, users_settings_db
-from redis import redis
+from mongo import list_of_pairs_mexc_db, tokens_mexc_by_chains_db, goplus_db, users_settings_db
+from redis import redis, trades_redis
 import datetime
 
 
@@ -99,7 +99,7 @@ async def buy_on_one_inch(mexc, one_inch, info, goplus, chains_by_gas_price):
 async def notify():
     while True:
         settings = await users_settings_db.get_all() 
-        arr = await trades_db.get_all()
+        arr = await trades_redis.get_all()
         if len(arr) == 0:
             continue
         for user_settings in settings:
@@ -120,7 +120,8 @@ async def notify():
                 try:
                     keyboard = await create_keyboard_for_notify(i["symbol"])
                     await bot.send_message(chat_id, i["message"], parse_mode='Markdown', reply_markup=keyboard)
-                    await trades_db.update("symbol", i["symbol"], {"notify": i["notify"] + [chat_id]})
+                    i["notify"] += [chat_id]
+                    await trades_redis.set(i["symbol"], json.dumps(i))
                 except Exception as e:
                     print(e)
                 await asyncio.sleep(3)
@@ -137,9 +138,8 @@ async def scan():
         tokens_info = await tokens_mexc_by_chains_db.get_all()
         usdt_addresses = [i for i in tokens_info if i["coin"] == "USDT"][0]["networkList"]
         
-
         goplus = await goplus_db.get_all()
-        trades = await trades_db.get_all()
+        trades = await trades_redis.get_all()
 
         chains_by_gas_price = await redis.get("chains_by_gas_price")
         if not chains_by_gas_price:
@@ -148,9 +148,11 @@ async def scan():
         arr = set()
         tasks = []
         for pair in pairs:
-            if pair["symbol"] in ["SEILORUSDT"]:
+            symbol = pair["symbol"]
+            if symbol in ["SEILORUSDT"]:
                 continue
-            tasks.append(get_profit(pair["symbol"], tokens_info, target_profit, chains_by_gas_price, goplus, trades, chains_by_number, usdt_addresses, chains_for_defilama))
+            trade = next((i for i in trades if i["symbol"] == symbol), None)
+            tasks.append(get_profit(symbol, tokens_info, target_profit, chains_by_gas_price, goplus, trade, chains_by_number, usdt_addresses, chains_for_defilama))
             if len(tasks) > 10:
                 results = await asyncio.gather(*tasks)
                 for result in results:
@@ -166,15 +168,15 @@ async def scan():
                     continue
                 arr.add(result)
 
-        current_trades = await trades_db.get_all()
+        current_trades = await trades_redis.get_all()
         for i in current_trades:
             if i["symbol"] in arr:
                 continue
-            await trades_db.delete("symbol", i["symbol"])
+            await trades_redis.delete(i["symbol"])
 
 
 
-async def get_profit(symbol, tokens_info, target_profit, chains_by_gas_price, goplus, trades, chains_by_number, usdt_addresses, chains_for_defilama):
+async def get_profit(symbol, tokens_info, target_profit, chains_by_gas_price, goplus, trade, chains_by_number, usdt_addresses, chains_for_defilama):
     start_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     one_inch = await redis.get(f'{symbol}@1INCH')
     if not one_inch:
@@ -207,7 +209,6 @@ async def get_profit(symbol, tokens_info, target_profit, chains_by_gas_price, go
     if not profit_one_inch:
         return None
     
-    trade = next((i for i in trades if i["symbol"] == symbol), None)
     last_time = trade["start_time"] if trade else start_time
     life_time = datetime.datetime.now() - datetime.datetime.strptime(last_time, "%Y-%m-%d %H:%M:%S")
     total_seconds = int(life_time.total_seconds())
@@ -256,11 +257,13 @@ async def get_profit(symbol, tokens_info, target_profit, chains_by_gas_price, go
             "start_time": start_time,
             "lifetime": total_seconds,
             "notify": []}
-    check = [i for i in trades if i["symbol"] == symbol]
-    if check:
-        await trades_db.update("symbol", symbol, {"message": message, "profit": profit, "lifetime": total_seconds}, True)
+    if trade:
+        trade["message"] = message
+        trade["profit"] = profit
+        trade["lifetime"] = total_seconds
+        await trades_redis.set(symbol, json.dumps(trade))
     else:
-        await trades_db.update("symbol", symbol, item, True)
+        await trades_redis.set(symbol, json.dumps(item))    
 
     return item["symbol"]
 

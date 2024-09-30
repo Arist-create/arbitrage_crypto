@@ -1,4 +1,5 @@
-from mongo import goplus_db, list_of_pairs_mexc_db, tokens_mexc_by_chains_db, trades_db
+from mongo import goplus_db, list_of_pairs_mexc_db, tokens_mexc_by_chains_db
+from redis import trades_redis
 import requests
 import json
 import time
@@ -83,7 +84,7 @@ async def get_tokens_by_goplus_for_trades():
     with open('chains_by_number_only_for_mexc.json') as f: 
         chains = json.load(f)
     tokens = await tokens_mexc_by_chains_db.get_all()
-    trades = await trades_db.get_all()
+    trades = await trades_redis.get_all()
     trades = {i["symbol"] for i in trades}
     
     tokens = [i for i in tokens if f'{i["coin"]}USDT' in trades]

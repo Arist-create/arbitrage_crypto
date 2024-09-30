@@ -1,7 +1,9 @@
 import time
+import json
 from aiogram import types, executor
 from aiogram import Bot, Dispatcher
-from mongo import trades_db, users_settings_db
+from mongo import users_settings_db
+from redis import trades_redis
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
@@ -139,9 +141,9 @@ async def message_id(callback_query: types.CallbackQuery):
     chat_id = callback_query.message.chat.id
     keyboard = await create_keyboard_for_notify(callback_query.data)
     
-    trade = await trades_db.get("symbol", callback_query.data)
+    trade = await trades_redis.get(callback_query.data)
 
-    text = trade["message"] if trade else "Not found"
+    text = json.loads(trade["message"]) if trade else "Not found"
     # Обновляем сообщение с новой клавиатурой
     await bot.edit_message_text(text, chat_id=chat_id, message_id=callback_query.message.message_id, reply_markup=keyboard, parse_mode='Markdown')
     
@@ -152,7 +154,7 @@ async def message_id(callback_query: types.CallbackQuery):
 @dp.message_handler(commands=['show_arbs'], state="*")
 async def message_id(message: types.Message, state: FSMContext):
     await state.finish()
-    trades = await trades_db.get_all()
+    trades = await trades_redis.get_all()
     if not trades:
         await bot.send_message(message.chat.id, "No trades")
         return
