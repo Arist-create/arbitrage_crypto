@@ -8,7 +8,7 @@ from mongo import list_of_pairs_mexc_db
 stop_event = asyncio.Event()
 
 async def get_quote(subscribe_list):
-    while not stop_event.is_set():
+    while not stop_event.is_set(): 
         try:
             async with websockets.connect('wss://wbs.mexc.com/ws', ping_interval=5, ping_timeout=None) as websocket:
                 await websocket.send(
