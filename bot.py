@@ -27,7 +27,16 @@ async def create_keyboard(chat_id):
     )
     return keyboard
 
-async def create_keyboard_for_notify(symbol):
+async def create_keyboard_for_select_profit():
+    keyboard = types.InlineKeyboardMarkup()
+    keyboard.add(
+        types.InlineKeyboardButton(text='1️⃣', callback_data="10"),
+        types.InlineKeyboardButton(text='5️⃣', callback_data="50"),
+        types.InlineKeyboardButton(text='🔟', callback_data="100")
+    ) 
+
+
+async def create_keyboard_for_update_notify(symbol):
     # Создаем кнопки с состоянием
     keyboard = types.InlineKeyboardMarkup()
     keyboard.add(
@@ -62,7 +71,8 @@ async def message_id(message: types.Message, state: FSMContext):
 async def message_id(message: types.Message, state: FSMContext):
     await state.finish()
 
-    await bot.send_message(message.chat.id, "Enter target profit($):")
+    keyboard = await create_keyboard_for_select_profit()
+    await bot.send_message(message.chat.id, "Select target profit", reply_markup=keyboard)
     await Form.waiting_target_profit.set()
 
 @dp.message_handler(commands=["show_notify_settings"], state="*")
@@ -76,22 +86,14 @@ async def message_id(message: types.Message, state: FSMContext):
     await bot.send_message(message.chat.id, f"Target profit: {settings['target_profit']}$")
     await bot.send_message(message.chat.id, f"Life time target: {settings['life_time_target']} seconds")
 
-@dp.message_handler(state=Form.waiting_target_profit)
-async def message_id(message: types.Message):
-    try:
-        target_profit = float(message.text)
-    except ValueError:
-        await bot.send_message(message.chat.id, "Target profit must be a positive number")
-        return
-    if target_profit < 0:
-        await bot.send_message(message.chat.id, "Target profit must be a positive number")
-        return
-    user_settings = {"target_profit": target_profit,
-        "chat_id": message.chat.id,
+@dp.callback_query_handler(lambda c: c.data in ["1️⃣", "5️⃣", "🔟"], state=Form.waiting_target_profit)
+async def message_id(callback_query: types.CallbackQuery, state: FSMContext):
+    chat_id = callback_query.message.chat.id
+    user_settings = {"target_profit": int(callback_query.data),
+        "chat_id": chat_id,
         "notify_is_on": True}
-    await users_settings_db.update("chat_id", message.chat.id, user_settings, True)
-    await bot.send_message(message.chat.id, "Done")
-    await bot.send_message(message.chat.id, "Enter life time target(seconds):")
+    await users_settings_db.update("chat_id", chat_id, user_settings, True)
+    await bot.send_message(chat_id, "Enter life time target(seconds):")
     await Form.waiting_life_time_target.set()
 
 
