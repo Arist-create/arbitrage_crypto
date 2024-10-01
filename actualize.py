@@ -68,11 +68,7 @@ async def get_pairs(): #переписать на получение из фай
             'X-MEXC-APIKEY': 'mx0vglNJacXHNmGojb',
         }
     )
-    try:
-        resp = resp.json()["symbols"]
-    except:
-        print(resp.text)
-        return
+    resp = resp.json()["symbols"]
     arr = [
         i
         for i in resp
@@ -194,7 +190,7 @@ async def get_tokens_by_goplus():
 
 
 async def actualize():
-    # await get_pairs()
-    # await get_decimals_mexc()
-    # await get_tokens_mexc_by_chains()
+    await get_pairs()
+    await get_decimals_mexc()
+    await get_tokens_mexc_by_chains()
     await get_tokens_by_goplus_for_trades()

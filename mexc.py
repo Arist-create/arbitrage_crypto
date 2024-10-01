@@ -61,4 +61,4 @@ if __name__ == '__main__':
             loop.run_until_complete(main())
         except Exception as e:
             print(f"Error: {e}")
-            time.sleep(5)
+            time.sleep(30)
