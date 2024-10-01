@@ -111,12 +111,19 @@ async def notify():
             life_time_target = float(user_settings["life_time_target"])
             target_profit = float(user_settings["target_profit"])
             for i in arr:
-                life_time = i["lifetime"]
                 if chat_id in i["notify"]:
                     continue
-                if life_time < life_time_target:
-                    continue
                 if i["profit"] < target_profit:
+                    continue
+                if target_profit == 10:
+                    life_time = i["lifetime_more_10"]
+                elif target_profit == 50:
+                    life_time = i["lifetime_more_50"]
+                elif target_profit == 100:
+                    life_time = i["lifetime_more_100"]
+                else:
+                    life_time = i["lifetime"]
+                if life_time < life_time_target:
                     continue
                 try:
                     keyboard = await create_keyboard_for_notify(i["symbol"])
@@ -222,8 +229,40 @@ async def get_profit(symbol, tokens_info, target_profit, chains_by_gas_price, go
     # Форматируем строку
     formatted_time_difference = f"{hours:02}:{minutes:02}:{seconds:02}"
     
+    profit = profit_mexc if profit_mexc > target_profit else profit_one_inch
+
+    if profit > 100:
+        last_time = trade["start_time_more_100"] if trade else start_time
+        life_time = datetime.datetime.now() - datetime.datetime.strptime(last_time, "%Y-%m-%d %H:%M:%S")
+        total_seconds_more_100 = int(life_time.total_seconds())
+        hours = total_seconds_more_100 // 3600
+        minutes = (total_seconds_more_100 % 3600) // 60
+        seconds = total_seconds_more_100 % 60
+        
+        formatted_time_difference = f"{hours:02}:{minutes:02}:{seconds:02}"
+    
+    elif profit > 50:
+        last_time = trade["start_time_more_50"] if trade else start_time
+        life_time = datetime.datetime.now() - datetime.datetime.strptime(last_time, "%Y-%m-%d %H:%M:%S")
+        total_seconds_more_50 = int(life_time.total_seconds())
+        hours = total_seconds_more_50 // 3600
+        minutes = (total_seconds_more_50 % 3600) // 60
+        seconds = total_seconds_more_50 % 60
+        
+        formatted_time_difference = f"{hours:02}:{minutes:02}:{seconds:02}"
+
+    elif profit > 10:
+        last_time = trade["start_time_more_10"] if trade else start_time
+        life_time = datetime.datetime.now() - datetime.datetime.strptime(last_time, "%Y-%m-%d %H:%M:%S")
+        total_seconds_more_10 = int(life_time.total_seconds())
+        hours = total_seconds_more_10 // 3600
+        minutes = (total_seconds_more_10 % 3600) // 60
+        seconds = total_seconds_more_10 % 60
+
+        formatted_time_difference = f"{hours:02}:{minutes:02}:{seconds:02}"
+
+
     if profit_one_inch >= target_profit:
-        profit = profit_one_inch
         message = (f'*{symbol[:-4]}/USDT({chain_sell}): Swap -> Mexc*' + '\n' + 
             '\n' + f'_Contract:_ `{info_sell["contract"]}`' +
             '\n' + f'_Commission for buying:_ *{goplus_sell["buy_tax"]}%*' +
@@ -239,7 +278,6 @@ async def get_profit(symbol, tokens_info, target_profit, chains_by_gas_price, go
         
 
     elif profit_mexc >= target_profit: 
-        profit = profit_mexc
         message = (f'*{symbol[:-4]}/USDT({chain_buy}): Mexc -> Swap*' + '\n' +
             '\n' + f'_Contract_: `{info_buy["contract"]}`' +
             '\n' + f'_Commission for selling:_ {goplus_buy["sell_tax"]}%' +
@@ -254,16 +292,27 @@ async def get_profit(symbol, tokens_info, target_profit, chains_by_gas_price, go
             '\n' + f'_Lifetime:_ *{formatted_time_difference}*')
     else:
         return None
+    
+
     item = {"symbol": symbol, 
             "profit": profit,
             "message": message,
             "start_time": start_time,
-            "lifetime": total_seconds,
+            "lifetime": 0,
+            "start_time_more_10$": start_time,
+            "lifetime_more_10$": 0,
+            "start_time_more_50$": start_time,
+            "lifetime_more_50$": 0,
+            "start_time_more_100$": start_time,
+            "lifetime_more_100$": 0,
             "notify": []}
     if trade:
         trade["message"] = message
         trade["profit"] = profit
         trade["lifetime"] = total_seconds
+        trade["lifetime_more_10$"] = total_seconds_more_10
+        trade["lifetime_more_50$"] = total_seconds_more_50
+        trade["lifetime_more_100$"] = total_seconds_more_100 
         await trades_redis.set(symbol, json.dumps(trade))
     else:
         await trades_redis.set(symbol, json.dumps(item))    

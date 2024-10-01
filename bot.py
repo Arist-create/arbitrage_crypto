@@ -115,7 +115,7 @@ async def message_id(message: types.Message, state: FSMContext):
     await state.finish()
 
     if not await users_settings_db.get("chat_id", message.chat.id):
-        await bot.send_message(message.chat.id, "You have to set up notifications settings first, use /change_settings")
+        await bot.send_message(message.chat.id, "You have to set up notifications settings first, use /change_notify_settings")
         return
     keyboard = await create_keyboard(message.chat.id)
     await bot.send_message(message.chat.id, "Notifications", reply_markup=keyboard)
