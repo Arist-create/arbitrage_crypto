@@ -16,13 +16,13 @@ async def fetch(client, chain_number, sell_token, buy_token, amount):
 
 
 async def get_eth_price(client):
-    resp = await client.get('https://api-defillama.1inch.io/v5.2/1/quote?src=0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE&dst=0xdac17f958d2ee523a2206206994597c13d831ec7&amount=3000000000000000000&includeGas=true')
+    resp = await client.get('https://api-defillama.1inch.io/v5.2/1/quote?src=0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE&dst=0xdac17f958d2ee523a2206206994597c13d831ec7&amount=1000000000000000000&includeGas=true')
     return resp.json()
    
 
 async def calc_vol(arr):
     total_cost = 0.0
-    target_value = 3000.0
+    target_value = 1000.0
     total_volume = 0.0
     k = 0
     for i in arr:
@@ -154,7 +154,7 @@ async def check_prices(main_token, usdt_token, chains, gas_price, goplus):
                     dictionary["gas_sell"] = float(resp['gas'])
                     dictionary["sell"] = float(resp['toAmount'])/10**usdt_token_detect["decimals"]
                     dictionary["chain_sell"] = i["network"]
-                amount_usdt = 3000*10**usdt_token_detect["decimals"]
+                amount_usdt = 1000*10**usdt_token_detect["decimals"]
                 resp = await fetch(client, chain_number, usdt_token_detect["contract"], contract_address, amount_usdt)
                 if not resp.get("toAmount"):
                     await redis.delete(f'{i["coin"]}USDT@1INCH')
