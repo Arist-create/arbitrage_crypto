@@ -184,6 +184,8 @@ async def get_profit(symbol, tokens_info, target_profit, chains_by_gas_price, go
         return None
     one_inch = json.loads(one_inch)
     mexc = await redis.get(f'{symbol}@MEXC')
+    if not mexc:
+        return None
     mexc = json.loads(mexc)
     info = [i for i in tokens_info if i["coin"] == symbol[:-4]][0]["networkList"]
 
