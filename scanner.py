@@ -310,9 +310,9 @@ async def get_profit(symbol, tokens_info, target_profit, chains_by_gas_price, go
         trade["message"] = message
         trade["profit"] = profit
         trade["lifetime"] = total_seconds
-        trade["lifetime_more_10$"] = total_seconds_more_10
-        trade["lifetime_more_50$"] = total_seconds_more_50
-        trade["lifetime_more_100$"] = total_seconds_more_100 
+        trade["lifetime_more_10$"] = total_seconds_more_10 if total_seconds_more_10 else 0
+        trade["lifetime_more_50$"] = total_seconds_more_50 if total_seconds_more_50 else 0
+        trade["lifetime_more_100$"] = total_seconds_more_100 if total_seconds_more_100 else 0
         await trades_redis.set(symbol, json.dumps(trade))
     else:
         await trades_redis.set(symbol, json.dumps(item))    
