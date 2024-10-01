@@ -94,6 +94,7 @@ async def message_id(callback_query: types.CallbackQuery, state: FSMContext):
         "chat_id": chat_id,
         "notify_is_on": True}
     await users_settings_db.update("chat_id", chat_id, user_settings, True)
+    await bot.answer_callback_query(callback_query.id)
     await bot.send_message(chat_id, "Enter life time target(seconds):")
     await Form.waiting_life_time_target.set()
 
