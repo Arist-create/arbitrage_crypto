@@ -1,4 +1,4 @@
-from bot import bot, create_keyboard_for_notify
+from bot import bot, create_keyboard_for_update_notify
 import time
 import asyncio
 import json
@@ -126,7 +126,7 @@ async def notify():
                 if life_time < life_time_target:
                     continue
                 try:
-                    keyboard = await create_keyboard_for_notify(i["symbol"])
+                    keyboard = await create_keyboard_for_update_notify(i["symbol"])
                     await bot.send_message(chat_id, i["message"], parse_mode='Markdown', reply_markup=keyboard)
                     i["notify"] = i["notify"] + [chat_id]
                     await trades_redis.set(i["symbol"], json.dumps(i))
