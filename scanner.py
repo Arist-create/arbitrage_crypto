@@ -235,7 +235,7 @@ async def get_profit(symbol, tokens_info, target_profit, chains_by_gas_price, go
     total_seconds_more_50 = 0
     total_seconds_more_100 = 0
     if profit > 100:
-        last_time = trade["lifetime_more_100"] if trade else start_time
+        last_time = trade["lifetime_more_100$"] if trade else start_time
         life_time = datetime.datetime.now() - datetime.datetime.strptime(last_time, "%Y-%m-%d %H:%M:%S")
         total_seconds_more_100 = int(life_time.total_seconds())
         hours = total_seconds_more_100 // 3600
@@ -245,7 +245,7 @@ async def get_profit(symbol, tokens_info, target_profit, chains_by_gas_price, go
         formatted_time_difference = f"{hours:02}:{minutes:02}:{seconds:02}"
     
     elif profit > 50:
-        last_time = trade["lifetime_more_50"] if trade else start_time
+        last_time = trade["lifetime_more_50$"] if trade else start_time
         life_time = datetime.datetime.now() - datetime.datetime.strptime(last_time, "%Y-%m-%d %H:%M:%S")
         total_seconds_more_50 = int(life_time.total_seconds())
         hours = total_seconds_more_50 // 3600
@@ -255,7 +255,7 @@ async def get_profit(symbol, tokens_info, target_profit, chains_by_gas_price, go
         formatted_time_difference = f"{hours:02}:{minutes:02}:{seconds:02}"
 
     elif profit > 10:
-        last_time = trade["lifetime_more_10"] if trade else start_time
+        last_time = trade["lifetime_more_10$"] if trade else start_time
         life_time = datetime.datetime.now() - datetime.datetime.strptime(last_time, "%Y-%m-%d %H:%M:%S")
         total_seconds_more_10 = int(life_time.total_seconds())
         hours = total_seconds_more_10 // 3600
