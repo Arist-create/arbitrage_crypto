@@ -194,7 +194,7 @@ async def get_tokens_by_goplus():
 
 
 async def actualize():
-    await get_pairs()
-    await get_decimals_mexc()
-    await get_tokens_mexc_by_chains()
+    # await get_pairs()
+    # await get_decimals_mexc()
+    # await get_tokens_mexc_by_chains()
     await get_tokens_by_goplus_for_trades()
