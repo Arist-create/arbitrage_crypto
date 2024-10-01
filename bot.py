@@ -87,7 +87,7 @@ async def message_id(message: types.Message, state: FSMContext):
     await bot.send_message(message.chat.id, f"Target profit: {settings['target_profit']}$")
     await bot.send_message(message.chat.id, f"Life time target: {settings['life_time_target']} seconds")
 
-@dp.callback_query_handler(lambda c: c.data in ["1️⃣", "5️⃣", "🔟"], state=Form.waiting_target_profit)
+@dp.callback_query_handler(lambda c: c.data in ["10", "50", "100"], state=Form.waiting_target_profit)
 async def message_id(callback_query: types.CallbackQuery, state: FSMContext):
     chat_id = callback_query.message.chat.id
     user_settings = {"target_profit": int(callback_query.data),
