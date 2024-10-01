@@ -68,7 +68,11 @@ async def get_pairs(): #переписать на получение из фай
             'X-MEXC-APIKEY': 'mx0vglNJacXHNmGojb',
         }
     )
-    resp = resp.json()["symbols"]
+    try:
+        resp = resp.json()["symbols"]
+    except:
+        print(resp.text)
+        return
     arr = [
         i
         for i in resp
