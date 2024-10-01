@@ -116,11 +116,11 @@ async def notify():
                 if i["profit"] < target_profit:
                     continue
                 if target_profit == 10:
-                    life_time = i["lifetime_more_10"]
+                    life_time = i["lifetime_more_10$"]
                 elif target_profit == 50:
-                    life_time = i["lifetime_more_50"]
+                    life_time = i["lifetime_more_50$"]
                 elif target_profit == 100:
-                    life_time = i["lifetime_more_100"]
+                    life_time = i["lifetime_more_100$"]
                 else:
                     life_time = i["lifetime"]
                 if life_time < life_time_target:
