@@ -34,6 +34,7 @@ async def create_keyboard_for_select_profit():
         types.InlineKeyboardButton(text='5️⃣', callback_data="50"),
         types.InlineKeyboardButton(text='🔟', callback_data="100")
     ) 
+    return keyboard
 
 
 async def create_keyboard_for_update_notify(symbol):
