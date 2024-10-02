@@ -26,7 +26,7 @@ async def get_quote(subscribe_list):
                         continue
                     await asyncio.sleep(0.1)
                     dict[f'{pair}@MEXC'] = json.dumps(data["d"])
-                    if len(dict) == 500:
+                    if len(dict) == 10:
                         await redis.mset(dict)
                         dict = {}
                 await websocket.close()
