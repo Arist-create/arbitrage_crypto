@@ -11,6 +11,9 @@ class RedisFacade:
     async def set(self, key, value):
         return await self.client.set(key, value)
     
+    async def mset(self, dict):
+        return await self.client.mset(dict)
+    
     async def delete(self, key):
         return await self.client.delete(key)
 

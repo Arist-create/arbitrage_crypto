@@ -17,16 +17,18 @@ async def get_quote(subscribe_list):
                         "params": subscribe_list
                     })
                 )
+                dict = {}
                 while not stop_event.is_set():
                     data = await websocket.recv()
                     data = json.loads(data)
                     pair = data.get("s")
                     if not pair: 
                         continue
-                    await redis.set(
-                    f'{pair}@MEXC',
-                        json.dumps(data["d"])
-                    )
+                    await asyncio.sleep(0.01)
+                    dict[f'{pair}@MEXC'] = json.dumps(data["d"])
+                    if len(dict) == 100:
+                        await redis.mset(dict)
+                        dict = {}
                 await websocket.close()
         except:
             await asyncio.sleep(30)
