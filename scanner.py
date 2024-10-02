@@ -316,6 +316,12 @@ async def get_profit(symbol, tokens_info, target_profit, chains_by_gas_price, go
         trade["lifetime_more_10$"] = total_seconds_more_10
         trade["lifetime_more_50$"] = total_seconds_more_50
         trade["lifetime_more_100$"] = total_seconds_more_100
+        if profit < 100:
+            trade["start_time_more_100$"] = start_time
+        if profit < 50:
+            trade["start_time_more_50$"] = start_time
+        if profit < 10:
+            trade["start_time_more_10$"] = start_time
         await trades_redis.set(symbol, json.dumps(trade))
     else:
         await trades_redis.set(symbol, json.dumps(item))    
