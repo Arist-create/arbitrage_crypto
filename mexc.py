@@ -34,7 +34,7 @@ async def get_quote(subscribe_list):
             await asyncio.sleep(30)
 
 async def stop():
-    await asyncio.sleep(3600)
+    await asyncio.sleep(10)
     stop_event.set()
 
 async def main():
@@ -47,10 +47,13 @@ async def main():
         for i in range(0, len(subscribe_list), 20):
             chunk = subscribe_list[i:i + 20]
             tasks.append(get_quote(chunk))
-        tasks.append(stop())
+            if len(tasks) >= 50:
+                tasks.append(stop())
+                await asyncio.gather(*tasks)
+                stop_event.clear() 
 
-        await asyncio.gather(*tasks)
-        stop_event.clear() 
+        # await asyncio.gather(*tasks)
+        # stop_event.clear() 
 
 
 if __name__ == '__main__':
