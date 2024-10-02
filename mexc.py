@@ -10,7 +10,7 @@ stop_event = asyncio.Event()
 async def get_quote(subscribe_list):
     while not stop_event.is_set(): 
         try:
-            async with websockets.connect('wss://wbs.mexc.com/ws', ping_interval=5, ping_timeout=None) as websocket:
+            async with websockets.connect('wss://wbs.mexc.com/ws', ping_interval=10, ping_timeout=None) as websocket:
                 await websocket.send(
                     json.dumps({
                         "method": "SUBSCRIPTION",
@@ -44,8 +44,8 @@ async def main():
         subscribe_list = [f'spot@public.limit.depth.v3.api@{pair["symbol"]}@20' for pair in pairs]
         
         tasks = []
-        for i in range(0, len(subscribe_list), 20):
-            chunk = subscribe_list[i:i + 20]
+        for i in range(0, len(subscribe_list), 30):
+            chunk = subscribe_list[i:i + 30]
             tasks.append(get_quote(chunk))
         tasks.append(stop())
 
