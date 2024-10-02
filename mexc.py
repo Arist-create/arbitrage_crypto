@@ -26,7 +26,7 @@ async def get_quote(subscribe_list):
                         continue
                     await asyncio.sleep(0.1)
                     dict[f'{pair}@MEXC'] = json.dumps(data["d"])
-                    if len(dict) == 15:
+                    if len(dict) == 10:
                         await redis.mset(dict)
                         dict = {}
                 await websocket.close()
@@ -44,8 +44,8 @@ async def main():
         subscribe_list = [f'spot@public.limit.depth.v3.api@{pair["symbol"]}@20' for pair in pairs]
         
         tasks = []
-        for i in range(0, len(subscribe_list), 25):
-            chunk = subscribe_list[i:i + 25]
+        for i in range(0, len(subscribe_list), 20):
+            chunk = subscribe_list[i:i + 20]
             tasks.append(get_quote(chunk))
         tasks.append(stop())
 
