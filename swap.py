@@ -146,7 +146,6 @@ async def check_prices(main_token, usdt_token, chains, gas_price, goplus):
                 resp = await fetch(client, chain_number, contract_address, usdt_token_detect["contract"], amount)
                 if not resp.get("toAmount"):
                     await redis.delete(f'{i["coin"]}USDT@1INCH')
-
                     continue
                 check = float(resp['toAmount'])/10**usdt_token_detect["decimals"] - float(resp["gas"])*gas_price[i["network"]]
                 if check > max_usdt:

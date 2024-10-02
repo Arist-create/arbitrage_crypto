@@ -204,8 +204,6 @@ async def get_profit(symbol, tokens_info, target_profit, chains_by_gas_price, go
     info_sell = next((i for i in info if i["network"] == chain_sell), None)
     if not info_buy or not info_sell:
         return None
-    if info_buy.get("withdrawTips") or info_sell.get("withdrawTips") or info_buy.get("depositTips") or info_sell.get("depositTips"):
-        return None
     
     goplus_buy = next((i for i in goplus if i["contract_address"] == info_buy["contract"].lower()), None)
     goplus_sell = next((i for i in goplus if i["contract_address"] == info_sell["contract"].lower()), None)
@@ -234,6 +232,9 @@ async def get_profit(symbol, tokens_info, target_profit, chains_by_gas_price, go
     total_seconds_more_10 = 0
     total_seconds_more_50 = 0
     total_seconds_more_100 = 0
+    formatted_time_difference_more_10 = "00:00:00"
+    formatted_time_difference_more_50 = "00:00:00"
+    formatted_time_difference_more_100 = "00:00:00"
     if profit > 100:
         last_time = trade["start_time_more_100$"] if trade else start_time
         life_time = datetime.datetime.now() - datetime.datetime.strptime(last_time, "%Y-%m-%d %H:%M:%S")
@@ -277,7 +278,10 @@ async def get_profit(symbol, tokens_info, target_profit, chains_by_gas_price, go
             '\n' + f'Gas for swap: *{float(gas_buy):.2f}$*' +
             '\n' + f'Gas for withdraw: *{float(gas_for_withdraw_buy):.2f}$*' + '\n' +
             '\n' + f'_Profit(considering commissions):_ *{profit_one_inch:.2f}$*' + '\n' +
-            '\n' + f'_Lifetime:_ *{formatted_time_difference}*')
+            '\n' + f'_Lifetime:_ *{formatted_time_difference}*' + 
+            '\n' + f'_Lifetime more 10$:_ *{formatted_time_difference_more_10}*' +
+            '\n' + f'_Lifetime more 50$:_ *{formatted_time_difference_more_50}*' +
+            '\n' + f'_Lifetime more 100$:_ *{formatted_time_difference_more_100}*')
         
 
     elif profit_mexc >= target_profit: 
@@ -292,7 +296,10 @@ async def get_profit(symbol, tokens_info, target_profit, chains_by_gas_price, go
             '\n' + f'Gas for swap: *{float(gas_sell):.2f}$*' +
             '\n' + f'Gas for withdraw: *{float(gas_for_withdraw_sell):.2f}$*' + '\n' +
             '\n' + f'_Profit(considering commissions):_ *{profit_mexc:.2f}$*' + '\n' +
-            '\n' + f'_Lifetime:_ *{formatted_time_difference}*')
+            '\n' + f'_Lifetime:_ *{formatted_time_difference}*' +
+            '\n' + f'_Lifetime more 10$:_ *{formatted_time_difference_more_10}*' +
+            '\n' + f'_Lifetime more 50$:_ *{formatted_time_difference_more_50}*' +
+            '\n' + f'_Lifetime more 100$:_ *{formatted_time_difference_more_100}*')
     else:
         return None
     
