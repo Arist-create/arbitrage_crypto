@@ -52,6 +52,10 @@ async def main():
                 await asyncio.gather(*tasks)
                 stop_event.clear() 
                 tasks = []
+        if tasks:
+            tasks.append(stop())
+            await asyncio.gather(*tasks)
+            stop_event.clear() 
 
         # await asyncio.gather(*tasks)
         # stop_event.clear() 
