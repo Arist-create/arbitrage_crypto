@@ -71,7 +71,7 @@ async def main():
  
         tasks = []
         for pair in pairs:
-            main_token = tokens_dict.get(pair['symbol'])
+            main_token = tokens_dict.get(pair['symbol'][:-4])
             if not main_token:
                 continue
         
@@ -132,7 +132,6 @@ async def check_prices(main_token, usdt_token, chains, gas_price, goplus_dict):
                 
             try:
                 resp = await fetch(client, chain_number, contract_address, usdt_token_detect["contract"], amount)
-                print(resp)
                 if not resp.get("toAmount"):
                     await redis.delete(f'{i["coin"]}USDT@1INCH')
                     continue
