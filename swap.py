@@ -59,19 +59,16 @@ async def main():
         await get_gas_price_in_usdt()
         pairs = await list_of_pairs_mexc_db.get_all()
         usdt_token = await tokens_mexc_by_chains_db.get("coin", 'USDT') 
-        usdt_token = usdt_token['networkList']
         tokens = await tokens_mexc_by_chains_db.get_all()
-        tokens_dict = {i['coin']: i for i in tokens}
         gas_price = await redis.get("chains_by_gas_price")
         goplus = await goplus_db.get_all()
-        goplus_dict = {i['contract_address']: i for i in goplus}
         if not gas_price:
             continue
         gas_price = json.loads(gas_price)
  
         tasks = []
         for pair in pairs:
-            main_token = tokens_dict.get(pair['symbol'][:-4])
+            main_token = next((i for i in tokens if i['coin'] == pair['symbol'][:-4]), None)
             if not main_token:
                 continue
         
@@ -80,9 +77,9 @@ async def main():
                 usdt_token,
                 chains,
                 gas_price,
-                goplus_dict
+                goplus
             ))
-            if len(tasks) > 200:
+            if len(tasks) > 100:
                 await asyncio.gather(*tasks)
                 tasks = []
                 
@@ -91,45 +88,60 @@ async def main():
 
 
 
-async def check_prices(main_token, usdt_token, chains, gas_price, goplus_dict):
+async def check_prices(main_token, usdt_token, chains, gas_price, goplus):
     max_tokens = 0
     max_usdt = 0
     dictionary = {}
-    async with httpx.AsyncClient(verify=False) as client:
+    for i in main_token['networkList']:
+        chain_number = chains.get(i['network'])
+        if not chain_number:
+            continue
 
-        for i in main_token['networkList']:
-            chain_number = chains.get(i['network'])
-            if not chain_number:
-                continue
+        contract_address = i.get('contract')
+        if not contract_address:
+            continue
 
-            contract_address = i.get('contract')
-            if not contract_address:
-                continue
+        if i.get("withdrawTips") or i.get("depositTips"):
+            continue
 
-            if i.get("withdrawTips") or i.get("depositTips"):
-                continue
-
-            goplus_detect = goplus_dict.get(contract_address)
-            if not goplus_detect:
-                continue
-            if (goplus_detect.get("is_anti_whale", 0) == 1) or (goplus_detect.get("is_honeypot", 0) == 1) or (goplus_detect.get("cannot_buy", 0) == 1) or (goplus_detect.get("cannot_sell_all", 0) == 1):
-                continue
+        goplus_detect = next((j for j in goplus if j['contract_address'] == contract_address.lower()), None)
+        if not goplus_detect:
+            continue
+        if (goplus_detect.get("is_anti_whale", 0) == 1) or (goplus_detect.get("is_honeypot", 0) == 1) or (goplus_detect.get("cannot_buy", 0) == 1) or (goplus_detect.get("cannot_sell_all", 0) == 1):
+            continue
 
 
-            decimals = i.get('decimals')
-            if not decimals:
-                continue
+        decimals = i.get('decimals')
+        if not decimals:
+            continue
 
-            usdt_token_detect = next((j for j in usdt_token if j["network"] == i["network"]), None)
-            if not usdt_token_detect:
-                continue
+        usdt_token_detect = next((j for j in usdt_token['networkList'] if j['network'] == i['network']), None)
+        if not usdt_token_detect:
+            continue
 
 
-            amount = await fetch_volume(i["coin"], i["withdrawFee"])
-            if amount is None:
-                continue
-            amount = format(amount*10**decimals, '.0f')
-                
+        amount = await fetch_volume(i["coin"], i["withdrawFee"])
+        if amount is None:
+            continue
+        amount = format(amount*10**decimals, '.0f')
+        # print(amount)
+        # if chain_number == 9000:
+        #     resp = await ton.get_price(contract_address, usdt_token_detect["contract"], amount)
+        #     max_usdt = resp["amount_out"]/10**usdt_token_detect["decimals"]
+        #     dictionary["gas_sell"] = 0
+        #     dictionary["sell"] = resp["amount_out"]/10**usdt_token_detect["decimals"]
+        #     dictionary["chain_sell"] = i["network"]
+        #     amount_usdt = 3000*10**usdt_token_detect["decimals"]
+        #     resp = await ton.get_price(usdt_token_detect["contract"], contract_address, amount_usdt)
+        #     max_tokens = resp["amount_out"]/10**decimals
+        #     dictionary["gas_buy"] = 0
+        #     dictionary["buy"] = resp["amount_out"]/10**decimals
+        #     dictionary["chain_buy"] = i["network"]
+            
+        async with httpx.AsyncClient(
+            # mounts=proxy_mounts
+            verify=False
+        ) as client:
             try:
                 resp = await fetch(client, chain_number, contract_address, usdt_token_detect["contract"], amount)
                 if not resp.get("toAmount"):
