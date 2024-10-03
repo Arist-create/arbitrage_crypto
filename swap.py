@@ -59,7 +59,7 @@ async def main():
         await get_gas_price_in_usdt()
         pairs = await list_of_pairs_mexc_db.get_all()
         usdt_token = await tokens_mexc_by_chains_db.get("coin", 'USDT') 
-        usdt_token_dict = {network: i for network, i in usdt_token['networkList'].items()}
+        usdt_token = usdt_token['networkList']
         tokens = await tokens_mexc_by_chains_db.get_all()
         tokens_dict = {i['coin']: i for i in tokens}
         gas_price = await redis.get("chains_by_gas_price")
@@ -77,7 +77,7 @@ async def main():
         
             tasks.append(check_prices(
                 main_token,
-                usdt_token_dict,
+                usdt_token,
                 chains,
                 gas_price,
                 goplus_dict
@@ -91,7 +91,7 @@ async def main():
 
 
 
-async def check_prices(main_token, usdt_token_dict, chains, gas_price, goplus_dict):
+async def check_prices(main_token, usdt_token, chains, gas_price, goplus_dict):
     max_tokens = 0
     max_usdt = 0
     dictionary = {}
@@ -120,7 +120,7 @@ async def check_prices(main_token, usdt_token_dict, chains, gas_price, goplus_di
             if not decimals:
                 continue
 
-            usdt_token_detect = usdt_token_dict.get(i["network"])
+            usdt_token_detect = next((j for j in usdt_token if j["network"] == i["network"]), None)
             if not usdt_token_detect:
                 continue
 
