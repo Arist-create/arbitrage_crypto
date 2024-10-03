@@ -24,17 +24,18 @@ async def get_quote(subscribe_list):
                     pair = data.get("s")
                     if not pair: 
                         continue
-                    await asyncio.sleep(0.01)
+                    await asyncio.sleep(0.1)
                     dict[f'{pair}@MEXC'] = json.dumps(data["d"])
-                    if len(dict) == 10:
+                    if len(dict) == 15:
                         await redis.mset(dict)
                         dict = {}
                 await websocket.close()
-        except:
+        except Exception as e:
+            print(e)
             await asyncio.sleep(30)
 
 async def stop():
-    await asyncio.sleep(3)
+    await asyncio.sleep(3600)
     stop_event.set()
 
 async def main():
@@ -47,18 +48,11 @@ async def main():
         for i in range(0, len(subscribe_list), 20):
             chunk = subscribe_list[i:i + 20]
             tasks.append(get_quote(chunk))
-            if len(tasks) >= 30:
-                tasks.append(stop())
-                await asyncio.gather(*tasks)
-                stop_event.clear() 
-                tasks = []
-        if tasks:
-            tasks.append(stop())
-            await asyncio.gather(*tasks)
-            stop_event.clear() 
-
-        # await asyncio.gather(*tasks)
-        # stop_event.clear() 
+            
+        tasks.append(stop())
+        
+        await asyncio.gather(*tasks)
+        stop_event.clear() 
 
 
 if __name__ == '__main__':
