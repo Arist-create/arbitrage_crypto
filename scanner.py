@@ -243,7 +243,7 @@ async def get_profit(symbol, tokens_info, target_profit, chains_by_gas_price, go
         minutes = (total_seconds_more_100 % 3600) // 60
         seconds = total_seconds_more_100 % 60
         
-        formatted_time_difference_more_10 = f"{hours:02}:{minutes:02}:{seconds:02}"
+        formatted_time_difference_more_100 = f"{hours:02}:{minutes:02}:{seconds:02}"
     
     if profit > 50:
         last_time = trade["start_time_more_50$"] if trade else start_time
@@ -263,7 +263,7 @@ async def get_profit(symbol, tokens_info, target_profit, chains_by_gas_price, go
         minutes = (total_seconds_more_10 % 3600) // 60
         seconds = total_seconds_more_10 % 60
 
-        formatted_time_difference_more_100 = f"{hours:02}:{minutes:02}:{seconds:02}"
+        formatted_time_difference_more_10 = f"{hours:02}:{minutes:02}:{seconds:02}"
 
 
     if profit_one_inch >= target_profit:
