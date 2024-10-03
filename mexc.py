@@ -11,7 +11,7 @@ async def get_quote(subscribe_list):
     while not stop_event.is_set(): 
         try:
             async with websockets.connect('wss://wbs.mexc.com/ws', ping_interval=10, ping_timeout=None) as websocket:
-                await websocket.send(
+                await websocket.send( 
                     json.dumps({
                         "method": "SUBSCRIPTION",
                         "params": subscribe_list
