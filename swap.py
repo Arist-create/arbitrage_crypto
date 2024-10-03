@@ -71,7 +71,7 @@ async def main():
  
         tasks = []
         for pair in pairs:
-            main_token = tokens_dict.get(pair['coin'])
+            main_token = tokens_dict.get(pair['symbol'])
             if not main_token:
                 continue
         
