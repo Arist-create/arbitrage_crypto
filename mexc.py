@@ -58,8 +58,8 @@ async def main():
         pairs = await list_of_pairs_mexc_db.get_all()
         subscribe_list = [f'spot@public.limit.depth.v3.api@{pair["symbol"]}@20' for pair in pairs]
         tasks = []
-        for i in range(0, len(subscribe_list), 400):
-            tasks.append(get_quote(subscribe_list[i:i+400]))
+        for i in range(0, len(subscribe_list), 200):
+            tasks.append(get_quote(subscribe_list[i:i+200]))
         tasks.append(stop_main())
         await asyncio.gather(*tasks)
         stop_event_main.clear()
