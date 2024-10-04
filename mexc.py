@@ -6,7 +6,6 @@ from redis_facade import redis
 from mongo import list_of_pairs_mexc_db
 
 stop_event = asyncio.Event()
-stop_event_main = asyncio.Event()
 
 async def manage_message(websocket):
     dict = {}
@@ -16,40 +15,26 @@ async def manage_message(websocket):
         pair = data.get("s")
         if not pair: 
             continue
-        await asyncio.sleep(0.01)
+        await asyncio.sleep(0.5)
         dict[f'{pair}@MEXC'] = json.dumps(data["d"])
         if len(dict) == 15:
             await redis.mset(dict)
             dict = {}
 
 async def get_quote(subscribe_list):
-    while not stop_event_main.is_set():
+    while not stop_event.is_set():
         try:
             async with websockets.connect('wss://wbs.mexc.com/ws', ping_interval=10, ping_timeout=None) as websocket:
-                while not stop_event_main.is_set():
-                    print("start")
-                    
-                    tasks = []
-                    for i in range(0, len(subscribe_list), 20):
-                        chunk = subscribe_list[i:i + 20]
-                        await websocket.send( 
-                            json.dumps({
-                                "method": "SUBSCRIPTION",
-                                "params": chunk
-                            })
-                        )
-                        tasks.append(stop())
-                        tasks.append(manage_message(websocket))
-                        await asyncio.gather(*tasks)
-                        await websocket.send(
-                            json.dumps({
-                                "method": "UNSUBSCRIPTION",
-                                "params": chunk
-                            })
-                        )
-                        tasks = []
-                        stop_event.clear()
-                await websocket.close()
+                print("start")
+                
+                await websocket.send( 
+                    json.dumps({
+                        "method": "SUBSCRIPTION",
+                        "params": subscribe_list
+                    })
+                )
+                await manage_message(websocket)
+            await websocket.close()
         except Exception as e:
             print(e)
             await asyncio.sleep(30)
@@ -60,19 +45,15 @@ async def main():
         pairs = await list_of_pairs_mexc_db.get_all()
         subscribe_list = [f'spot@public.limit.depth.v3.api@{pair["symbol"]}@20' for pair in pairs]
         tasks = []
-        for i in range(0, len(subscribe_list), 200):
-            tasks.append(get_quote(subscribe_list[i:i+200]))
-        tasks.append(stop_main())
+        for i in range(0, len(subscribe_list), 20):
+            tasks.append(get_quote(subscribe_list[i:i+20]))
+        tasks.append(stop())
         await asyncio.gather(*tasks)
-        stop_event_main.clear()
+        stop_event.clear()
 
 async def stop():
-    await asyncio.sleep(3)
-    stop_event.set()
-
-async def stop_main():
     await asyncio.sleep(3600)
-    stop_event_main.set()
+    stop_event.set()
 
 
 if __name__ == '__main__':
