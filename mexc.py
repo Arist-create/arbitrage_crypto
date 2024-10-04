@@ -48,6 +48,7 @@ async def get_quote(subscribe_list):
                     )
                     tasks = []
                     stop_event.clear()
+            await websocket.close()
     except Exception as e:
         print(e)
         await asyncio.sleep(30)
