@@ -23,35 +23,36 @@ async def manage_message(websocket):
             dict = {}
 
 async def get_quote(subscribe_list):
-    try:
-        async with websockets.connect('wss://wbs.mexc.com/ws', ping_interval=10, ping_timeout=None) as websocket:
-            while not stop_event_main.is_set():
-                print("start")
-                
-                tasks = []
-                for i in range(0, len(subscribe_list), 20):
-                    chunk = subscribe_list[i:i + 20]
-                    await websocket.send( 
-                        json.dumps({
-                            "method": "SUBSCRIPTION",
-                            "params": chunk
-                        })
-                    )
-                    tasks.append(stop())
-                    tasks.append(manage_message(websocket))
-                    await asyncio.gather(*tasks)
-                    await websocket.send(
-                        json.dumps({
-                            "method": "UNSUBSCRIPTION",
-                            "params": chunk
-                        })
-                    )
+    while not stop_event_main.is_set():
+        try:
+            async with websockets.connect('wss://wbs.mexc.com/ws', ping_interval=10, ping_timeout=None) as websocket:
+                while not stop_event_main.is_set():
+                    print("start")
+                    
                     tasks = []
-                    stop_event.clear()
-            await websocket.close()
-    except Exception as e:
-        print(e)
-        await asyncio.sleep(30)
+                    for i in range(0, len(subscribe_list), 20):
+                        chunk = subscribe_list[i:i + 20]
+                        await websocket.send( 
+                            json.dumps({
+                                "method": "SUBSCRIPTION",
+                                "params": chunk
+                            })
+                        )
+                        tasks.append(stop())
+                        tasks.append(manage_message(websocket))
+                        await asyncio.gather(*tasks)
+                        await websocket.send(
+                            json.dumps({
+                                "method": "UNSUBSCRIPTION",
+                                "params": chunk
+                            })
+                        )
+                        tasks = []
+                        stop_event.clear()
+                await websocket.close()
+        except Exception as e:
+            print(e)
+            await asyncio.sleep(30)
 
 
 async def main():
