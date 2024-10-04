@@ -21,10 +21,16 @@ async def manage_message(websocket):
             await redis.mset(dict)
             dict = {}
 
+
+async def ping(websocket):
+    while not stop_event.is_set():
+        await websocket.send(json.dumps({"method":"PING"}))
+        await asyncio.sleep(5)
+
 async def get_quote(subscribe_list):
     while not stop_event.is_set():
         try:
-            async with websockets.connect('wss://wbs.mexc.com/ws', ping_interval=10, ping_timeout=None) as websocket:
+            async with websockets.connect('wss://wbs.mexc.com/ws', ping_interval=None, ping_timeout=None) as websocket:
                 print("start")
                 await websocket.send( 
                     json.dumps({
@@ -32,8 +38,7 @@ async def get_quote(subscribe_list):
                         "params": subscribe_list
                     })
                 )
-                await manage_message(websocket)
-                await websocket.close()
+                await asyncio.gather(manage_message(websocket), ping(websocket))
         except Exception as e:
             print(e)
             await asyncio.sleep(30)
