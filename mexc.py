@@ -15,7 +15,7 @@ async def manage_message(websocket):
         pair = data.get("s")
         if not pair: 
             continue
-        await asyncio.sleep(0.01)
+        await asyncio.sleep(0.5)
         dict[f'{pair}@MEXC'] = json.dumps(data["d"])
         if len(dict) == 15:
             await redis.mset(dict)
